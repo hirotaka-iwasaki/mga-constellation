@@ -13,6 +13,11 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
   const [selectedStar, setSelectedStar] = useState<string | null>(null)
   const [selectedConstellationIds, setSelectedConstellationIds] = useState<string[]>([])
 
+  // 検索機能用のstate
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const searchInputRef = useRef<HTMLInputElement>(null)
+
   // パン＆ズーム用のstate
   const [viewBox, setViewBox] = useState({ x: 0, y: 0, width: 100, height: 100 })
   const [isPanning, setIsPanning] = useState(false)
@@ -42,6 +47,44 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
 
   // 位置IDからポジションを取得するマップ
   const positionMap = useMemo(() => new Map(positions.map(p => [p.id, p])), [positions])
+
+  // 検索結果のフィルタリング
+  const searchResults = useMemo(() => {
+    if (!searchQuery.trim()) return []
+    const query = searchQuery.toLowerCase()
+    return songs
+      .filter(song => song.title.toLowerCase().includes(query))
+      .slice(0, 10) // 最大10件
+  }, [searchQuery, songs])
+
+  // 検索結果から曲を選択
+  const handleSearchSelect = useCallback((songId: string) => {
+    const pos = positionMap.get(songId)
+    if (!pos) return
+
+    setSelectedStar(songId)
+    setIsSearchOpen(false)
+    setSearchQuery('')
+
+    // その星を画面中央に持ってくる
+    setViewBox(prev => ({
+      ...prev,
+      x: pos.x - prev.width / 2,
+      y: pos.y - prev.height / 2,
+    }))
+  }, [positionMap])
+
+  // 検索モーダルを開く
+  const openSearch = useCallback(() => {
+    setIsSearchOpen(true)
+    setTimeout(() => searchInputRef.current?.focus(), 100)
+  }, [])
+
+  // 検索モーダルを閉じる
+  const closeSearch = useCallback(() => {
+    setIsSearchOpen(false)
+    setSearchQuery('')
+  }, [])
 
   // 選択中の星座に含まれる曲IDのセット
   const highlightedSongIds = useMemo(() => {
@@ -149,6 +192,52 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
     const prevIndex = (selectedStarIndex - 1 + navigableSongIds.length) % navigableSongIds.length
     navigateToStar(navigableSongIds[prevIndex])
   }, [selectedStarIndex, navigableSongIds, navigateToStar])
+
+  // キーボード操作
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // 検索モーダルが開いている場合は無視
+      if (isSearchOpen) return
+
+      // input要素にフォーカスがある場合は無視
+      if (document.activeElement?.tagName === 'INPUT') return
+
+      switch (e.key) {
+        case 'ArrowRight':
+        case 'ArrowDown':
+          e.preventDefault()
+          if (selectedStar) {
+            goToNextStar()
+          } else if (navigableSongIds.length > 0) {
+            // 何も選択されていない場合は最初の曲を選択
+            navigateToStar(navigableSongIds[0])
+          }
+          break
+        case 'ArrowLeft':
+        case 'ArrowUp':
+          e.preventDefault()
+          if (selectedStar) {
+            goToPrevStar()
+          } else if (navigableSongIds.length > 0) {
+            // 何も選択されていない場合は最後の曲を選択
+            navigateToStar(navigableSongIds[navigableSongIds.length - 1])
+          }
+          break
+        case 'Escape':
+          e.preventDefault()
+          setSelectedStar(null)
+          break
+        case '/':
+          // スラッシュキーで検索を開く（Vim風）
+          e.preventDefault()
+          openSearch()
+          break
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isSearchOpen, selectedStar, navigableSongIds, goToNextStar, goToPrevStar, navigateToStar, openSearch])
 
   // カードスワイプ用のstate
   const [cardSwipeStart, setCardSwipeStart] = useState<number | null>(null)
@@ -518,6 +607,45 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
               <div class="text-xs text-slate-500 mt-0.5">
                 {selectedStarIndex >= 0 ? selectedStarIndex + 1 : '-'} / {navigableSongIds.length}
               </div>
+              {/* 外部リンク */}
+              <div class="flex justify-center gap-3 mt-2">
+                <a
+                  href={`https://www.youtube.com/results?search_query=${encodeURIComponent(songMap.get(selectedStar)!.title + ' Mrs. GREEN APPLE')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  class="p-1.5 rounded-full bg-red-600/20 text-red-400 hover:bg-red-600/30 active:bg-red-600/40"
+                  aria-label="YouTubeで検索"
+                >
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                  </svg>
+                </a>
+                <a
+                  href={`https://open.spotify.com/search/${encodeURIComponent(songMap.get(selectedStar)!.title + ' Mrs. GREEN APPLE')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  class="p-1.5 rounded-full bg-green-600/20 text-green-400 hover:bg-green-600/30 active:bg-green-600/40"
+                  aria-label="Spotifyで検索"
+                >
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+                  </svg>
+                </a>
+                <a
+                  href={`https://music.apple.com/jp/search?term=${encodeURIComponent(songMap.get(selectedStar)!.title + ' Mrs. GREEN APPLE')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  class="p-1.5 rounded-full bg-pink-600/20 text-pink-400 hover:bg-pink-600/30 active:bg-pink-600/40"
+                  aria-label="Apple Musicで検索"
+                >
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M23.994 6.124a9.23 9.23 0 00-.24-2.19c-.317-1.31-1.062-2.31-2.18-3.043a5.022 5.022 0 00-1.877-.726 10.496 10.496 0 00-1.564-.15c-.04-.003-.083-.01-.124-.013H5.986c-.152.01-.303.017-.455.026-.747.043-1.49.123-2.193.401-1.336.53-2.3 1.452-2.865 2.78-.192.448-.292.925-.363 1.408-.056.392-.088.785-.1 1.18 0 .032-.007.062-.01.093v12.223c.01.14.017.283.027.424.05.815.154 1.624.497 2.373.65 1.42 1.738 2.353 3.234 2.801.42.127.856.187 1.293.228.555.053 1.11.06 1.667.06h11.03a12.5 12.5 0 001.57-.1c.822-.106 1.596-.35 2.295-.81a5.046 5.046 0 001.88-2.207c.186-.42.293-.87.37-1.324.113-.675.138-1.358.137-2.04-.002-3.8 0-7.595-.003-11.393zm-6.423 3.99v5.712c0 .417-.058.827-.244 1.206-.29.59-.76.962-1.388 1.14-.35.1-.706.157-1.07.173-.95.042-1.785-.455-2.105-1.245-.38-.94.093-2.003 1.116-2.494.285-.137.59-.217.9-.27.457-.077.92-.136 1.378-.214.295-.05.452-.188.49-.472.002-.016.005-.032.005-.05V9.315c0-.269-.08-.347-.346-.3l-3.98.756c-.036.007-.07.018-.12.03v6.637c0 .424-.048.84-.225 1.227-.283.616-.765 1.012-1.415 1.2-.34.097-.69.15-1.043.17-1.015.05-1.86-.5-2.14-1.382-.315-.99.188-2.028 1.238-2.52.27-.127.56-.2.856-.25.47-.08.946-.143 1.417-.222.28-.047.43-.18.472-.464.002-.02.006-.04.006-.06V7.12c0-.176.026-.345.105-.503.073-.148.185-.256.34-.318.12-.049.246-.08.374-.104l5.186-.99c.186-.036.374-.07.563-.088.322-.03.52.138.54.46.003.04.003.082.003.123v4.42z"/>
+                  </svg>
+                </a>
+              </div>
             </div>
 
             {/* 次へボタン */}
@@ -538,6 +666,84 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
       <div class="absolute bottom-4 left-4 text-xs text-white/40">
         {songs.length} songs
       </div>
+
+      {/* 検索ボタン */}
+      <button
+        onClick={openSearch}
+        class="absolute top-16 left-3 w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center z-20 active:bg-slate-800"
+        aria-label="曲を検索"
+      >
+        <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </button>
+
+      {/* 検索モーダル */}
+      {isSearchOpen && (
+        <div class="absolute inset-0 z-50 flex flex-col">
+          {/* 背景オーバーレイ */}
+          <div class="absolute inset-0 bg-slate-950/90" onClick={closeSearch} />
+
+          {/* 検索コンテンツ */}
+          <div class="relative z-10 p-4 pt-16">
+            {/* 検索入力 */}
+            <div class="relative">
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchQuery}
+                onInput={(e) => setSearchQuery((e.target as HTMLInputElement).value)}
+                placeholder="曲名で検索..."
+                class="w-full px-4 py-3 pl-10 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-slate-500"
+              />
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+            </div>
+
+            {/* 検索結果 */}
+            {searchResults.length > 0 && (
+              <div class="mt-2 bg-slate-800 border border-slate-600 rounded-lg overflow-hidden">
+                {searchResults.map((song) => (
+                  <button
+                    key={song.id}
+                    onClick={() => handleSearchSelect(song.id)}
+                    class="w-full px-4 py-3 text-left hover:bg-slate-700 active:bg-slate-600 border-b border-slate-700 last:border-b-0"
+                  >
+                    <div class="text-white">{song.title}</div>
+                    <div class="text-sm text-slate-400">{song.releaseDate}</div>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* 検索クエリがあるが結果がない場合 */}
+            {searchQuery.trim() && searchResults.length === 0 && (
+              <div class="mt-4 text-center text-slate-400">
+                「{searchQuery}」に一致する曲が見つかりません
+              </div>
+            )}
+
+            {/* 閉じるボタン */}
+            <button
+              onClick={closeSearch}
+              class="mt-4 w-full py-3 bg-slate-800 border border-slate-600 rounded-lg text-slate-300 active:bg-slate-700"
+            >
+              閉じる
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* ミニマップ */}
       <div class="absolute top-16 right-3 w-20 h-20 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg overflow-hidden z-20">
@@ -569,6 +775,28 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
           />
         </svg>
       </div>
+
+      {/* 凡例（複数星座選択時のみ表示） */}
+      {selectedConstellationIds.length >= 2 && (
+        <div class="absolute top-40 right-3 max-w-32 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg p-2 z-20">
+          <div class="text-xs text-slate-400 mb-1.5">凡例</div>
+          <div class="space-y-1">
+            {selectedConstellationIds.map((id) => {
+              const constellation = constellations.find(c => c.id === id)
+              if (!constellation) return null
+              return (
+                <div key={id} class="flex items-center gap-1.5">
+                  <span
+                    class="w-3 h-0.5 rounded-full flex-shrink-0"
+                    style={{ backgroundColor: constellation.color }}
+                  />
+                  <span class="text-xs text-white/80 truncate">{constellation.name}</span>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
 
       {/* CSSアニメーション */}
       <style>{`
