@@ -17,10 +17,11 @@
 - [x] モバイルファースト対応（タッチUI）
 - [x] グリッドレイアウト（リリース日順配置）
 - [x] 星の統一表示（全て白・同サイズ）
+- [x] OGP/メタタグ設定
+- [x] Cloudflare Pages デプロイ (https://mga-constellation.pages.dev/)
 
 ## SNS共有・シェア機能
 
-- [ ] **OGP/メタタグ** - og:image, og:title, twitter:card 等の設定 `高`
 - [ ] **カスタム星座作成** - 自分の好きな曲を選んでオリジナル星座を作成 `高`
 - [ ] **星座画像化** - html-to-image/html2canvasでSVGを画像出力、Web Share APIで共有 `高`
 - [ ] **URL状態共有** - 選択中の星座をURLパラメータに保存して共有可能に `中`
@@ -50,7 +51,6 @@
 
 ## デプロイ
 
-- [ ] **Cloudflare Pages設定** - wrangler.toml または GitHub連携でデプロイ
 - [ ] **カスタムドメイン** - 必要に応じて設定
 - [ ] **アナリティクス** - Cloudflare Web Analytics または Google Analytics
 
