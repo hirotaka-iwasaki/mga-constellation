@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from 'preact/hooks'
 import { CategorySelector } from './CategorySelector'
 import { CustomConstellationBuilder } from './CustomConstellationBuilder'
+import { ShareButton } from './ShareButton'
 import type { Song, StarPosition, Constellation } from '../types'
 
 const CUSTOM_CONSTELLATIONS_KEY = 'mga-custom-constellations'
@@ -926,6 +927,14 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
         </svg>
       </div>
 
+      {/* 共有ボタン */}
+      <div class="absolute top-40 right-3 z-20">
+        <ShareButton
+          selectedConstellations={selectedConstellations}
+          positions={positions}
+          titleToIdMap={titleToIdMap}
+        />
+      </div>
 
       {/* CSSアニメーション */}
       <style>{`
