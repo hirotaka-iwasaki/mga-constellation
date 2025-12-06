@@ -653,7 +653,7 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
                   key={dot.cumulativeIndex}
                   cx={dot.x}
                   cy={dot.y}
-                  r="0.2"
+                  r="0.5"
                   fill={line.color}
                   opacity="0"
                   class="constellation-dot"
