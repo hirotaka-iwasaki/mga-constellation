@@ -1,6 +1,9 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from 'preact/hooks'
 import { CategorySelector } from './CategorySelector'
+import { CustomConstellationBuilder } from './CustomConstellationBuilder'
 import type { Song, StarPosition, Constellation } from '../types'
+
+const CUSTOM_CONSTELLATIONS_KEY = 'mga-custom-constellations'
 
 interface StarFieldProps {
   songs: Song[]
@@ -12,6 +15,75 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
   const [isLoading, setIsLoading] = useState(true)
   const [selectedStar, setSelectedStar] = useState<string | null>(null)
   const [selectedConstellationIds, setSelectedConstellationIds] = useState<string[]>([])
+
+  // カスタム星座の状態管理
+  const [customConstellations, setCustomConstellations] = useState<Constellation[]>([])
+  const [isBuilderOpen, setIsBuilderOpen] = useState(false)
+  const [editingConstellation, setEditingConstellation] = useState<Constellation | null>(null)
+
+  // localStorageからカスタム星座を読み込み
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(CUSTOM_CONSTELLATIONS_KEY)
+      if (stored) {
+        setCustomConstellations(JSON.parse(stored))
+      }
+    } catch (e) {
+      console.error('Failed to load custom constellations:', e)
+    }
+  }, [])
+
+  // カスタム星座をlocalStorageに保存
+  const saveCustomConstellations = useCallback((constellations: Constellation[]) => {
+    try {
+      localStorage.setItem(CUSTOM_CONSTELLATIONS_KEY, JSON.stringify(constellations))
+    } catch (e) {
+      console.error('Failed to save custom constellations:', e)
+    }
+  }, [])
+
+  // カスタム星座を追加/更新
+  const handleSaveCustomConstellation = useCallback((constellation: Constellation) => {
+    let newConstellations: Constellation[]
+    if (editingConstellation) {
+      // 編集モード：既存の星座を更新
+      newConstellations = customConstellations.map(c =>
+        c.id === constellation.id ? constellation : c
+      )
+    } else {
+      // 新規作成
+      newConstellations = [...customConstellations, constellation]
+    }
+    setCustomConstellations(newConstellations)
+    saveCustomConstellations(newConstellations)
+    setIsBuilderOpen(false)
+    setEditingConstellation(null)
+    // 作成/更新した星座を自動選択
+    if (!selectedConstellationIds.includes(constellation.id)) {
+      setSelectedConstellationIds(prev => [...prev, constellation.id])
+    }
+  }, [customConstellations, saveCustomConstellations, editingConstellation, selectedConstellationIds])
+
+  // カスタム星座を編集
+  const handleEditCustomConstellation = useCallback((constellation: Constellation) => {
+    setEditingConstellation(constellation)
+    setIsBuilderOpen(true)
+  }, [])
+
+  // カスタム星座を削除
+  const handleDeleteCustomConstellation = useCallback((id: string) => {
+    const newConstellations = customConstellations.filter(c => c.id !== id)
+    setCustomConstellations(newConstellations)
+    saveCustomConstellations(newConstellations)
+    // 選択中だった場合は選択解除
+    setSelectedConstellationIds(prev => prev.filter(cid => cid !== id))
+  }, [customConstellations, saveCustomConstellations])
+
+  // 全ての星座（既存 + カスタム）
+  const allConstellations = useMemo(() =>
+    [...constellations, ...customConstellations],
+    [constellations, customConstellations]
+  )
 
   // 検索機能用のstate
   const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -48,12 +120,17 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
   // 位置IDからポジションを取得するマップ
   const positionMap = useMemo(() => new Map(positions.map(p => [p.id, p])), [positions])
 
-  // 検索結果のフィルタリング
+  // 検索結果のフィルタリング（スペース無視の検索にも対応）
   const searchResults = useMemo(() => {
     if (!searchQuery.trim()) return []
     const query = searchQuery.toLowerCase()
+    const queryNoSpace = query.replace(/\s+/g, '')
     return songs
-      .filter(song => song.title.toLowerCase().includes(query))
+      .filter(song => {
+        const title = song.title.toLowerCase()
+        const titleNoSpace = title.replace(/\s+/g, '')
+        return title.includes(query) || titleNoSpace.includes(queryNoSpace)
+      })
       .slice(0, 10) // 最大10件
   }, [searchQuery, songs])
 
@@ -86,11 +163,23 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
     setSearchQuery('')
   }, [])
 
+  // 選択中の星座オブジェクト
+  const selectedConstellations = useMemo(() => {
+    return selectedConstellationIds
+      .map(id => allConstellations.find(c => c.id === id))
+      .filter((c): c is Constellation => c !== undefined)
+  }, [selectedConstellationIds, allConstellations])
+
+  // 選択から星座を削除
+  const handleRemoveConstellation = useCallback((id: string) => {
+    setSelectedConstellationIds(prev => prev.filter(cid => cid !== id))
+  }, [])
+
   // 選択中の星座に含まれる曲IDのセット
   const highlightedSongIds = useMemo(() => {
     const ids = new Set<string>()
     selectedConstellationIds.forEach(constellationId => {
-      const constellation = constellations.find(c => c.id === constellationId)
+      const constellation = allConstellations.find(c => c.id === constellationId)
       if (constellation) {
         constellation.songs.forEach(title => {
           const songId = titleToIdMap.get(title)
@@ -99,12 +188,12 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
       }
     })
     return ids
-  }, [selectedConstellationIds, constellations, titleToIdMap])
+  }, [selectedConstellationIds, allConstellations, titleToIdMap])
 
   // 星座線のデータを計算
   const constellationLines = useMemo(() => {
     return selectedConstellationIds.map(constellationId => {
-      const constellation = constellations.find(c => c.id === constellationId)
+      const constellation = allConstellations.find(c => c.id === constellationId)
       if (!constellation) return null
 
       // 曲タイトルから座標を取得（順番を保持）
@@ -125,7 +214,7 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
         points,
       }
     }).filter((line): line is NonNullable<typeof line> => line !== null)
-  }, [selectedConstellationIds, constellations, titleToIdMap, positionMap])
+  }, [selectedConstellationIds, allConstellations, titleToIdMap, positionMap])
 
   // ハイライト中かどうか（何か選択されているか）
   const hasSelection = selectedConstellationIds.length > 0
@@ -148,7 +237,7 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
     if (selectedConstellationIds.length > 0) {
       // 星座が選択されている場合、その星座の曲順で並べる
       // 複数星座選択時は、最初に選択した星座の順序を使用
-      const constellation = constellations.find(c => c.id === selectedConstellationIds[0])
+      const constellation = allConstellations.find(c => c.id === selectedConstellationIds[0])
       if (constellation) {
         // titleToIdMapを使って効率的に変換
         return constellation.songs
@@ -158,7 +247,7 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
     }
     // 星座が選択されていない場合はリリース日順（事前にソート済み）
     return sortedSongIds
-  }, [selectedConstellationIds, constellations, titleToIdMap, sortedSongIds])
+  }, [selectedConstellationIds, allConstellations, titleToIdMap, sortedSongIds])
 
   // 選択中の星のインデックス
   const selectedStarIndex = useMemo(() => {
@@ -474,6 +563,17 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
             <stop offset="0%" stopColor="#ffffff" />
             <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
           </radialGradient>
+
+          {/* 選択された星のグロー（緑） */}
+          <filter id="glow-green" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur stdDeviation="0.6" result="blur" />
+            <feFlood floodColor="#22c55e" floodOpacity="0.5" result="color" />
+            <feComposite in="color" in2="blur" operator="in" result="coloredBlur" />
+            <feMerge>
+              <feMergeNode in="coloredBlur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
         </defs>
 
         {/* 星座線を描画 */}
@@ -554,6 +654,18 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
                 opacity={isSelected || isHighlighted ? 0.7 : 0.4}
                 class="transition-all duration-300"
               />
+              {/* 選択された星の緑色グロー */}
+              {isSelected && (
+                <circle
+                  cx={pos.x}
+                  cy={pos.y}
+                  r={starSize * 0.8}
+                  fill="#22c55e"
+                  opacity="0.4"
+                  filter="url(#glow-green)"
+                  class="transition-all duration-300"
+                />
+              )}
               {/* 星の中心 */}
               <circle
                 cx={pos.x}
@@ -572,8 +684,15 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
       {/* カテゴリ選択UI */}
       <CategorySelector
         constellations={constellations}
+        customConstellations={customConstellations}
         selectedIds={selectedConstellationIds}
         onSelectionChange={setSelectedConstellationIds}
+        onCreateCustom={() => {
+          setEditingConstellation(null)
+          setIsBuilderOpen(true)
+        }}
+        onEditCustom={handleEditCustomConstellation}
+        onDeleteCustom={handleDeleteCustomConstellation}
       />
 
       {/* 選択時の詳細パネル（カテゴリUIの下に表示） */}
@@ -667,16 +786,47 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
         {songs.length} songs
       </div>
 
-      {/* 検索ボタン */}
-      <button
-        onClick={openSearch}
-        class="absolute top-16 left-3 w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center z-20 active:bg-slate-800"
-        aria-label="曲を検索"
-      >
-        <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
-      </button>
+      {/* 上部UI: 検索ボタン + 選択中タグ */}
+      <div class="absolute top-16 left-3 right-24 flex items-center gap-2 z-20">
+        {/* 検索ボタン */}
+        <button
+          onClick={openSearch}
+          class="w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center flex-shrink-0 active:bg-slate-800"
+          aria-label="曲を検索"
+        >
+          <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </button>
+
+        {/* 選択中タグ */}
+        {selectedConstellations.length > 0 && (
+          <div class="flex gap-1.5 overflow-x-auto py-1">
+            {selectedConstellations.map((c) => (
+              <span
+                key={c.id}
+                class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap flex-shrink-0"
+                style={{
+                  backgroundColor: c.color + '30',
+                  color: c.color,
+                  border: `1px solid ${c.color}50`,
+                }}
+              >
+                {c.name}
+                <button
+                  onClick={() => handleRemoveConstellation(c.id)}
+                  class="ml-0.5 opacity-70 active:opacity-100"
+                  aria-label={`${c.name}の選択を解除`}
+                >
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
 
       {/* 検索モーダル */}
       {isSearchOpen && (
@@ -776,27 +926,6 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
         </svg>
       </div>
 
-      {/* 凡例（複数星座選択時のみ表示） */}
-      {selectedConstellationIds.length >= 2 && (
-        <div class="absolute top-40 right-3 max-w-32 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg p-2 z-20">
-          <div class="text-xs text-slate-400 mb-1.5">凡例</div>
-          <div class="space-y-1">
-            {selectedConstellationIds.map((id) => {
-              const constellation = constellations.find(c => c.id === id)
-              if (!constellation) return null
-              return (
-                <div key={id} class="flex items-center gap-1.5">
-                  <span
-                    class="w-3 h-0.5 rounded-full flex-shrink-0"
-                    style={{ backgroundColor: constellation.color }}
-                  />
-                  <span class="text-xs text-white/80 truncate">{constellation.name}</span>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      )}
 
       {/* CSSアニメーション */}
       <style>{`
@@ -826,6 +955,19 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
           animation: spin 0.8s linear infinite;
         }
       `}</style>
+
+      {/* カスタム星座ビルダー */}
+      {isBuilderOpen && (
+        <CustomConstellationBuilder
+          songs={songs}
+          editingConstellation={editingConstellation ?? undefined}
+          onSave={handleSaveCustomConstellation}
+          onCancel={() => {
+            setIsBuilderOpen(false)
+            setEditingConstellation(null)
+          }}
+        />
+      )}
     </div>
   )
 }
