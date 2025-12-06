@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'preact/hooks'
 
 const TUTORIAL_KEY = 'mga-tutorial-completed'
-const TUTORIAL_VERSION = '3'
+const TUTORIAL_VERSION = '4'
 
 interface TutorialStep {
   target: string // data-tutorial属性のセレクタ
@@ -9,12 +9,19 @@ interface TutorialStep {
   description: string
   position: 'top' | 'bottom' | 'center' | 'center-bottom' | 'top-center'
   // onEnter: このステップに入った時に実行
-  onEnter?: 'focus-start' | 'show-card-start' | 'select-babel'
+  onEnter?: 'focus-start' | 'show-card-start' | 'select-babel' | 'reset-view'
   // onExit: このステップから次へ進む時に実行
   onExit?: 'show-card-start' | 'hide-card' | 'select-babel' | 'clear-selection'
 }
 
 const TUTORIAL_STEPS: TutorialStep[] = [
+  {
+    target: '[data-tutorial="starfield"]',
+    title: '🍏 Mrs. GREEN APPLEの\n楽曲を星に見立てた星図です',
+    description: '',
+    position: 'center-bottom',
+    onEnter: 'reset-view', // 全体を見せるため初期位置にリセット
+  },
   {
     target: '[data-tutorial="star-start"]',
     title: '⭐ 星をタップすると',
@@ -38,7 +45,7 @@ const TUTORIAL_STEPS: TutorialStep[] = [
     onExit: 'select-babel', // 次へ進む時に星座を選択
   },
   {
-    target: '[data-tutorial="constellation"]',
+    target: '[data-tutorial="starfield"]',
     title: '✨ セトリや収録曲で\n星座が作れます',
     description: '',
     position: 'center-bottom',
@@ -46,7 +53,7 @@ const TUTORIAL_STEPS: TutorialStep[] = [
   },
   {
     target: '[data-tutorial="oshiza-button"]',
-    title: '💚 好きな曲を集めて\n"推し座"を作りましょう',
+    title: '💚 自分で好きな曲を集めて\n"推し座"も作れます',
     description: '',
     position: 'top',
   },

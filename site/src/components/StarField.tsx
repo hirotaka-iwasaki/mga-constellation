@@ -547,6 +547,13 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
             // onEnter: ステップに入った時の準備
             // onExit: ステップから次へ進む時の処理
             switch (action) {
+              case 'reset-view': {
+                // ビューを初期状態（全体表示）にリセット
+                setViewBox({ x: 0, y: 0, width: 100, height: 100 })
+                setSelectedStar(null)
+                setSelectedConstellationIds([])
+                break
+              }
               case 'focus-start': {
                 // ビューを初期状態（全体表示）にリセット
                 setViewBox({ x: 0, y: 0, width: 100, height: 100 })
@@ -587,7 +594,7 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
           handleBackgroundTap(e)
           handleDoubleTap()
         }}
-        data-tutorial="constellation"
+        data-tutorial="starfield"
       >
         <defs>
           {/* 星のグロー効果 */}
