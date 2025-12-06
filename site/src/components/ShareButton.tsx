@@ -247,19 +247,17 @@ export function ShareButton({ selectedConstellations, positions, titleToIdMap }:
   }, [isGenerating, generateImage, selectedConstellations, showSuccessMessage])
 
   // 星座が選択されていない場合は非表示
-  if (selectedConstellations.length === 0) {
-    return null
-  }
+  const hasSelection = selectedConstellations.length > 0
 
   return (
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2" data-tutorial="share-button">
       {/* 画像共有ボタン */}
       <button
         onClick={handleShare}
-        disabled={isGenerating}
-        class="w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center active:bg-slate-800 disabled:opacity-50"
+        disabled={isGenerating || !hasSelection}
+        class={`w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center active:bg-slate-800 disabled:opacity-50 ${!hasSelection ? 'opacity-30' : ''}`}
         aria-label="画像として共有"
-        title="画像として共有"
+        title={hasSelection ? '画像として共有' : '星座を選択してください'}
       >
         {isGenerating ? (
           <div class="w-5 h-5 border-2 border-white/30 border-t-white/80 rounded-full animate-spin" />
@@ -272,7 +270,7 @@ export function ShareButton({ selectedConstellations, positions, titleToIdMap }:
 
       {/* 成功通知 */}
       {successMessage && (
-        <div class="absolute top-12 right-0 bg-green-600/90 text-white text-xs px-3 py-1.5 rounded-lg whitespace-nowrap animate-fade-in">
+        <div class="absolute top-12 right-0 bg-emerald-600/90 text-white text-xs px-3 py-1.5 rounded-lg whitespace-nowrap animate-fade-in">
           {successMessage}
         </div>
       )}

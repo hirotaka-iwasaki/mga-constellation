@@ -2,6 +2,7 @@ import { useState, useCallback, useMemo, useRef, useEffect } from 'preact/hooks'
 import { CategorySelector } from './CategorySelector'
 import { CustomConstellationBuilder } from './CustomConstellationBuilder'
 import { ShareButton } from './ShareButton'
+import { TutorialOverlay } from './TutorialOverlay'
 import type { Song, StarPosition, Constellation } from '../types'
 
 const CUSTOM_CONSTELLATIONS_KEY = 'mga-custom-constellations'
@@ -14,6 +15,7 @@ interface StarFieldProps {
 
 export function StarField({ songs, positions, constellations }: StarFieldProps) {
   const [isLoading, setIsLoading] = useState(true)
+  const [showTutorial, setShowTutorial] = useState(false)
   const [selectedStar, setSelectedStar] = useState<string | null>(null)
   const [selectedConstellationIds, setSelectedConstellationIds] = useState<string[]>([])
 
@@ -101,7 +103,9 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
 
   // 初期ローディング完了
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 100)
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 100)
     return () => clearTimeout(timer)
   }, [])
 
@@ -535,6 +539,41 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
         </div>
       )}
 
+      {/* チュートリアルオーバーレイ */}
+      {showTutorial && (
+        <TutorialOverlay
+          onComplete={() => setShowTutorial(false)}
+          onAction={(action) => {
+            // onEnter: ステップに入った時の準備
+            // onExit: ステップから次へ進む時の処理
+            switch (action) {
+              case 'focus-start': {
+                // ビューを初期状態（全体表示）にリセット
+                setViewBox({ x: 0, y: 0, width: 100, height: 100 })
+                break
+              }
+              case 'show-card-start': {
+                // StaRtの星を選択してカードを表示（ズームアウト状態を維持）
+                setSelectedStar('start')
+                // ビューを初期状態（全体表示）にリセット
+                setViewBox({ x: 0, y: 0, width: 100, height: 100 })
+                break
+              }
+              case 'hide-card':
+                setSelectedStar(null)
+                break
+              case 'select-babel':
+                // BABEL no TOHを選択
+                setSelectedConstellationIds(['babel-no-toh-2025'])
+                break
+              case 'clear-selection':
+                setSelectedConstellationIds([])
+                break
+            }
+          }}
+        />
+      )}
+
       {/* 星空の背景グラデーション */}
       <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-900/20 via-transparent to-transparent pointer-events-none" />
 
@@ -543,11 +582,12 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
         ref={svgRef}
         class={`absolute inset-0 w-full h-full select-none transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
         viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`}
-        preserveAspectRatio="xMidYMid slice"
+        preserveAspectRatio="xMidYMid meet"
         onClick={(e) => {
           handleBackgroundTap(e)
           handleDoubleTap()
         }}
+        data-tutorial="constellation"
       >
         <defs>
           {/* 星のグロー効果 */}
@@ -625,6 +665,8 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
           const isHighlighted = highlightedSongIds.has(pos.id)
           const isDimmed = hasSelection && !isHighlighted
           const starSize = isSelected || isHighlighted ? 2.5 : 1.8
+          // チュートリアル用：StaRtの星にマークをつける
+          const isStartStar = pos.id === 'start'
 
           return (
             <g
@@ -638,6 +680,7 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
                 transition: 'opacity 0.3s ease',
                 opacity: isDimmed ? 0.2 : 1,
               }}
+              {...(isStartStar ? { 'data-tutorial': 'star-start' } : {})}
             >
               {/* タップ領域を広げる透明な円 */}
               <circle
@@ -699,6 +742,7 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
       {/* 選択時の詳細パネル（カテゴリUIの下に表示） */}
       {selectedStar && songMap.get(selectedStar) && (
         <div
+          data-tutorial="card"
           class="absolute bottom-28 left-4 right-4 bg-slate-900/95 backdrop-blur-md border border-slate-700 rounded-lg p-4 z-30 animate-slide-up"
           style={{
             transform: `translateX(${cardSwipeOffset * 0.3}px)`,
@@ -746,7 +790,7 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  class="p-1.5 rounded-full bg-green-600/20 text-green-400 hover:bg-green-600/30 active:bg-green-600/40"
+                  class="p-1.5 rounded-full bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/30 active:bg-emerald-600/40"
                   aria-label="Spotifyで検索"
                 >
                   <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -935,6 +979,17 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
           titleToIdMap={titleToIdMap}
         />
       </div>
+
+      {/* 使い方ボタン */}
+      <button
+        onClick={() => setShowTutorial(true)}
+        class="absolute top-52 right-3 w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center z-20 active:bg-slate-800"
+        aria-label="使い方を見る"
+      >
+        <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </button>
 
       {/* CSSアニメーション */}
       <style>{`

@@ -276,7 +276,7 @@ export function CustomConstellationBuilder({
           <span class="text-sm text-slate-400">
             選択中 ({selectedSongIds.length}曲)
             {selectedSongIds.length < 2 && (
-              <span class="ml-2 text-green-300">※2曲以上選んでください</span>
+              <span class="ml-2 text-emerald-300">※2曲以上選んでください</span>
             )}
           </span>
           {selectedSongIds.length > 0 && (

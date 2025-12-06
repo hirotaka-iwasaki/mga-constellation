@@ -99,7 +99,7 @@ export function CategorySelector({
     .filter((c): c is Constellation => c !== undefined)
 
   return (
-    <div class="absolute bottom-0 left-0 right-0 z-40" ref={dropdownRef}>
+    <div class="absolute bottom-0 left-0 right-0 z-40" ref={dropdownRef} data-tutorial="footer">
       {/* カテゴリボタン */}
       <div class="bg-slate-900/95 backdrop-blur-md border-t border-slate-700 p-4">
         <div class="flex gap-2 justify-center flex-wrap">
@@ -114,6 +114,7 @@ export function CategorySelector({
                     : 'bg-slate-800 text-slate-300 active:bg-slate-700'
                   }
                 `}
+                {...(cat === 'custom' ? { 'data-tutorial': 'oshiza-button' } : {})}
               >
                 {CATEGORY_LABELS[cat]}
                 <svg
@@ -143,7 +144,7 @@ export function CategorySelector({
                         setOpenCategory(null)
                         onCreateCustom()
                       }}
-                      class="w-full px-4 py-3 text-left flex items-center gap-3 text-green-400 active:bg-white/5 border-b border-slate-700"
+                      class="w-full px-4 py-3 text-left flex items-center gap-3 text-emerald-300 active:bg-white/5 border-b border-slate-700"
                     >
                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -178,11 +179,11 @@ export function CategorySelector({
                             style={{ backgroundColor: c.color }}
                           />
                           <span class="flex-1 min-w-0">
-                            <span class="block text-sm text-white truncate">{c.name}</span>
+                            <span class="block text-sm text-white break-words leading-tight">{c.name}</span>
                             <span class="block text-xs text-slate-400">{c.year}</span>
                           </span>
                           {isSelected && (
-                            <svg class="w-5 h-5 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="w-5 h-5 text-emerald-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                               <path
                                 fill-rule="evenodd"
                                 d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
