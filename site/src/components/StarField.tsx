@@ -534,14 +534,6 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
         </div>
       )}
 
-      {/* ヘッダー */}
-      <header class="absolute top-0 left-0 right-0 p-4 z-10">
-        <h1 class="text-xl font-light tracking-wider text-white/90">
-          MRS. GREEN APPLE
-          <span class="block text-xs text-white/50 mt-0.5">CONSTELLATION MAP</span>
-        </h1>
-      </header>
-
       {/* 楽曲数の表示 */}
       <div class="absolute bottom-4 left-4 text-xs text-white/40">
         {songs.length} songs

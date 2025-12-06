@@ -9,7 +9,23 @@ export default defineConfig({
   site: 'https://mga-constellation.pages.dev',
   integrations: [preact()],
 
+  build: {
+    inlineStylesheets: 'always'
+  },
+
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    build: {
+      modulePreload: {
+        polyfill: false
+      },
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            preact: ['preact', 'preact/hooks']
+          }
+        }
+      }
+    }
   }
 });
