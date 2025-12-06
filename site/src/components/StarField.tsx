@@ -611,7 +611,7 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
                   opacity="0"
                   class="constellation-dot"
                   style={{
-                    animationDelay: `${lineIndex * 0.3 + dot.cumulativeIndex * 0.015}s`,
+                    animationDelay: `${lineIndex * 0.15 + dot.cumulativeIndex * 0.008}s`,
                   }}
                 />
               ))}
@@ -950,7 +950,7 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
           to { opacity: 0.4; }
         }
         .constellation-dot {
-          animation: fade-in-dot 0.3s ease-out forwards;
+          animation: fade-in-dot 0.2s ease-out forwards;
         }
         @keyframes spin {
           to { transform: rotate(360deg); }

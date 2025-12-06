@@ -16,14 +16,14 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
     build: {
-      modulePreload: {
-        polyfill: false
-      },
       rollupOptions: {
         output: {
+          // Preact関連を1つのチャンクにまとめて依存チェーンを短縮
           manualChunks(id) {
-            if (id.includes('node_modules/preact')) {
-              return 'preact'
+            if (id.includes('node_modules')) {
+              if (id.includes('preact') || id.includes('@preact')) {
+                return 'vendor'
+              }
             }
           }
         }
