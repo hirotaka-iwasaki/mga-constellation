@@ -1,0 +1,19 @@
+{
+  "name": "mga-constellation-v3",
+  "version": "3.0.0",
+  "description": "Mrs. GREEN APPLE 動的星座マップ - データ収集・構築スクリプト",
+  "type": "module",
+  "scripts": {
+    "01:songs": "tsx 01-fetch-songs.ts",
+    "02:constellations": "tsx 02-build-constellations.ts",
+    "03:positions": "tsx 04-calculate-positions.ts",
+    "04:export": "tsx 05-export-to-site.ts",
+    "build": "npm run 01:songs && npm run 02:constellations && npm run 03:positions && npm run 04:export",
+    "dev": "npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0"
+  }
+}

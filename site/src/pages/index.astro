@@ -1,0 +1,13 @@
+---
+import Layout from '../layouts/Layout.astro'
+import { StarField } from '../components/StarField'
+
+// JSONデータを読み込み
+import songs from '../content/songs.json'
+import positions from '../content/positions.json'
+import constellations from '../content/constellations.json'
+---
+
+<Layout title="Mrs. GREEN APPLE Constellation Map">
+  <StarField songs={songs} positions={positions} constellations={constellations} client:load />
+</Layout>
