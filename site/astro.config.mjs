@@ -21,8 +21,10 @@ export default defineConfig({
       },
       rollupOptions: {
         output: {
-          manualChunks: {
-            preact: ['preact', 'preact/hooks']
+          manualChunks(id) {
+            if (id.includes('node_modules/preact')) {
+              return 'preact'
+            }
           }
         }
       }
