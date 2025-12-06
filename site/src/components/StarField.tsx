@@ -9,6 +9,7 @@ interface StarFieldProps {
 }
 
 export function StarField({ songs, positions, constellations }: StarFieldProps) {
+  const [isLoading, setIsLoading] = useState(true)
   const [selectedStar, setSelectedStar] = useState<string | null>(null)
   const [selectedConstellationIds, setSelectedConstellationIds] = useState<string[]>([])
 
@@ -19,6 +20,12 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
   const [lastPinchDistance, setLastPinchDistance] = useState<number | null>(null)
   const svgRef = useRef<SVGSVGElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+
+  // 初期ローディング完了
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 100)
+    return () => clearTimeout(timer)
+  }, [])
 
   // viewBoxを初期値にリセット（リサイズ時）
   useEffect(() => {
@@ -342,13 +349,20 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
       onMouseLeave={handleMouseUp}
       onWheel={handleWheel}
     >
+      {/* ローディングスピナー */}
+      {isLoading && (
+        <div class="absolute inset-0 flex items-center justify-center z-50 bg-slate-950">
+          <div class="loading-spinner" />
+        </div>
+      )}
+
       {/* 星空の背景グラデーション */}
       <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-900/20 via-transparent to-transparent pointer-events-none" />
 
       {/* SVG星空 */}
       <svg
         ref={svgRef}
-        class="absolute inset-0 w-full h-full select-none"
+        class={`absolute inset-0 w-full h-full select-none transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
         viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`}
         preserveAspectRatio="xMidYMid slice"
         onClick={(e) => {
@@ -377,8 +391,9 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
         {constellationLines.map((line, lineIndex) => {
           if (line.points.length < 2) return null
 
-          // 星と星の間に小さな点を配置
-          const dots: { x: number; y: number }[] = []
+          // 星と星の間に小さな点を配置（累積インデックス付き）
+          const dots: { x: number; y: number; cumulativeIndex: number }[] = []
+          let cumulativeIndex = 0
           for (let i = 0; i < line.points.length - 1; i++) {
             const p1 = line.points[i]
             const p2 = line.points[i + 1]
@@ -389,15 +404,16 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
               dots.push({
                 x: p1.x + (p2.x - p1.x) * t,
                 y: p1.y + (p2.y - p1.y) * t,
+                cumulativeIndex: cumulativeIndex++,
               })
             }
           }
 
           return (
             <g key={line.id} class="constellation-line">
-              {dots.map((dot, i) => (
+              {dots.map((dot) => (
                 <circle
-                  key={i}
+                  key={dot.cumulativeIndex}
                   cx={dot.x}
                   cy={dot.y}
                   r="0.2"
@@ -405,7 +421,7 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
                   opacity="0"
                   class="constellation-dot"
                   style={{
-                    animationDelay: `${lineIndex * 0.1 + i * 0.01}s`,
+                    animationDelay: `${lineIndex * 0.3 + dot.cumulativeIndex * 0.015}s`,
                   }}
                 />
               ))}
@@ -577,6 +593,17 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
         }
         .constellation-dot {
           animation: fade-in-dot 0.3s ease-out forwards;
+        }
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+        .loading-spinner {
+          width: 40px;
+          height: 40px;
+          border: 2px solid rgba(255, 255, 255, 0.1);
+          border-top-color: rgba(255, 255, 255, 0.8);
+          border-radius: 50%;
+          animation: spin 0.8s linear infinite;
         }
       `}</style>
     </div>
