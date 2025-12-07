@@ -3,6 +3,7 @@ import { CategorySelector } from './CategorySelector'
 import { CustomConstellationBuilder } from './CustomConstellationBuilder'
 import { ShareButton } from './ShareButton'
 import { TutorialOverlay } from './TutorialOverlay'
+import { WelcomeModal, shouldShowWelcome } from './WelcomeModal'
 import type { Song, StarPosition, Constellation } from '../types'
 
 const CUSTOM_CONSTELLATIONS_KEY = 'mga-custom-constellations'
@@ -15,8 +16,9 @@ interface StarFieldProps {
 
 export function StarField({ songs, positions, constellations }: StarFieldProps) {
   const [isLoading, setIsLoading] = useState(true)
+  const [showWelcome, setShowWelcome] = useState(false)
   const [showTutorial, setShowTutorial] = useState(false)
-  const [selectedStar, setSelectedStar] = useState<string | null>(null)
+  const [selectedStar, setSelectedStar] = useState<string | null>('start')
   const [selectedConstellationIds, setSelectedConstellationIds] = useState<string[]>([])
 
   // カスタム星座の状態管理
@@ -101,10 +103,14 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
   const svgRef = useRef<SVGSVGElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
-  // 初期ローディング完了
+  // 初期ローディング完了 & ウェルカムモーダル表示判定
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false)
+      // ローディング完了後に初回かどうかをチェック
+      if (shouldShowWelcome()) {
+        setShowWelcome(true)
+      }
     }, 100)
     return () => clearTimeout(timer)
   }, [])
@@ -539,6 +545,11 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
         </div>
       )}
 
+      {/* ウェルカムモーダル（初回のみ） */}
+      {showWelcome && (
+        <WelcomeModal onClose={() => setShowWelcome(false)} />
+      )}
+
       {/* チュートリアルオーバーレイ */}
       {showTutorial && (
         <TutorialOverlay
@@ -750,8 +761,9 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
       {selectedStar && songMap.get(selectedStar) && (
         <div
           data-tutorial="card"
-          class="absolute bottom-28 left-4 right-4 bg-slate-900/95 backdrop-blur-md border border-slate-700 rounded-lg p-4 z-30 animate-slide-up"
+          class="absolute left-4 right-4 bg-slate-900/95 backdrop-blur-md border border-slate-700 rounded-lg p-4 z-30 animate-slide-up"
           style={{
+            bottom: 'calc(7rem + env(safe-area-inset-bottom, 0px))',
             transform: `translateX(${cardSwipeOffset * 0.3}px)`,
             transition: cardSwipeStart !== null ? 'none' : 'transform 0.2s ease-out',
           }}
