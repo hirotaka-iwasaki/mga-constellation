@@ -66,6 +66,35 @@
     ]
   },
   {
+    "id": "10-best",
+    "name": "10",
+    "type": "album",
+    "year": 2025,
+    "date": "2025-07-08",
+    "color": "#e879f9",
+    "songs": [
+      "ニュー・マイ・ノーマル",
+      "ダンスホール",
+      "Soranji",
+      "私は最強",
+      "ケセラセラ",
+      "Magic",
+      "ANTENNA",
+      "ナハトムジーク",
+      "ライラック",
+      "Dear",
+      "コロンブス",
+      "アポロドロス",
+      "familie",
+      "ビターバカンス",
+      "ダーリン",
+      "クスシキ",
+      "天国",
+      "breakfast",
+      "慶びの種"
+    ]
+  },
+  {
     "id": "harmony-2024",
     "name": "Mrs. GREEN APPLE on \"Harmony\"",
     "type": "live",
@@ -128,28 +157,6 @@
       "愛情と矛先",
       "我逢人",
       "ケセラセラ"
-    ]
-  },
-  {
-    "id": "single-columbus",
-    "name": "コロンブス",
-    "type": "single",
-    "year": 2024,
-    "date": "2024-06-12",
-    "color": "#fb923c",
-    "songs": [
-      "コロンブス"
-    ]
-  },
-  {
-    "id": "single-lilac",
-    "name": "ライラック",
-    "type": "single",
-    "year": 2024,
-    "date": "2024-04-12",
-    "color": "#c084fc",
-    "songs": [
-      "ライラック"
     ]
   },
   {
@@ -268,17 +275,6 @@
     ]
   },
   {
-    "id": "single-keserasera",
-    "name": "ケセラセラ",
-    "type": "single",
-    "year": 2023,
-    "date": "2023-04-25",
-    "color": "#4ade80",
-    "songs": [
-      "ケセラセラ"
-    ]
-  },
-  {
     "id": "zenmi-reliance-2022",
     "name": "Zepp Tour 2022 \"ゼンジン未到とリライアンス〜復誦編〜\"",
     "type": "live",
@@ -306,19 +302,6 @@
       "CONFLICT",
       "StaRt",
       "Soranji"
-    ]
-  },
-  {
-    "id": "single-soranji",
-    "name": "Soranji",
-    "type": "single",
-    "year": 2022,
-    "date": "2022-11-09",
-    "color": "#a78bfa",
-    "songs": [
-      "Soranji",
-      "私は最強",
-      "フロリジナル"
     ]
   },
   {
@@ -448,17 +431,6 @@
     ]
   },
   {
-    "id": "single-inferno",
-    "name": "インフェルノ",
-    "type": "single",
-    "year": 2019,
-    "date": "2019-07-18",
-    "color": "#ef4444",
-    "songs": [
-      "インフェルノ"
-    ]
-  },
-  {
     "id": "room-tour-2019",
     "name": "HALL TOUR 2019 \"The ROOM TOUR\"",
     "type": "live",
@@ -488,32 +460,6 @@
     ]
   },
   {
-    "id": "single-bokunokoto",
-    "name": "僕のこと",
-    "type": "single",
-    "year": 2019,
-    "date": "2019-01-09",
-    "color": "#a78bfa",
-    "songs": [
-      "僕のこと",
-      "灯火",
-      "Folktale"
-    ]
-  },
-  {
-    "id": "single-aonatsu",
-    "name": "青と夏",
-    "type": "single",
-    "year": 2018,
-    "date": "2018-08-01",
-    "color": "#38bdf8",
-    "songs": [
-      "青と夏",
-      "点描の唄",
-      "ア・プリオリ"
-    ]
-  },
-  {
     "id": "ensemble",
     "name": "ENSEMBLE",
     "type": "album",
@@ -532,19 +478,6 @@
       "Love me, Love you",
       "Log",
       "春愁",
-      "光のうた"
-    ]
-  },
-  {
-    "id": "single-wanted",
-    "name": "WanteD! WanteD!",
-    "type": "single",
-    "year": 2017,
-    "date": "2017-08-30",
-    "color": "#f472b6",
-    "songs": [
-      "WanteD! WanteD!",
-      "On My MiND",
       "光のうた"
     ]
   },
@@ -568,19 +501,6 @@
       "ツキマシテハ",
       "Just a Friend",
       "JOURNEY"
-    ]
-  },
-  {
-    "id": "single-samama",
-    "name": "サママ・フェスティバル！",
-    "type": "single",
-    "year": 2016,
-    "date": "2016-06-15",
-    "color": "#fbbf24",
-    "songs": [
-      "サママ・フェスティバル！",
-      "umbrella",
-      "ノニサクウタ"
     ]
   },
   {

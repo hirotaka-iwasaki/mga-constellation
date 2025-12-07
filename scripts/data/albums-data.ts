@@ -6,7 +6,7 @@
 export interface Album {
   id: string;
   name: string;
-  type: 'album' | 'mini' | 'best' | 'single';
+  type: 'album' | 'mini' | 'best';
   releaseDate: string;
   color: string;
   songs: string[]; // 収録順
@@ -119,78 +119,18 @@ export const ALBUMS: Album[] = [
       // Disc 2 など追加可能
     ],
   },
+  {
+    id: '10-best',
+    name: '10',
+    type: 'best',
+    releaseDate: '2025-07-08',
+    color: '#e879f9',
+    songs: [
+      'ニュー・マイ・ノーマル', 'ダンスホール', 'Soranji', '私は最強', 'ケセラセラ',
+      'Magic', 'ANTENNA', 'ナハトムジーク', 'ライラック', 'Dear',
+      'コロンブス', 'アポロドロス', 'familie', 'ビターバカンス', 'ダーリン',
+      'クスシキ', '天国', 'breakfast', '慶びの種',
+    ],
+  },
 
-  // 主要シングル
-  {
-    id: 'single-samama',
-    name: 'サママ・フェスティバル！',
-    type: 'single',
-    releaseDate: '2016-06-15',
-    color: '#fbbf24',
-    songs: ['サママ・フェスティバル！', 'umbrella', 'ノニサクウタ'],
-  },
-  {
-    id: 'single-wanted',
-    name: 'WanteD! WanteD!',
-    type: 'single',
-    releaseDate: '2017-08-30',
-    color: '#f472b6',
-    songs: ['WanteD! WanteD!', 'On My MiND', '光のうた'],
-  },
-  {
-    id: 'single-aonatsu',
-    name: '青と夏',
-    type: 'single',
-    releaseDate: '2018-08-01',
-    color: '#38bdf8',
-    songs: ['青と夏', '点描の唄', 'ア・プリオリ'],
-  },
-  {
-    id: 'single-bokunokoto',
-    name: '僕のこと',
-    type: 'single',
-    releaseDate: '2019-01-09',
-    color: '#a78bfa',
-    songs: ['僕のこと', '灯火', 'Folktale'],
-  },
-  {
-    id: 'single-inferno',
-    name: 'インフェルノ',
-    type: 'single',
-    releaseDate: '2019-07-18',
-    color: '#ef4444',
-    songs: ['インフェルノ'],
-  },
-  {
-    id: 'single-soranji',
-    name: 'Soranji',
-    type: 'single',
-    releaseDate: '2022-11-09',
-    color: '#a78bfa',
-    songs: ['Soranji', '私は最強', 'フロリジナル'],
-  },
-  {
-    id: 'single-keserasera',
-    name: 'ケセラセラ',
-    type: 'single',
-    releaseDate: '2023-04-25',
-    color: '#4ade80',
-    songs: ['ケセラセラ'],
-  },
-  {
-    id: 'single-lilac',
-    name: 'ライラック',
-    type: 'single',
-    releaseDate: '2024-04-12',
-    color: '#c084fc',
-    songs: ['ライラック'],
-  },
-  {
-    id: 'single-columbus',
-    name: 'コロンブス',
-    type: 'single',
-    releaseDate: '2024-06-12',
-    color: '#fb923c',
-    songs: ['コロンブス'],
-  },
 ];

@@ -85,10 +85,12 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
   }, [customConstellations, saveCustomConstellations])
 
   // 全ての星座（既存 + カスタム）
-  const allConstellations = useMemo(() =>
-    [...constellations, ...customConstellations],
-    [constellations, customConstellations]
-  )
+  // 既存の星座IDと重複するカスタム星座は除外
+  const allConstellations = useMemo(() => {
+    const existingIds = new Set(constellations.map(c => c.id))
+    const uniqueCustom = customConstellations.filter(c => !existingIds.has(c.id))
+    return [...constellations, ...uniqueCustom]
+  }, [constellations, customConstellations])
 
   // 検索機能用のstate
   const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -124,6 +126,21 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
 
   // 曲IDからSongを取得するマップ
   const songMap = useMemo(() => new Map(songs.map(s => [s.id, s])), [songs])
+
+  // 曲タイトルから、その曲が収録されている星座一覧を取得するマップ
+  const songToConstellationsMap = useMemo(() => {
+    const map = new Map<string, Constellation[]>()
+    allConstellations.forEach(constellation => {
+      // 重複を避けるためユニークな曲タイトルのみ処理
+      const uniqueTitles = [...new Set(constellation.songs)]
+      uniqueTitles.forEach(title => {
+        const existing = map.get(title) || []
+        existing.push(constellation)
+        map.set(title, existing)
+      })
+    })
+    return map
+  }, [allConstellations])
 
   // タイトルからSong IDを取得するマップ
   const titleToIdMap = useMemo(() => new Map(songs.map(s => [s.title, s.id])), [songs])
@@ -185,6 +202,17 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
   const handleRemoveConstellation = useCallback((id: string) => {
     setSelectedConstellationIds(prev => prev.filter(cid => cid !== id))
   }, [])
+
+  // 星座選択時に1曲目を選択（画面移動なし）
+  const handleConstellationSelect = useCallback((constellation: Constellation) => {
+    if (constellation.songs.length > 0) {
+      const firstSongTitle = constellation.songs[0]
+      const firstSongId = titleToIdMap.get(firstSongTitle)
+      if (firstSongId) {
+        setSelectedStar(firstSongId)
+      }
+    }
+  }, [titleToIdMap])
 
   // 選択中の星座に含まれる曲IDのセット
   const highlightedSongIds = useMemo(() => {
@@ -266,20 +294,10 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
     return navigableSongIds.indexOf(selectedStar)
   }, [selectedStar, navigableSongIds])
 
-  // 次/前の星に移動してビューを中央に
+  // 次/前の星に移動（画面移動なし）
   const navigateToStar = useCallback((starId: string) => {
-    const pos = positionMap.get(starId)
-    if (!pos) return
-
     setSelectedStar(starId)
-
-    // その星を画面中央に持ってくる
-    setViewBox(prev => ({
-      ...prev,
-      x: pos.x - prev.width / 2,
-      y: pos.y - prev.height / 2,
-    }))
-  }, [positionMap])
+  }, [])
 
   const goToNextStar = useCallback(() => {
     if (selectedStarIndex < 0) return
@@ -749,6 +767,7 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
         customConstellations={customConstellations}
         selectedIds={selectedConstellationIds}
         onSelectionChange={setSelectedConstellationIds}
+        onConstellationSelect={handleConstellationSelect}
         onCreateCustom={() => {
           setEditingConstellation(null)
           setIsBuilderOpen(true)
@@ -829,6 +848,58 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
                   </svg>
                 </a>
               </div>
+              {/* 収録アルバム/ライブ一覧 */}
+              {(() => {
+                const songTitle = songMap.get(selectedStar)!.title
+                const containingConstellations = songToConstellationsMap.get(songTitle) || []
+                const albums = containingConstellations.filter(c => c.type === 'album' || c.type === 'single')
+                const lives = containingConstellations.filter(c => c.type === 'live')
+                if (albums.length === 0 && lives.length === 0) return null
+                return (
+                  <div class="mt-3 pt-2 border-t border-slate-700/50">
+                    <div class="flex flex-wrap justify-center gap-1.5">
+                      {albums.map(c => (
+                        <button
+                          key={c.id}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            if (!selectedConstellationIds.includes(c.id)) {
+                              setSelectedConstellationIds(prev => [...prev, c.id])
+                            }
+                            handleConstellationSelect(c)
+                          }}
+                          class="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full active:opacity-70"
+                          style={{ backgroundColor: `${c.color}20`, color: c.color }}
+                        >
+                          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 3.22l-.61-.6a5.5 5.5 0 0 0-7.78 7.77L10 18.78l8.39-8.4a5.5 5.5 0 0 0-7.78-7.77l-.61.61z" />
+                          </svg>
+                          <span class="truncate max-w-24">{c.name}</span>
+                        </button>
+                      ))}
+                      {lives.map(c => (
+                        <button
+                          key={c.id}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            if (!selectedConstellationIds.includes(c.id)) {
+                              setSelectedConstellationIds(prev => [...prev, c.id])
+                            }
+                            handleConstellationSelect(c)
+                          }}
+                          class="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full active:opacity-70"
+                          style={{ backgroundColor: `${c.color}20`, color: c.color }}
+                        >
+                          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+                          </svg>
+                          <span class="truncate max-w-24">{c.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )
+              })()}
             </div>
 
             {/* 次へボタン */}
@@ -850,9 +921,8 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
         {songs.length} songs
       </div>
 
-      {/* 上部UI: 検索ボタン + 選択中タグ */}
-      <div class="absolute top-16 left-3 right-24 flex items-center gap-2 z-20">
-        {/* 検索ボタン */}
+      {/* 上部UI: 検索ボタン */}
+      <div class="absolute top-16 left-3 z-20">
         <button
           onClick={openSearch}
           class="w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center flex-shrink-0 active:bg-slate-800"
@@ -862,34 +932,6 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </button>
-
-        {/* 選択中タグ */}
-        {selectedConstellations.length > 0 && (
-          <div class="flex gap-1.5 overflow-x-auto py-1">
-            {selectedConstellations.map((c) => (
-              <span
-                key={c.id}
-                class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap flex-shrink-0"
-                style={{
-                  backgroundColor: c.color + '30',
-                  color: c.color,
-                  border: `1px solid ${c.color}50`,
-                }}
-              >
-                {c.name}
-                <button
-                  onClick={() => handleRemoveConstellation(c.id)}
-                  class="ml-0.5 opacity-70 active:opacity-100"
-                  aria-label={`${c.name}の選択を解除`}
-                >
-                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </span>
-            ))}
-          </div>
-        )}
       </div>
 
       {/* 検索モーダル */}

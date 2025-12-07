@@ -6,6 +6,7 @@ interface CategorySelectorProps {
   customConstellations: Constellation[]
   selectedIds: string[]
   onSelectionChange: (ids: string[]) => void
+  onConstellationSelect?: (constellation: Constellation) => void
   onCreateCustom: () => void
   onEditCustom: (constellation: Constellation) => void
   onDeleteCustom: (id: string) => void
@@ -24,6 +25,7 @@ export function CategorySelector({
   customConstellations,
   selectedIds,
   onSelectionChange,
+  onConstellationSelect,
   onCreateCustom,
   onEditCustom,
   onDeleteCustom,
@@ -31,6 +33,11 @@ export function CategorySelector({
   const [openCategory, setOpenCategory] = useState<CategoryType | null>(null)
   const [hasInteracted, setHasInteracted] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+
+  // 既存の星座IDと重複するカスタム星座は除外
+  const existingIds = new Set(constellations.map(c => c.id))
+  const uniqueCustom = customConstellations.filter(c => !existingIds.has(c.id))
+  const allConstellations = [...constellations, ...uniqueCustom]
 
   // カテゴリごとにグループ化
   const grouped: Record<CategoryType, Constellation[]> = {
@@ -42,13 +49,13 @@ export function CategorySelector({
   constellations.forEach((c) => {
     if (c.type === 'live') {
       grouped.live.push(c)
-    } else if (c.type === 'album' || c.type === 'single') {
+    } else if (c.type === 'album') {
       grouped.album.push(c)
     }
   })
 
   // 推し座（カスタム星座）を追加
-  grouped.custom = customConstellations
+  grouped.custom = uniqueCustom
 
   // 年で降順ソート
   Object.keys(grouped).forEach((key) => {
@@ -66,6 +73,10 @@ export function CategorySelector({
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  const selectedConstellations = selectedIds
+    .map((id) => allConstellations.find((c) => c.id === id))
+    .filter((c): c is Constellation => c !== undefined)
+
   const handleToggleCategory = useCallback((cat: CategoryType) => {
     setOpenCategory((prev) => (prev === cat ? null : cat))
     setHasInteracted(true)
@@ -73,13 +84,19 @@ export function CategorySelector({
 
   const handleSelectConstellation = useCallback(
     (id: string) => {
+      const constellation = allConstellations.find(c => c.id === id)
       if (selectedIds.includes(id)) {
         onSelectionChange(selectedIds.filter((sid) => sid !== id))
       } else {
         onSelectionChange([...selectedIds, id])
+        // 新規選択時：メニューを閉じて1曲目へ移動
+        setOpenCategory(null)
+        if (constellation && onConstellationSelect) {
+          onConstellationSelect(constellation)
+        }
       }
     },
-    [selectedIds, onSelectionChange]
+    [selectedIds, onSelectionChange, allConstellations, onConstellationSelect]
   )
 
   const handleRemoveSelection = useCallback(
@@ -93,15 +110,40 @@ export function CategorySelector({
     onSelectionChange([])
   }, [onSelectionChange])
 
-  // すべての星座（既存 + カスタム）
-  const allConstellations = [...constellations, ...customConstellations]
-
-  const selectedConstellations = selectedIds
-    .map((id) => allConstellations.find((c) => c.id === id))
-    .filter((c): c is Constellation => c !== undefined)
-
   return (
     <div class="absolute bottom-0 left-0 right-0 z-40" ref={dropdownRef} data-tutorial="footer">
+      {/* 選択中タグ（フッター上に表示） */}
+      {selectedConstellations.length > 0 && (
+        <div class="px-4 pb-2">
+          <div
+            class="flex gap-1.5 overflow-x-auto py-1 justify-center overscroll-contain touch-pan-x"
+            onTouchMove={(e) => e.stopPropagation()}
+          >
+            {selectedConstellations.map((c) => (
+              <span
+                key={c.id}
+                class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap flex-shrink-0"
+                style={{
+                  backgroundColor: c.color + '30',
+                  color: c.color,
+                  border: `1px solid ${c.color}50`,
+                }}
+              >
+                {c.name}
+                <button
+                  onClick={() => handleRemoveSelection(c.id)}
+                  class="ml-0.5 opacity-70 active:opacity-100"
+                  aria-label={`${c.name}の選択を解除`}
+                >
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
       {/* カテゴリボタン */}
       <div class="bg-slate-900/95 backdrop-blur-md border-t border-slate-700 p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
         <div class="flex gap-2 justify-center flex-wrap">

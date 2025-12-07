@@ -15,7 +15,7 @@ export interface Song {
 export interface Constellation {
   id: string;
   name: string;
-  type: 'album' | 'live' | 'theme' | 'single';
+  type: 'album' | 'live' | 'theme';
   year: number;
   date?: string;
   color: string;
