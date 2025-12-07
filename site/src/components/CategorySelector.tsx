@@ -29,6 +29,7 @@ export function CategorySelector({
   onDeleteCustom,
 }: CategorySelectorProps) {
   const [openCategory, setOpenCategory] = useState<CategoryType | null>(null)
+  const [hasInteracted, setHasInteracted] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   // カテゴリごとにグループ化
@@ -67,6 +68,7 @@ export function CategorySelector({
 
   const handleToggleCategory = useCallback((cat: CategoryType) => {
     setOpenCategory((prev) => (prev === cat ? null : cat))
+    setHasInteracted(true)
   }, [])
 
   const handleSelectConstellation = useCallback(
@@ -101,7 +103,7 @@ export function CategorySelector({
   return (
     <div class="absolute bottom-0 left-0 right-0 z-40" ref={dropdownRef} data-tutorial="footer">
       {/* カテゴリボタン */}
-      <div class="bg-slate-900/95 backdrop-blur-md border-t border-slate-700 p-4">
+      <div class="bg-slate-900/95 backdrop-blur-md border-t border-slate-700 p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
         <div class="flex gap-2 justify-center flex-wrap">
           {(Object.keys(CATEGORY_LABELS) as CategoryType[]).map((cat) => (
             <div key={cat} class="relative">
@@ -113,8 +115,10 @@ export function CategorySelector({
                     ? 'bg-white/20 text-white'
                     : 'bg-slate-800 text-slate-300 active:bg-slate-700'
                   }
+                  ${cat === 'live' && !hasInteracted ? 'animate-pulse-glow' : ''}
                 `}
                 {...(cat === 'custom' ? { 'data-tutorial': 'oshiza-button' } : {})}
+                {...(cat === 'live' ? { 'data-tutorial': 'live-button' } : {})}
               >
                 {CATEGORY_LABELS[cat]}
                 <svg
@@ -241,6 +245,17 @@ export function CategorySelector({
         }
         .animate-dropdown {
           animation: dropdown 0.15s ease-out;
+        }
+        @keyframes pulse-glow {
+          0%, 100% {
+            box-shadow: 0 0 0 0 rgba(52, 211, 153, 0);
+          }
+          50% {
+            box-shadow: 0 0 12px 4px rgba(52, 211, 153, 0.5);
+          }
+        }
+        .animate-pulse-glow {
+          animation: pulse-glow 2s ease-in-out infinite;
         }
       `}</style>
     </div>
