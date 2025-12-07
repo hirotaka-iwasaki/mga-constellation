@@ -15,7 +15,7 @@ export interface Live {
 }
 
 export const LIVES: Live[] = [
-  // 2025
+  // 2025 (Phase 2)
   {
     id: 'babel-no-toh-2025',
     name: 'DOME TOUR 2025 "BABEL no TOH"',
