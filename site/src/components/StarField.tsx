@@ -4,6 +4,8 @@ import { CustomConstellationBuilder } from './CustomConstellationBuilder'
 import { ShareButton } from './ShareButton'
 import { TutorialOverlay } from './TutorialOverlay'
 import { WelcomeModal, shouldShowWelcome } from './WelcomeModal'
+import { FeedbackModal } from './FeedbackModal'
+import { RoadmapModal } from './RoadmapModal'
 import type { Song, StarPosition, Constellation } from '../types'
 
 const CUSTOM_CONSTELLATIONS_KEY = 'mga-custom-constellations'
@@ -18,6 +20,8 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
   const [isLoading, setIsLoading] = useState(true)
   const [showWelcome, setShowWelcome] = useState(false)
   const [showTutorial, setShowTutorial] = useState(false)
+  const [showFeedback, setShowFeedback] = useState(false)
+  const [showRoadmap, setShowRoadmap] = useState(false)
   const [selectedStar, setSelectedStar] = useState<string | null>('start')
   const [selectedConstellationIds, setSelectedConstellationIds] = useState<string[]>([])
 
@@ -1021,16 +1025,40 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
         </svg>
       </button>
 
-      {/* ロードマップリンク */}
-      <a
-        href="/roadmap"
+      {/* ロードマップボタン */}
+      <button
+        onClick={() => setShowRoadmap(true)}
         class="absolute top-40 right-3 w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center z-20 active:bg-slate-800"
         aria-label="ロードマップを見る"
       >
         <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
         </svg>
-      </a>
+      </button>
+
+      {/* フィードバックボタン */}
+      <button
+        onClick={() => setShowFeedback(true)}
+        class="absolute top-52 right-3 w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center z-20 active:bg-slate-800"
+        aria-label="フィードバックを送る"
+      >
+        <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
+      </button>
+
+      {/* フィードバックモーダル */}
+      {showFeedback && (
+        <FeedbackModal onClose={() => setShowFeedback(false)} />
+      )}
+
+      {/* ロードマップモーダル */}
+      {showRoadmap && (
+        <RoadmapModal
+          onClose={() => setShowRoadmap(false)}
+          onOpenFeedback={() => setShowFeedback(true)}
+        />
+      )}
 
       {/* CSSアニメーション */}
       <style>{`
