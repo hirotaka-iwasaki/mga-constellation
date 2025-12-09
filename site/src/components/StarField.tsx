@@ -1052,6 +1052,17 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
         </svg>
       </button>
 
+      {/* ロードマップリンク */}
+      <a
+        href="/roadmap"
+        class="absolute top-64 right-3 w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center z-20 active:bg-slate-800"
+        aria-label="ロードマップを見る"
+      >
+        <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+        </svg>
+      </a>
+
       {/* CSSアニメーション */}
       <style>{`
         @keyframes slide-up {

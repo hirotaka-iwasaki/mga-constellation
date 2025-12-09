@@ -1,0 +1,177 @@
+---
+import '../styles/global.css'
+
+const title = "Roadmap - MGA Constellation Map"
+const description = "Mrs. GREEN APPLE Constellation Mapの今後のリリース予定や検討中の機能一覧"
+
+const siteUrl = import.meta.env.SITE || "https://mga-constellation.pages.dev"
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href
+const ogImageUrl = new URL("/og-image.png", siteUrl).href
+
+// ロードマップデータ
+const roadmap = {
+  high: {
+    title: "優先度: 高",
+    description: "UX向上・コンテンツ拡充",
+    items: [
+      { title: "カードにジャケット表示", description: "アルバムアートを詳細カードに表示", status: "planned" },
+      { title: "タッチターゲット最適化", description: "星のタップ領域を最適化し操作性向上", status: "planned" },
+      { title: "ランダムジャンプ", description: "「今日のラッキースター」ボタンでランダムな曲へ案内", status: "planned" },
+      { title: "曲名ラベル表示トグル", description: "ズームレベルに応じてラベル表示/非表示を切り替え", status: "planned" },
+      { title: "URL状態の効率化", description: "曲選択をビット配列でエンコードしURLを短縮", status: "planned" },
+      { title: "フェーズの切り替わり", description: "フェーズ1,2の楽曲を視覚的に分類", status: "planned" },
+      { title: "フィードバックフォーム", description: "要望受付フォームをサイト内に設置", status: "planned" },
+    ]
+  },
+  medium: {
+    title: "優先度: 中",
+    description: "機能追加・運用改善",
+    items: [
+      { title: "PWA対応", description: "ホーム画面に追加可能に", status: "planned" },
+      { title: "初披露ライブへのリンク", description: "カードから初演奏ライブへジャンプ", status: "planned" },
+      { title: "星座名前付け機能", description: "カスタム星座にオリジナル名を付与", status: "planned" },
+      { title: "診断・称号機能", description: "選んだ曲傾向から称号を付与", status: "planned" },
+      { title: "星の脈動アニメーション", description: "ホバー/タップ時にゆっくり脈動", status: "planned" },
+      { title: "探索率カウンター", description: "「空の○○%を探索済み」表示", status: "planned" },
+      { title: "日付ベースのイースターエッグ", description: "記念日に特別な星座を表示", status: "planned" },
+      { title: "アクセシビリティ強化", description: "aria-label, フォーカス管理対応", status: "planned" },
+    ]
+  },
+  low: {
+    title: "優先度: 低",
+    description: "将来検討",
+    items: [
+      { title: "流れ星エフェクト", description: "操作がないと流れ星が流れる演出", status: "idea" },
+      { title: "カラーテーマ切替", description: "昼/夜モード、GREEN APPLEモードなど", status: "idea" },
+      { title: "共通曲ハイライト", description: "複数星座で共有される曲を強調", status: "idea" },
+      { title: "星座ガイドモード", description: "当時のセットリストを辿るガイド", status: "idea" },
+      { title: "全曲制覇スペシャル星座", description: "全曲訪問で隠し星座出現", status: "idea" },
+      { title: "星座クイズ", description: "星座線だけでアルバム/ライブを当てるゲーム", status: "idea" },
+      { title: "多言語対応", description: "UIテキストを英語表示に切り替え可能", status: "idea" },
+    ]
+  },
+  experimental: {
+    title: "要検証・大規模改修",
+    description: "技術検証が必要",
+    items: [
+      { title: "Canvas描画への移行", description: "低スペック端末でも60fps確保", status: "research" },
+      { title: "動的OGP画像生成", description: "選択した星座のプレビュー画像を動的生成", status: "research" },
+      { title: "オーディオプレビュー", description: "星選択時に30秒プレビュー再生", status: "research" },
+      { title: "Spotify/Apple Music連携", description: "再生履歴に基づく星の強調表示", status: "research" },
+      { title: "AR星空モード", description: "カメラ越しに星空を重ねて表示", status: "research" },
+    ]
+  }
+}
+
+const statusLabels: Record<string, { text: string; class: string }> = {
+  planned: { text: "予定", class: "bg-emerald-500/20 text-emerald-400" },
+  idea: { text: "検討中", class: "bg-amber-500/20 text-amber-400" },
+  research: { text: "要検証", class: "bg-purple-500/20 text-purple-400" },
+}
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <title>{title}</title>
+  </head>
+  <body class="bg-slate-950 text-white min-h-screen">
+    <!-- 星空背景 -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+      <div class="stars"></div>
+    </div>
+
+    <div class="relative z-10 max-w-4xl mx-auto px-4 py-8 pb-24">
+      <!-- ヘッダー -->
+      <header class="mb-8">
+        <a href="/" class="inline-flex items-center gap-2 text-white/60 hover:text-white/90 transition-colors mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m15 18-6-6 6-6"/>
+          </svg>
+          星座マップに戻る
+        </a>
+        <h1 class="text-3xl font-light tracking-wider">
+          Roadmap
+          <span class="block text-sm text-emerald-400/70 mt-1">今後の予定・検討中の機能</span>
+        </h1>
+        <p class="text-white/60 mt-4 text-sm leading-relaxed">
+          このプロジェクトで検討している機能の一覧です。<br/>
+          ご要望やフィードバックがあれば、ぜひお聞かせください。
+        </p>
+      </header>
+
+      <!-- ロードマップセクション -->
+      {Object.entries(roadmap).map(([key, section]) => (
+        <section class="mb-10">
+          <h2 class="text-lg font-medium mb-1 text-white/90">{section.title}</h2>
+          <p class="text-xs text-white/50 mb-4">{section.description}</p>
+
+          <div class="grid gap-3">
+            {section.items.map((item) => (
+              <div class="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:border-white/20 transition-colors">
+                <div class="flex items-start justify-between gap-3">
+                  <div class="flex-1 min-w-0">
+                    <h3 class="font-medium text-white/90">{item.title}</h3>
+                    <p class="text-sm text-white/50 mt-1">{item.description}</p>
+                  </div>
+                  <span class={`shrink-0 text-xs px-2 py-1 rounded-full ${statusLabels[item.status].class}`}>
+                    {statusLabels[item.status].text}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      ))}
+
+      <!-- フッター -->
+      <footer class="mt-12 pt-8 border-t border-white/10 text-center text-white/40 text-sm">
+        <p>
+          このサイトは非公式のファンメイドプロジェクトです。<br/>
+          楽曲の著作権は Mrs. GREEN APPLE および関係者に帰属します。
+        </p>
+      </footer>
+    </div>
+
+    <style>
+      .stars {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image:
+          radial-gradient(1px 1px at 20px 30px, white, transparent),
+          radial-gradient(1px 1px at 40px 70px, rgba(255,255,255,0.8), transparent),
+          radial-gradient(1px 1px at 50px 160px, rgba(255,255,255,0.6), transparent),
+          radial-gradient(1px 1px at 90px 40px, white, transparent),
+          radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.7), transparent),
+          radial-gradient(1px 1px at 160px 120px, white, transparent),
+          radial-gradient(1px 1px at 200px 50px, rgba(255,255,255,0.5), transparent),
+          radial-gradient(1px 1px at 250px 90px, white, transparent),
+          radial-gradient(1px 1px at 300px 150px, rgba(255,255,255,0.8), transparent),
+          radial-gradient(1px 1px at 350px 30px, rgba(255,255,255,0.6), transparent),
+          radial-gradient(1px 1px at 400px 100px, white, transparent),
+          radial-gradient(1px 1px at 450px 60px, rgba(255,255,255,0.7), transparent),
+          radial-gradient(1px 1px at 500px 140px, white, transparent);
+        background-repeat: repeat;
+        background-size: 550px 200px;
+        opacity: 0.4;
+      }
+    </style>
+  </body>
+</html>
