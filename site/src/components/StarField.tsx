@@ -1001,39 +1001,8 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
         </div>
       )}
 
-      {/* ミニマップ */}
-      <div class="absolute top-16 right-3 w-20 h-20 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg overflow-hidden z-20">
-        <svg viewBox="0 0 100 100" class="w-full h-full">
-          {/* 全ての星を小さく表示（白） */}
-          {positions.map((pos) => {
-            const isHighlighted = highlightedSongIds.has(pos.id)
-            return (
-              <circle
-                key={pos.id}
-                cx={pos.x}
-                cy={pos.y}
-                r={isHighlighted ? 1.5 : 0.8}
-                fill="#ffffff"
-                opacity={isHighlighted ? 1 : 0.4}
-              />
-            )
-          })}
-          {/* 現在の表示範囲を示す枠 */}
-          <rect
-            x={viewBox.x}
-            y={viewBox.y}
-            width={viewBox.width}
-            height={viewBox.height}
-            fill="none"
-            stroke="white"
-            strokeWidth="1.5"
-            strokeOpacity="0.7"
-          />
-        </svg>
-      </div>
-
       {/* 共有ボタン */}
-      <div class="absolute top-40 right-3 z-20">
+      <div class="absolute top-16 right-3 z-20">
         <ShareButton
           selectedConstellations={selectedConstellations}
           positions={positions}
@@ -1044,7 +1013,7 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
       {/* 使い方ボタン */}
       <button
         onClick={() => setShowTutorial(true)}
-        class="absolute top-52 right-3 w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center z-20 active:bg-slate-800"
+        class="absolute top-28 right-3 w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center z-20 active:bg-slate-800"
         aria-label="使い方を見る"
       >
         <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1055,7 +1024,7 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
       {/* ロードマップリンク */}
       <a
         href="/roadmap"
-        class="absolute top-64 right-3 w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center z-20 active:bg-slate-800"
+        class="absolute top-40 right-3 w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center z-20 active:bg-slate-800"
         aria-label="ロードマップを見る"
       >
         <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
