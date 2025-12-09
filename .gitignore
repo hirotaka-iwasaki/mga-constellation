@@ -26,3 +26,6 @@ Thumbs.db
 
 # Generated data (keep in repo for convenience)
 # scripts/output/
+
+# Lyrics data (copyright protected - do not commit)
+scripts/data/lyrics/

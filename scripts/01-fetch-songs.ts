@@ -8,6 +8,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
+import * as crypto from 'crypto';
 import type { Song } from './types.js';
 
 // 楽曲データ（2014-2025）
@@ -135,14 +136,46 @@ FACTORY|2014-07-05
 HeLLo|2014-07-05
 `.trim();
 
+/**
+ * タイトルからIDを生成
+ * - 英数字のみのタイトル → 小文字化・記号除去（例: "StaRt" → "start"）
+ * - 日本語を含むタイトル → 英数字部分 + ハッシュ（例: "青と夏" → "s-a1b2c3"）
+ */
 function generateId(title: string): string {
-  return title
+  // 日本語文字が含まれているかチェック
+  const hasJapanese = /[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/.test(title);
+
+  if (!hasJapanese) {
+    // 英数字のみ: 従来通りの処理
+    const id = title
+      .toLowerCase()
+      .replace(/[（）()「」『』\s]/g, '-')
+      .replace(/[!！?？、。・']/g, '')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
+    return id || `song-${shortHash(title)}`;
+  }
+
+  // 日本語含む: 英数字部分を抽出 + ハッシュ
+  const asciiPart = title
+    .replace(/[^a-zA-Z0-9]/g, '')
     .toLowerCase()
-    .replace(/[（）()「」『』\s]/g, '-')
-    .replace(/[!！?？、。・']/g, '')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '')
-    || `song-${Date.now()}`;
+    .slice(0, 8); // 最大8文字
+
+  const hash = shortHash(title);
+
+  return asciiPart ? `${asciiPart}-${hash}` : `s-${hash}`;
+}
+
+/**
+ * 短いハッシュを生成（6文字）
+ */
+function shortHash(str: string): string {
+  return crypto
+    .createHash('md5')
+    .update(str)
+    .digest('hex')
+    .slice(0, 6);
 }
 
 function main() {

@@ -9,7 +9,8 @@
     "03:positions": "tsx 04-calculate-positions.ts",
     "04:export": "tsx 05-export-to-site.ts",
     "build": "npm run 01:songs && npm run 02:constellations && npm run 03:positions && npm run 04:export",
-    "dev": "npm run build"
+    "dev": "npm run build",
+    "lyrics": "tsx add-lyrics.ts"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
