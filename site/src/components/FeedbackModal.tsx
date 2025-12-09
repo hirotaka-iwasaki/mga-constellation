@@ -166,7 +166,7 @@ export function FeedbackModal({ onClose }: FeedbackModalProps) {
           // 入力フォーム
           <>
             <h2 class="text-lg font-bold text-white mb-1 pr-8">
-              フィードバック
+              匿名フィードバック
             </h2>
             <p class="text-slate-400 text-sm mb-4">
               ご意見・ご要望をお聞かせください
