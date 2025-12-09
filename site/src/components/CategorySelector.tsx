@@ -157,7 +157,7 @@ export function CategorySelector({
         </div>
       )}
       {/* カテゴリボタン */}
-      <div class="bg-slate-900/95 backdrop-blur-md border-t border-slate-700 p-4 pb-[max(3rem,calc(1rem+env(safe-area-inset-bottom,0px)))]">
+      <div class="bg-slate-900/95 backdrop-blur-md border-t border-slate-700 p-4 pb-[max(5.5rem,calc(1rem+env(safe-area-inset-bottom,0px)))]">
         <div class="flex gap-2 justify-center flex-wrap">
           {(Object.keys(CATEGORY_LABELS) as CategoryType[]).map((cat) => (
             <div key={cat} class="relative">
