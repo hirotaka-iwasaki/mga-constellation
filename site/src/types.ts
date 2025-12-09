@@ -19,6 +19,7 @@ export interface StarPosition {
 export interface Constellation {
   id: string
   name: string
+  shortName?: string
   type: 'album' | 'live' | 'theme'
   year: number
   date?: string

@@ -33,6 +33,7 @@ function main() {
     constellations.push({
       id: live.id,
       name: live.name,
+      shortName: live.shortName,
       type: 'live',
       year: live.year,
       date: live.date,

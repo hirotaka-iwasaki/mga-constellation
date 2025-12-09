@@ -24,6 +24,7 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
   const [showRoadmap, setShowRoadmap] = useState(false)
   const [selectedStar, setSelectedStar] = useState<string | null>('start')
   const [selectedConstellationIds, setSelectedConstellationIds] = useState<string[]>([])
+  const [isCardExpanded, setIsCardExpanded] = useState(false)
 
   // カスタム星座の状態管理
   const [customConstellations, setCustomConstellations] = useState<Constellation[]>([])
@@ -265,6 +266,7 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
   // 星をタップしたときの処理
   const handleStarTap = useCallback((starId: string) => {
     setSelectedStar(prev => prev === starId ? null : starId)
+    setIsCardExpanded(false)
   }, [])
 
   // リリース日順にソートした曲IDリスト（メモ化）
@@ -301,6 +303,7 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
   // 次/前の星に移動（画面移動なし）
   const navigateToStar = useCallback((starId: string) => {
     setSelectedStar(starId)
+    setIsCardExpanded(false)
   }, [])
 
   const goToNextStar = useCallback(() => {
@@ -859,10 +862,18 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
                 const albums = containingConstellations.filter(c => c.type === 'album' || c.type === 'single')
                 const lives = containingConstellations.filter(c => c.type === 'live')
                 if (albums.length === 0 && lives.length === 0) return null
+
+                const MAX_ALBUMS = 2
+                const MAX_LIVES = 2
+                const visibleAlbums = isCardExpanded ? albums : albums.slice(0, MAX_ALBUMS)
+                const visibleLives = isCardExpanded ? lives : lives.slice(0, MAX_LIVES)
+                const hiddenCount = Math.max(0, albums.length - MAX_ALBUMS) + Math.max(0, lives.length - MAX_LIVES)
+                const hasMore = hiddenCount > 0
+
                 return (
                   <div class="mt-3 pt-2 border-t border-slate-700/50">
                     <div class="flex flex-wrap justify-center gap-1.5">
-                      {albums.map(c => (
+                      {visibleAlbums.map(c => (
                         <button
                           key={c.id}
                           onClick={(e) => {
@@ -878,10 +889,10 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
                           <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M10 3.22l-.61-.6a5.5 5.5 0 0 0-7.78 7.77L10 18.78l8.39-8.4a5.5 5.5 0 0 0-7.78-7.77l-.61.61z" />
                           </svg>
-                          <span class="truncate max-w-24">{c.name}</span>
+                          <span class="truncate max-w-24">{c.shortName || c.name}</span>
                         </button>
                       ))}
-                      {lives.map(c => (
+                      {visibleLives.map(c => (
                         <button
                           key={c.id}
                           onClick={(e) => {
@@ -897,9 +908,35 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
                           <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
                           </svg>
-                          <span class="truncate max-w-24">{c.name}</span>
+                          <span class="truncate max-w-24">{c.shortName || c.name}</span>
                         </button>
                       ))}
+                      {/* 展開/折りたたみボタン */}
+                      {hasMore && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setIsCardExpanded(!isCardExpanded)
+                          }}
+                          class="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full bg-slate-700/50 text-slate-300 active:bg-slate-600/50"
+                        >
+                          {isCardExpanded ? (
+                            <>
+                              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                              </svg>
+                              <span>閉じる</span>
+                            </>
+                          ) : (
+                            <>
+                              <span>+{hiddenCount}件</span>
+                              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                              </svg>
+                            </>
+                          )}
+                        </button>
+                      )}
                     </div>
                   </div>
                 )
@@ -926,7 +963,7 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
       </div>
 
       {/* 上部UI: 検索ボタン */}
-      <div class="absolute top-16 left-3 z-20">
+      <div class="absolute left-3 z-20" style={{ top: 'var(--header-offset)' }}>
         <button
           onClick={openSearch}
           class="w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center flex-shrink-0 active:bg-slate-800"
@@ -945,7 +982,7 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
           <div class="absolute inset-0 bg-slate-950/90" onClick={closeSearch} />
 
           {/* 検索コンテンツ */}
-          <div class="relative z-10 p-4 pt-16">
+          <div class="relative z-10 p-4" style={{ paddingTop: 'var(--header-offset)' }}>
             {/* 検索入力 */}
             <div class="relative">
               <input
@@ -1006,7 +1043,7 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
       )}
 
       {/* 共有ボタン */}
-      <div class="absolute top-16 right-3 z-20">
+      <div class="absolute right-3 z-20" style={{ top: 'var(--header-offset)' }}>
         <ShareButton
           selectedConstellations={selectedConstellations}
           positions={positions}
@@ -1017,7 +1054,8 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
       {/* 使い方ボタン */}
       <button
         onClick={() => setShowTutorial(true)}
-        class="absolute top-28 right-3 w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center z-20 active:bg-slate-800"
+        class="absolute right-3 w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center z-20 active:bg-slate-800"
+        style={{ top: 'calc(var(--header-offset) + 3rem)' }}
         aria-label="使い方を見る"
       >
         <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1028,7 +1066,8 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
       {/* ロードマップボタン */}
       <button
         onClick={() => setShowRoadmap(true)}
-        class="absolute top-40 right-3 w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center z-20 active:bg-slate-800"
+        class="absolute right-3 w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center z-20 active:bg-slate-800"
+        style={{ top: 'calc(var(--header-offset) + 6rem)' }}
         aria-label="ロードマップを見る"
       >
         <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1039,7 +1078,8 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
       {/* フィードバックボタン */}
       <button
         onClick={() => setShowFeedback(true)}
-        class="absolute top-52 right-3 w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center z-20 active:bg-slate-800"
+        class="absolute right-3 w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center z-20 active:bg-slate-800"
+        style={{ top: 'calc(var(--header-offset) + 9rem)' }}
         aria-label="フィードバックを送る"
       >
         <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">

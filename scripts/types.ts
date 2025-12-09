@@ -15,6 +15,7 @@ export interface Song {
 export interface Constellation {
   id: string;
   name: string;
+  shortName?: string; // カード表示用の短い名前
   type: 'album' | 'live' | 'theme';
   year: number;
   date?: string;

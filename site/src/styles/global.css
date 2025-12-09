@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* iPhone Safe Area support */
+:root {
+  --sat: env(safe-area-inset-top, 0px);
+  --header-offset: calc(4rem + var(--sat));
+}
+
 /* Tutorial animation */
 @keyframes bounce-slow {
   0%, 100% {

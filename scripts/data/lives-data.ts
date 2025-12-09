@@ -6,6 +6,7 @@
 export interface Live {
   id: string;
   name: string;
+  shortName?: string; // カード表示用の短い名前
   type: 'dome' | 'arena' | 'hall' | 'stadium' | 'fc' | 'fes';
   year: number;
   date: string; // 初日
@@ -19,6 +20,7 @@ export const LIVES: Live[] = [
   {
     id: 'babel-no-toh-2025',
     name: 'DOME TOUR 2025 "BABEL no TOH"',
+    shortName: 'BABEL no TOH',
     type: 'dome',
     year: 2025,
     date: '2025-10-25',
@@ -53,6 +55,7 @@ export const LIVES: Live[] = [
   {
     id: 'fjord-2025',
     name: 'MGA MAGICAL 10 YEARS ANNIVERSARY LIVE 〜FJORD〜',
+    shortName: 'FJORD',
     type: 'stadium',
     year: 2025,
     date: '2025-07-26',
@@ -89,6 +92,7 @@ export const LIVES: Live[] = [
   {
     id: 'the-white-lounge-2024',
     name: 'FC TOUR 2023-2024 "The White Lounge"',
+    shortName: 'The White Lounge',
     type: 'fc',
     year: 2024,
     date: '2023-12-09',
@@ -116,6 +120,7 @@ export const LIVES: Live[] = [
   {
     id: 'harmony-2024',
     name: 'Mrs. GREEN APPLE on "Harmony"',
+    shortName: 'Harmony',
     type: 'arena',
     year: 2024,
     date: '2024-10-05',
@@ -146,6 +151,7 @@ export const LIVES: Live[] = [
   {
     id: 'meimei-2024',
     name: 'ゼンジン未到とヴェルトラウム〜銘銘編〜',
+    shortName: '銘銘編',
     type: 'stadium',
     year: 2024,
     date: '2024-07-06',
@@ -185,6 +191,7 @@ export const LIVES: Live[] = [
   {
     id: 'atlantis-2023',
     name: 'DOME LIVE 2023 "Atlantis"',
+    shortName: 'Atlantis',
     type: 'dome',
     year: 2023,
     date: '2023-08-12',
@@ -217,6 +224,7 @@ export const LIVES: Live[] = [
   {
     id: 'noah-2023',
     name: 'ARENA TOUR 2023 "NOAH no HAKOBUNE"',
+    shortName: 'NOAH no HAKOBUNE',
     type: 'arena',
     year: 2023,
     date: '2023-07-08',
@@ -251,6 +259,7 @@ export const LIVES: Live[] = [
   {
     id: 'zenmi-reliance-2022',
     name: 'Zepp Tour 2022 "ゼンジン未到とリライアンス〜復誦編〜"',
+    shortName: '復誦編',
     type: 'hall',
     year: 2022,
     date: '2022-11-12',
@@ -284,6 +293,7 @@ export const LIVES: Live[] = [
   {
     id: 'utopia-2022',
     name: 'ARENA SHOW "Utopia"',
+    shortName: 'Utopia',
     type: 'arena',
     year: 2022,
     date: '2022-07-08',
@@ -320,6 +330,7 @@ export const LIVES: Live[] = [
   {
     id: 'eden-2019',
     name: 'ARENA TOUR 2019 "エデンの園"',
+    shortName: 'エデンの園',
     type: 'arena',
     year: 2019,
     date: '2019-12-07',
@@ -352,6 +363,7 @@ export const LIVES: Live[] = [
   {
     id: 'room-tour-2019',
     name: 'HALL TOUR 2019 "The ROOM TOUR"',
+    shortName: 'The ROOM TOUR',
     type: 'hall',
     year: 2019,
     date: '2019-06-28',
