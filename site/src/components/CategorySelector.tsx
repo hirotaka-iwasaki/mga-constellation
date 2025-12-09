@@ -302,14 +302,25 @@ export function CategorySelector({
         }
         @keyframes pulse-glow {
           0%, 100% {
-            box-shadow: 0 0 0 0 rgba(52, 211, 153, 0);
+            opacity: 0;
           }
           50% {
-            box-shadow: 0 0 12px 4px rgba(52, 211, 153, 0.5);
+            opacity: 1;
           }
         }
         .animate-pulse-glow {
+          position: relative;
+        }
+        .animate-pulse-glow::after {
+          content: '';
+          position: absolute;
+          inset: -4px;
+          border-radius: 12px;
+          background: rgba(52, 211, 153, 0.4);
+          filter: blur(8px);
           animation: pulse-glow 2s ease-in-out infinite;
+          pointer-events: none;
+          z-index: -1;
         }
       `}</style>
     </div>

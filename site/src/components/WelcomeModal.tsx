@@ -43,12 +43,12 @@ export function WelcomeModal({ onClose }: WelcomeModalProps) {
 
         <button
           onClick={handleClose}
-          class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-medium rounded-lg transition-colors"
+          class="w-full py-3 bg-emerald-700 hover:bg-emerald-600 active:bg-emerald-800 text-white font-medium rounded-lg transition-colors"
         >
           はじめる
         </button>
 
-        <p class="text-slate-500 text-xs text-center mt-4">
+        <p class="text-slate-400 text-xs text-center mt-4">
           ファンメイドの非公式プロジェクトです
         </p>
       </div>
