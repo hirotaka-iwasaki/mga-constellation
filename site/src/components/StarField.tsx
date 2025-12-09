@@ -863,8 +863,8 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
                 const lives = containingConstellations.filter(c => c.type === 'live')
                 if (albums.length === 0 && lives.length === 0) return null
 
-                const MAX_ALBUMS = 2
-                const MAX_LIVES = 2
+                const MAX_ALBUMS = 1
+                const MAX_LIVES = 1
                 const visibleAlbums = isCardExpanded ? albums : albums.slice(0, MAX_ALBUMS)
                 const visibleLives = isCardExpanded ? lives : lives.slice(0, MAX_LIVES)
                 const hiddenCount = Math.max(0, albums.length - MAX_ALBUMS) + Math.max(0, lives.length - MAX_LIVES)
