@@ -12,6 +12,8 @@ const ideas = {
     icon: "🔭",
     color: "text-blue-400",
     items: [
+      { title: "楽曲の考察", description: "インタビューや歌詞をもとにLLMで楽曲テーマを考察" },
+      { title: "考察星座", description: "本質が近い楽曲同士を繋げる新しい星座" },
       { title: "今日のラッキースター", description: "ランダムな曲へジャンプして新しい出会いを" },
       { title: "初披露ライブへのリンク", description: "曲が初めて演奏されたライブへジャンプ" },
       { title: "探索率カウンター", description: "「空の○○%を探索済み」の表示" },
