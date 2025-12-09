@@ -151,12 +151,8 @@ export function RoadmapModal({ onClose, onOpenFeedback }: RoadmapModalProps) {
                   key={idx}
                   class="bg-white/5 rounded-lg px-3 py-2 border border-white/10"
                 >
-                  <div class="flex items-center gap-2">
-                    <span class="text-white/30 text-xs">•</span>
-                    <span class="text-sm text-white/90">{item.title}</span>
-                    <span class="text-white/30">—</span>
-                    <span class="text-xs text-white/50 flex-1">{item.description}</span>
-                  </div>
+                  <div class="text-sm text-white/90">{item.title}</div>
+                  <div class="text-xs text-white/50 mt-0.5">{item.description}</div>
                 </div>
               ))}
             </div>
