@@ -114,9 +114,21 @@ export function CategorySelector({
     <div class="absolute bottom-0 left-0 right-0 z-40" ref={dropdownRef} data-tutorial="footer">
       {/* 選択中タグ（フッター上に表示） */}
       {selectedConstellations.length > 0 && (
-        <div class="px-4 pb-2">
+        <div class="px-4 pb-2 flex items-center gap-2">
+          {/* すべて解除ボタン（固定） */}
+          <button
+            onClick={handleClearAll}
+            class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap flex-shrink-0 bg-slate-700 text-slate-300 border border-slate-600 active:bg-slate-600"
+            aria-label="すべての選択を解除"
+          >
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            すべて解除
+          </button>
+          {/* スクロール可能なタグ領域 */}
           <div
-            class="flex gap-1.5 overflow-x-auto py-1 justify-center overscroll-contain touch-pan-x"
+            class="flex gap-1.5 overflow-x-auto py-1 overscroll-contain touch-pan-x"
             onTouchMove={(e) => e.stopPropagation()}
           >
             {selectedConstellations.map((c) => (
