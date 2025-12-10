@@ -32,7 +32,29 @@ export function CategorySelector({
 }: CategorySelectorProps) {
   const [openCategory, setOpenCategory] = useState<CategoryType | null>(null)
   const [hasInteracted, setHasInteracted] = useState(false)
+  const [bottomOffset, setBottomOffset] = useState(0)
   const dropdownRef = useRef<HTMLDivElement>(null)
+
+  // Safari等でツールバーの高さを動的に検出してフッター位置を調整
+  useEffect(() => {
+    const updateBottomOffset = () => {
+      if (window.visualViewport) {
+        // visualViewport.heightはツールバーを除いた高さ
+        // window.innerHeightとの差がツールバーの高さ
+        const offset = window.innerHeight - window.visualViewport.height
+        setBottomOffset(offset)
+      }
+    }
+
+    updateBottomOffset()
+    window.visualViewport?.addEventListener('resize', updateBottomOffset)
+    window.visualViewport?.addEventListener('scroll', updateBottomOffset)
+
+    return () => {
+      window.visualViewport?.removeEventListener('resize', updateBottomOffset)
+      window.visualViewport?.removeEventListener('scroll', updateBottomOffset)
+    }
+  }, [])
 
   // 既存の星座IDと重複するカスタム星座は除外
   const existingIds = new Set(constellations.map(c => c.id))
@@ -111,7 +133,7 @@ export function CategorySelector({
   }, [onSelectionChange])
 
   return (
-    <div class="absolute bottom-0 left-0 right-0 z-40" ref={dropdownRef} data-tutorial="footer">
+    <div class="absolute left-0 right-0 z-40" ref={dropdownRef} data-tutorial="footer" style={{ bottom: `${bottomOffset}px` }}>
       {/* 選択中タグ（フッター上に表示） */}
       {selectedConstellations.length > 0 && (
         <div class="px-4 pb-2 flex items-center gap-2">
@@ -157,7 +179,7 @@ export function CategorySelector({
         </div>
       )}
       {/* カテゴリボタン */}
-      <div class="bg-slate-900/95 backdrop-blur-md border-t border-slate-700 p-4 pb-[max(5.5rem,calc(1rem+env(safe-area-inset-bottom,0px)))]">
+      <div class="bg-slate-900/95 backdrop-blur-md border-t border-slate-700 p-4 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
         <div class="flex gap-2 justify-center flex-wrap">
           {(Object.keys(CATEGORY_LABELS) as CategoryType[]).map((cat) => (
             <div key={cat} class="relative">
