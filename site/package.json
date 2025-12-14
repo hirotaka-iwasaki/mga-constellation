@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
+    "dev:api": "astro build && wrangler pages dev dist --kv=VOTES --port 4321",
     "build": "astro build && node scripts/inject-modulepreload.mjs",
     "preview": "astro preview",
     "astro": "astro"
@@ -14,5 +15,8 @@
     "astro": "^5.16.3",
     "preact": "^10.28.0",
     "tailwindcss": "^4.1.17"
+  },
+  "devDependencies": {
+    "wrangler": "^4.54.0"
   }
 }
