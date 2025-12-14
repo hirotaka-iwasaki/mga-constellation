@@ -240,11 +240,11 @@ export function RoadmapModal({ onClose, onOpenFeedback }: RoadmapModalProps) {
 
                     {/* 投票ボタン */}
                     <button
-                      onClick={() => handleVote(item.id)}
-                      disabled={isVoting}
+                      onClick={() => !isVoted && handleVote(item.id)}
+                      disabled={isVoting || isVoted}
                       class={`flex-shrink-0 flex items-center gap-1 px-2 py-1 rounded text-xs transition-colors ${
                         isVoted
-                          ? 'bg-emerald-600/30 text-emerald-400 border border-emerald-500/40'
+                          ? 'bg-emerald-600/30 text-emerald-400 border border-emerald-500/40 cursor-default'
                           : 'bg-white/10 text-white/70 border border-white/20 hover:bg-white/20 hover:text-white'
                       } ${isVoting ? 'opacity-50 cursor-wait' : ''}`}
                       aria-label={isVoted ? '投票済み' : '投票する'}
