@@ -30,10 +30,12 @@
 
 ```
 mga-constellation/
-├── MGA-DYNAMIC-CONSTELLATION-SPEC.md  # 設計仕様書
 ├── README.md
 ├── CLAUDE.md                          # 開発ガイド
 ├── TODO.md                            # 残タスク・改善案
+├── docs/                              # ドキュメント
+│   ├── MGA-DYNAMIC-CONSTELLATION-SPEC.md  # 設計仕様書
+│   └── BACKEND-IDEAS.md               # バックエンドアイデア
 ├── scripts/
 │   ├── package.json
 │   ├── tsconfig.json

@@ -32,9 +32,10 @@ mga-constellation/
 │   │   └── content/              # 生成データの出力先
 │   └── wrangler.toml             # Cloudflare KV設定
 ├── docs/                         # ドキュメント
-│   └── voting-api-design.md      # 投票API設計書
-├── MGA-DYNAMIC-CONSTELLATION-SPEC.md  # 詳細設計仕様書
-└── README.md
+│   ├── voting-api-design.md      # 投票API設計書
+│   ├── MGA-DYNAMIC-CONSTELLATION-SPEC.md  # 詳細設計仕様書
+│   └── BACKEND-IDEAS.md          # バックエンドアイデア
+├── README.md
 └── TODO.md                       # 残タスク・改善案
 ```
 
