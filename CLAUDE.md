@@ -21,11 +21,18 @@ mga-constellation/
 │   ├── output/                   # 生成されたJSONデータ
 │   └── types.ts                  # 共通型定義
 ├── site/                         # フロントエンド（Astro+Preact）
-│   └── src/
-│       ├── components/           # Preactコンポーネント
-│       │   ├── StarField.tsx     # 星図メイン
-│       │   └── CategorySelector.tsx # カテゴリ選択UI
-│       └── content/              # 生成データの出力先
+│   ├── functions/                # Cloudflare Pages Functions
+│   │   └── api/
+│   │       ├── votes.ts          # GET /api/votes
+│   │       └── vote.ts           # POST /api/vote
+│   ├── src/
+│   │   ├── components/           # Preactコンポーネント
+│   │   │   ├── StarField.tsx     # 星図メイン
+│   │   │   └── CategorySelector.tsx # カテゴリ選択UI
+│   │   └── content/              # 生成データの出力先
+│   └── wrangler.toml             # Cloudflare KV設定
+├── docs/                         # ドキュメント
+│   └── voting-api-design.md      # 投票API設計書
 ├── MGA-DYNAMIC-CONSTELLATION-SPEC.md  # 詳細設計仕様書
 └── README.md
 └── TODO.md                       # 残タスク・改善案
@@ -52,16 +59,50 @@ npm run 04:export         # site/へエクスポート
 ```bash
 cd site
 
-# 開発サーバー起動
+# 開発サーバー起動（フロントエンドのみ）
 npm run dev
+
+# 開発サーバー起動（API含む、投票機能の確認用）
+npm run dev:api
 ```
 
 ## 技術スタック
 
 - **データ処理**: TypeScript + Node.js (tsx)
 - **フロントエンド**: Astro + Preact + Tailwind CSS
+- **バックエンド**: Cloudflare Pages Functions + KV
 - **描画**: SVG + CSS Animations
 - **ホスティング**: Cloudflare Pages
+
+## バックエンド（投票API）
+
+投票機能は Cloudflare Pages Functions + KV で実装。
+
+### ローカル開発
+
+```bash
+cd site
+npm run dev:api  # ビルド後、ローカルKVモックでサーバー起動
+```
+
+### API エンドポイント
+
+- `GET /api/votes` - 全アイデアの投票数取得
+- `POST /api/vote` - アイデアに投票
+
+### 本番デプロイ設定
+
+1. KV Namespace 作成
+```bash
+npx wrangler kv:namespace create "VOTES"
+npx wrangler kv:namespace create "VOTES" --preview
+```
+
+2. `site/wrangler.toml` に出力されたIDを設定
+
+3. Cloudflare Dashboard → Pages → Settings → Functions → KV namespace bindings で `VOTES` をバインド
+
+詳細: `docs/voting-api-design.md`
 
 ## 開発方針
 
