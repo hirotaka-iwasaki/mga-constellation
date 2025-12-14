@@ -5,25 +5,38 @@ interface RoadmapModalProps {
   onOpenFeedback: () => void
 }
 
-// カテゴリ別アイデアデータ（TODO.mdの[公開:xxx]タグから抽出）
-const ideas = {
+interface IdeaItem {
+  id: string
+  title: string
+  description: string
+}
+
+interface IdeaSection {
+  title: string
+  icon: string
+  color: string
+  items: IdeaItem[]
+}
+
+// カテゴリ別アイデアデータ（IDを追加）
+const ideas: Record<string, IdeaSection> = {
   explore: {
     title: "探索・発見",
     icon: "🔭",
     color: "text-blue-400",
     items: [
-      { title: "楽曲の考察", description: "インタビューや歌詞をもとにLLMで楽曲テーマを考察" },
-      { title: "考察星座", description: "本質が近い楽曲同士を繋げる新しい星座" },
-      { title: "今日のラッキースター", description: "ランダムな曲へジャンプして新しい出会いを" },
-      { title: "初披露ライブへのリンク", description: "曲が初めて演奏されたライブへジャンプ" },
-      { title: "探索率カウンター", description: "「空の○○%を探索済み」の表示" },
-      { title: "日付ベースのイースターエッグ", description: "記念日に特別な星座が出現" },
-      { title: "共通曲ハイライト", description: "複数星座で共有される曲を強調表示" },
-      { title: "星座ガイドモード", description: "当時のセットリストを順に辿るガイド" },
-      { title: "全曲制覇スペシャル星座", description: "全曲訪問で隠し星座が出現" },
-      { title: "星座クイズ", description: "星座線だけでアルバム/ライブを当てるゲーム" },
-      { title: "オーディオプレビュー", description: "星選択時に30秒プレビュー再生" },
-      { title: "AR星空モード", description: "カメラ越しに星空を重ねて表示" },
+      { id: "explore-song-analysis", title: "楽曲の考察", description: "インタビューや歌詞をもとにLLMで楽曲テーマを考察" },
+      { id: "explore-concept-constellation", title: "考察星座", description: "本質が近い楽曲同士を繋げる新しい星座" },
+      { id: "explore-lucky-star", title: "今日のラッキースター", description: "ランダムな曲へジャンプして新しい出会いを" },
+      { id: "explore-first-live-link", title: "初披露ライブへのリンク", description: "曲が初めて演奏されたライブへジャンプ" },
+      { id: "explore-progress-counter", title: "探索率カウンター", description: "「空の○○%を探索済み」の表示" },
+      { id: "explore-easter-egg", title: "日付ベースのイースターエッグ", description: "記念日に特別な星座が出現" },
+      { id: "explore-common-songs", title: "共通曲ハイライト", description: "複数星座で共有される曲を強調表示" },
+      { id: "explore-guide-mode", title: "星座ガイドモード", description: "当時のセットリストを順に辿るガイド" },
+      { id: "explore-complete-constellation", title: "全曲制覇スペシャル星座", description: "全曲訪問で隠し星座が出現" },
+      { id: "explore-quiz", title: "星座クイズ", description: "星座線だけでアルバム/ライブを当てるゲーム" },
+      { id: "explore-audio-preview", title: "オーディオプレビュー", description: "星選択時に30秒プレビュー再生" },
+      { id: "explore-ar-mode", title: "AR星空モード", description: "カメラ越しに星空を重ねて表示" },
     ]
   },
   share: {
@@ -31,11 +44,11 @@ const ideas = {
     icon: "✨",
     color: "text-pink-400",
     items: [
-      { title: "URL短縮", description: "共有URLをより短く、シェアしやすく" },
-      { title: "推奨ハッシュタグ表示", description: "共有時に #ミセス推し座 を提案" },
-      { title: "診断・称号機能", description: "選んだ曲傾向から「Pop星雲型」などの称号" },
-      { title: "星座コンプリートバッジ", description: "アルバム全曲探索で達成カードを付与" },
-      { title: "動的OGP画像生成", description: "選択した星座のプレビュー画像を自動生成" },
+      { id: "share-url-short", title: "URL短縮", description: "共有URLをより短く、シェアしやすく" },
+      { id: "share-hashtag", title: "推奨ハッシュタグ表示", description: "共有時に #ミセス推し座 を提案" },
+      { id: "share-diagnosis", title: "診断・称号機能", description: "選んだ曲傾向から「Pop星雲型」などの称号" },
+      { id: "share-complete-badge", title: "星座コンプリートバッジ", description: "アルバム全曲探索で達成カードを付与" },
+      { id: "share-dynamic-ogp", title: "動的OGP画像生成", description: "選択した星座のプレビュー画像を自動生成" },
     ]
   },
   display: {
@@ -43,13 +56,13 @@ const ideas = {
     icon: "🌟",
     color: "text-amber-400",
     items: [
-      { title: "カードにジャケット表示", description: "アルバムアートを詳細カードに表示" },
-      { title: "曲名ラベル表示", description: "ズームに応じて曲名を表示/非表示" },
-      { title: "フェーズ1/2の視覚的分類", description: "活動フェーズで楽曲を色分け" },
-      { title: "星の脈動アニメーション", description: "タップ時にゆっくり脈動する演出" },
-      { title: "流れ星エフェクト", description: "操作がないと流れ星が流れる" },
-      { title: "背景カラー演出", description: "選択中アルバムのテーマカラーを背景に反映" },
-      { title: "カラーテーマ切替", description: "昼/夜モード、GREEN APPLEモードなど" },
+      { id: "display-jacket", title: "カードにジャケット表示", description: "アルバムアートを詳細カードに表示" },
+      { id: "display-song-label", title: "曲名ラベル表示", description: "ズームに応じて曲名を表示/非表示" },
+      { id: "display-phase", title: "フェーズ1/2の視覚的分類", description: "活動フェーズで楽曲を色分け" },
+      { id: "display-pulse-animation", title: "星の脈動アニメーション", description: "タップ時にゆっくり脈動する演出" },
+      { id: "display-shooting-star", title: "流れ星エフェクト", description: "操作がないと流れ星が流れる" },
+      { id: "display-bg-color", title: "背景カラー演出", description: "選択中アルバムのテーマカラーを背景に反映" },
+      { id: "display-color-theme", title: "カラーテーマ切替", description: "昼/夜モード、GREEN APPLEモードなど" },
     ]
   },
   utility: {
@@ -57,16 +70,54 @@ const ideas = {
     icon: "⚡",
     color: "text-emerald-400",
     items: [
-      { title: "PWA対応", description: "ホーム画面に追加してアプリのように使用" },
-      { title: "Spotify連携", description: "再生履歴に基づき、よく聴く曲を強調" },
-      { title: "Apple Music連携", description: "ライブラリとの連携機能" },
-      { title: "多言語対応", description: "英語表示に切り替え可能" },
+      { id: "utility-pwa", title: "PWA対応", description: "ホーム画面に追加してアプリのように使用" },
+      { id: "utility-spotify", title: "Spotify連携", description: "再生履歴に基づき、よく聴く曲を強調" },
+      { id: "utility-apple-music", title: "Apple Music連携", description: "ライブラリとの連携機能" },
+      { id: "utility-i18n", title: "多言語対応", description: "英語表示に切り替え可能" },
     ]
   },
 }
 
+const STORAGE_KEY = 'mga-voted-ideas'
+
+function getVotedIds(): string[] {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+  } catch {
+    return []
+  }
+}
+
+function saveVotedId(ideaId: string): void {
+  const voted = getVotedIds()
+  if (!voted.includes(ideaId)) {
+    voted.push(ideaId)
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(voted))
+  }
+}
+
 export function RoadmapModal({ onClose, onOpenFeedback }: RoadmapModalProps) {
   const [isVisible, setIsVisible] = useState(true)
+  const [votes, setVotes] = useState<Record<string, number>>({})
+  const [votedIds, setVotedIds] = useState<string[]>([])
+  const [votingId, setVotingId] = useState<string | null>(null)
+
+  // 初期化: 投票数取得 & localStorage から投票済みID読み込み
+  useEffect(() => {
+    setVotedIds(getVotedIds())
+
+    // 投票数を取得
+    fetch('/api/votes')
+      .then(res => res.json())
+      .then(data => {
+        if (data.votes) {
+          setVotes(data.votes)
+        }
+      })
+      .catch(err => {
+        console.error('Failed to fetch votes:', err)
+      })
+  }, [])
 
   // モーダル表示中は背景のスクロールを無効化
   useEffect(() => {
@@ -90,6 +141,30 @@ export function RoadmapModal({ onClose, onOpenFeedback }: RoadmapModalProps) {
       onOpenFeedback()
     }, 300)
   }, [onClose, onOpenFeedback])
+
+  const handleVote = useCallback(async (ideaId: string) => {
+    if (votingId) return // 投票中は無視
+
+    setVotingId(ideaId)
+    try {
+      const res = await fetch('/api/vote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ideaId }),
+      })
+      const data = await res.json()
+
+      if (data.success) {
+        setVotes(prev => ({ ...prev, [ideaId]: data.votes }))
+        saveVotedId(ideaId)
+        setVotedIds(prev => [...prev, ideaId])
+      }
+    } catch (err) {
+      console.error('Failed to vote:', err)
+    } finally {
+      setVotingId(null)
+    }
+  }, [votingId])
 
   return (
     <div
@@ -125,7 +200,7 @@ export function RoadmapModal({ onClose, onOpenFeedback }: RoadmapModalProps) {
           Ideas
         </h2>
         <p class="text-slate-400 text-sm mb-3">
-          検討中のアイデア
+          検討中のアイデア - 欲しい機能に投票してください
         </p>
 
         {/* フィードバックボタン */}
@@ -148,15 +223,46 @@ export function RoadmapModal({ onClose, onOpenFeedback }: RoadmapModalProps) {
             </h3>
 
             <div class="space-y-1.5">
-              {section.items.map((item, idx) => (
-                <div
-                  key={idx}
-                  class="bg-white/5 rounded-lg px-3 py-2 border border-white/10"
-                >
-                  <div class="text-sm text-white/90">{item.title}</div>
-                  <div class="text-xs text-white/50 mt-0.5">{item.description}</div>
-                </div>
-              ))}
+              {section.items.map((item) => {
+                const isVoted = votedIds.includes(item.id)
+                const isVoting = votingId === item.id
+                const voteCount = votes[item.id] || 0
+
+                return (
+                  <div
+                    key={item.id}
+                    class="bg-white/5 rounded-lg px-3 py-2 border border-white/10 flex items-start gap-2"
+                  >
+                    <div class="flex-1 min-w-0">
+                      <div class="text-sm text-white/90">{item.title}</div>
+                      <div class="text-xs text-white/50 mt-0.5">{item.description}</div>
+                    </div>
+
+                    {/* 投票ボタン */}
+                    <button
+                      onClick={() => handleVote(item.id)}
+                      disabled={isVoting}
+                      class={`flex-shrink-0 flex items-center gap-1 px-2 py-1 rounded text-xs transition-colors ${
+                        isVoted
+                          ? 'bg-emerald-600/30 text-emerald-400 border border-emerald-500/40'
+                          : 'bg-white/10 text-white/70 border border-white/20 hover:bg-white/20 hover:text-white'
+                      } ${isVoting ? 'opacity-50 cursor-wait' : ''}`}
+                      aria-label={isVoted ? '投票済み' : '投票する'}
+                    >
+                      {isVoted ? (
+                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                      ) : (
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                        </svg>
+                      )}
+                      <span>{voteCount}</span>
+                    </button>
+                  </div>
+                )
+              })}
             </div>
           </section>
         ))}
