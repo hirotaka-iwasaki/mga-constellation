@@ -41,29 +41,25 @@ mga-constellation/
 ## クイックコマンド
 
 ```bash
+# 依存関係インストール + 開発サーバー起動（推奨）
+make dev
+
+# その他のコマンド
+make install     # 依存関係インストール
+make dev-front   # フロントエンドのみ起動（APIなし）
+make build       # 本番ビルド
+make data        # 楽曲・星座データ再生成
+make clean       # ビルド成果物削除
+```
+
+### 個別実行（scriptsディレクトリ）
+
+```bash
 cd scripts
-
-# 依存関係インストール
-npm install
-
-# 全ビルドステップを順次実行
-npm run build
-
-# 個別実行
 npm run 01:songs          # 楽曲データ生成
 npm run 02:constellations # 星座データ構築
 npm run 03:positions      # 位置計算（グリッド配置）
 npm run 04:export         # site/へエクスポート
-```
-
-```bash
-cd site
-
-# 開発サーバー起動（フロントエンドのみ）
-npm run dev
-
-# 開発サーバー起動（API含む、投票機能の確認用）
-npm run dev:api
 ```
 
 ## 技術スタック
