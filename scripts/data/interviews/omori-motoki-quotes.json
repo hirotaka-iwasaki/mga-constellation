@@ -1,0 +1,478 @@
+{
+  "artist": "大森元貴",
+  "role": "Vo/Gt, 作詞作曲編曲",
+  "collectedAt": "2025-12-14",
+  "categories": {
+    "musicPhilosophy": {
+      "label": "音楽観・曲作りの姿勢",
+      "quotes": [
+        {
+          "quote": "歌ったり踊ったり、そういうのは幼い頃から好きでしたね。いつからか鼻歌交じりで曲を作るようになったのは小学生ぐらいの頃で、小学6年生のときにバンドを組んだんです",
+          "context": "曲作りの原点について",
+          "source": "Billboard JAPAN",
+          "year": 2024,
+          "url": "https://www.billboard-japan.com/special/detail/4296"
+        },
+        {
+          "quote": "承認欲求を満たせず悶々とした時期に、『自分だけの誇れるもの』として音楽制作を始めた",
+          "context": "音楽を始めた動機",
+          "source": "Billboard JAPAN",
+          "year": 2024,
+          "url": "https://www.billboard-japan.com/special/detail/4296"
+        },
+        {
+          "quote": "ポピュラー・ミュージックをつくっているという自覚を持ち、多くの人に届けるうえで大事なのは、価値観を定めたり答え合わせをすることではなく、受け取る側に任せる",
+          "context": "ポップミュージックへの姿勢",
+          "source": "美術手帖",
+          "year": 2024,
+          "url": "https://bijutsutecho.com/magazine/interview/31127"
+        },
+        {
+          "quote": "自分が先導者ではないという意識を重視し、受け手に解釈の余白を残すことを大切にしている",
+          "context": "作詞における姿勢",
+          "source": "美術手帖",
+          "year": 2024,
+          "url": "https://bijutsutecho.com/magazine/interview/31127"
+        },
+        {
+          "quote": "5年後、10年後に自分が聴いても恥ずかしくない曲を書くことを目指し、より普遍的で自分に正直な表現を追求している",
+          "context": "楽曲制作の目標",
+          "source": "Billboard JAPAN",
+          "year": 2024,
+          "url": "https://www.billboard-japan.com/special/detail/4296"
+        },
+        {
+          "quote": "ポップ・ミュージックとしての強度を上げるには、華やかさだけでなく深さが必要。『間口と奥行き』が重要",
+          "context": "バンドの美学について",
+          "source": "Billboard JAPAN",
+          "year": 2024,
+          "url": "https://www.billboard-japan.com/special/detail/4296"
+        },
+        {
+          "quote": "エンタメを極めるには、ドキュメントを極めていかなきゃいけないと直感的に気づいた",
+          "context": "ENSEMBLEツアー後の気づき",
+          "source": "Billboard JAPAN",
+          "year": 2024,
+          "url": "https://www.billboard-japan.com/special/detail/4296"
+        },
+        {
+          "quote": "僕らは決して『ポップ＝明るい』ではないと思ってる。僕ら自身もポップバンドだと思ってるんですけど、僕らが言うポップとリスナーが思ってるポップにズレがあるなあと思って",
+          "context": "ポップの定義について",
+          "source": "rockinon.com",
+          "year": 2017,
+          "url": "https://rockinon.com/news/detail/166351"
+        },
+        {
+          "quote": "正しく伝えたい欲が増してきた",
+          "context": "メッセージの伝達について",
+          "source": "Skream!",
+          "year": 2019,
+          "url": "https://skream.jp/interview/2019/10/mrs_green_apple.php"
+        }
+      ]
+    },
+    "lifePhilosophy": {
+      "label": "人生観・哲学・死生観",
+      "quotes": [
+        {
+          "quote": "絶対的な正解があるのではなく、それぞれの正解があるような感覚が面白い。正解がない中で、僕はこう思うんだと話し合っていくことが、今の世の中で大事なことではと思う",
+          "context": "哲学への関心について",
+          "source": "ガクシンFind",
+          "year": 2016,
+          "url": "https://gakushin-kyoto.com/music-interview/160224.html"
+        },
+        {
+          "quote": "芸術は衣食住のように必須ではないが、その余剰によって人の孤独感に寄り添える",
+          "context": "芸術の役割について",
+          "source": "美術手帖",
+          "year": 2024,
+          "url": "https://bijutsutecho.com/magazine/interview/31127"
+        },
+        {
+          "quote": "胸がキュッとなる感じ、つまり寂しさを感じることが大切",
+          "context": "写真作品の選定基準について",
+          "source": "美術手帖",
+          "year": 2024,
+          "url": "https://bijutsutecho.com/magazine/interview/31127"
+        },
+        {
+          "quote": "表現活動は孤独なこと。自らの孤独な気持ちを紛らわす作業",
+          "context": "表現活動の本質について",
+          "source": "美術手帖",
+          "year": 2024,
+          "url": "https://bijutsutecho.com/magazine/interview/31127"
+        },
+        {
+          "quote": "自分がテレビに出ている姿は、本当に虚像だと思っています。シャイで自信がない自分をどうやって補完するのかということは、ずっと考えてきたこと",
+          "context": "メディアでの自分について",
+          "source": "美術手帖",
+          "year": 2024,
+          "url": "https://bijutsutecho.com/magazine/interview/31127"
+        },
+        {
+          "quote": "人は必要と不必要、葛藤と調和に向き合っている。完璧な喜びは存在しない",
+          "context": "人生観について",
+          "source": "ORICON NEWS",
+          "year": 2024,
+          "url": "https://www.oricon.co.jp/special/71047/"
+        },
+        {
+          "quote": "物事にはいつか終わりが来るという真理と、傷つくことがあっても愛することを諦めたくないという願い",
+          "context": "楽曲制作の根底にある思い",
+          "source": "SPICE",
+          "year": 2018,
+          "url": "https://spice.eplus.jp/articles/198912"
+        }
+      ]
+    },
+    "bandVision": {
+      "label": "バンドの方向性・ビジョン",
+      "quotes": [
+        {
+          "quote": "何にも例え難い存在になることが目標",
+          "context": "11年目以降のビジョン",
+          "source": "Billboard JAPAN",
+          "year": 2024,
+          "url": "https://www.billboard-japan.com/special/detail/4296"
+        },
+        {
+          "quote": "この3人だからちゃんと今フェーズ2を走ることができていて、それもどれも全部奇跡",
+          "context": "メンバーとの関係について",
+          "source": "音楽ナタリー",
+          "year": 2022,
+          "url": "https://natalie.mu/music/pp/mrsgreenapple03/page/3"
+        },
+        {
+          "quote": "人の顔色を窺う姿勢から『僕らはこうだ』と投げるアプローチへ転換した",
+          "context": "Attitudeアルバム制作時の変化",
+          "source": "Skream!",
+          "year": 2019,
+          "url": "https://skream.jp/interview/2019/10/mrs_green_apple.php"
+        },
+        {
+          "quote": "デビュー当初の『ぽっと出』というイメージを払拭するため、『10年後を見とけよ！』という強い決意を持っていた",
+          "context": "バンド結成10年を振り返って",
+          "source": "BARKS",
+          "year": 2023,
+          "url": "https://www.barks.jp/news/?id=1000233130"
+        },
+        {
+          "quote": "11年間、抽象的なオノマトペのような言葉で共有し、マインドの部分で通じ合っていることが強み",
+          "context": "メンバー間のコミュニケーション",
+          "source": "モデルプレス",
+          "year": 2024,
+          "url": "https://mdpr.jp/interview/detail/4437663"
+        }
+      ]
+    },
+    "phase2": {
+      "label": "フェーズ2・活動休止について",
+      "quotes": [
+        {
+          "quote": "やりたいことは頭の中であるのに、フィジカル的に僕らが全然表現できないと思った。1回お休みをもらってインプットの期間が欲しかった",
+          "context": "活動休止の理由",
+          "source": "モデルプレス",
+          "year": 2022,
+          "url": "https://mdpr.jp/news/detail/3873390"
+        },
+        {
+          "quote": "限界でしたね。表現をする上で。表現者として後ろを振り返った時に、目の前のことを精一杯やれてはいるんだけど、それだけなんじゃないかっていう",
+          "context": "フェーズ1終盤の心境",
+          "source": "RealSound",
+          "year": 2022,
+          "url": "https://realsound.jp/2022/07/post-1068820_2.html"
+        },
+        {
+          "quote": "16歳でミセスを組んで、18歳でメジャーデビューしたんですけど、そこから時間止まってたもんね。22、23歳になっても16歳のような気持ちでバンドをやっていた",
+          "context": "活動休止前の状態について",
+          "source": "モデルプレス",
+          "year": 2024,
+          "url": "https://mdpr.jp/interview/detail/4437663"
+        },
+        {
+          "quote": "フェーズ1の終盤はどこか孤独だったので、活動休止した意味があるなと思います",
+          "context": "活動休止の意義について",
+          "source": "モデルプレス",
+          "year": 2024,
+          "url": "https://mdpr.jp/interview/detail/4437663"
+        },
+        {
+          "quote": "バンドマンが踊っちゃダメって理由はないよね？",
+          "context": "ダンスホールMV制作時の発想",
+          "source": "BARKS",
+          "year": 2022,
+          "url": "https://www.barks.jp/news/?id=1000221577"
+        },
+        {
+          "quote": "今って戦争も起きているし、コロナもまだ収まっていないし、世界情勢的には圧倒的に『大丈夫じゃない』毎日。無責任なポップではダメだと思った。『大丈夫って言ってみようよ』ということを歌おう",
+          "context": "ダンスホール制作の意図",
+          "source": "BARKS",
+          "year": 2022,
+          "url": "https://www.barks.jp/news/?id=1000221800&page=3"
+        }
+      ]
+    },
+    "songComments": {
+      "label": "個別楽曲についてのコメント",
+      "songs": {
+        "ライラック": [
+          {
+            "quote": "大人が思う青春みたいなものを書きたいと思いました。ライラックって青というより、ちょっと渋みの加わった青紫みたいな色の花で。『青と夏』がピカピカの青だとすれば、ちょっと年齢が上がっているんだけど、それでもまだ僕らの中に残っている青い部分みたいなことを歌いたいと思った",
+            "source": "Billboard JAPAN",
+            "year": 2024,
+            "url": "https://www.billboard-japan.com/special/detail/4296"
+          },
+          {
+            "quote": "『青と夏』のアンサーソングみたいな感覚に近い",
+            "source": "Billboard JAPAN",
+            "year": 2024,
+            "url": "https://www.billboard-japan.com/special/detail/4296"
+          },
+          {
+            "quote": "若井が泣くようなギターを作ってやろうと思ってワクワクしましたね",
+            "source": "Billboard JAPAN",
+            "year": 2024,
+            "url": "https://www.billboard-japan.com/special/detail/4296"
+          }
+        ],
+        "青と夏": [
+          {
+            "quote": "映画の制作チームの方々との打ち合わせをして、『この夏を自分のものにするぞ』っていう気持ちを観客にちゃんと持ち帰ってほしいっていう話を聞いた。『自分事』というのが大事なキーワードになった",
+            "source": "SPICE",
+            "year": 2018,
+            "url": "https://spice.eplus.jp/articles/198912"
+          },
+          {
+            "quote": "この歌詞にたどり着くまでが、結構辛かった。いつもメロディと歌詞は同時に浮かぶんですけど、この曲は頭にあることを、どう書いていいかが掴めなかった",
+            "source": "SPICE",
+            "year": 2018,
+            "url": "https://spice.eplus.jp/articles/198912"
+          },
+          {
+            "quote": "歌詞に『映画じゃない』というフレーズを入れたのは、かなりぶっこんでいると思うんですけど、修正も一切なく一発で通った",
+            "source": "SPICE",
+            "year": 2018,
+            "url": "https://spice.eplus.jp/articles/198912"
+          }
+        ],
+        "ケセラセラ": [
+          {
+            "quote": "脚本を読んだ時に純粋にその内容に共感した。人は劣等感や敗北感を抱きながらもその中で生きていると日ごろから感じており、そういう人たちにフォーカスした楽曲を書きたいと思っていた",
+            "source": "BARKS",
+            "year": 2023,
+            "url": "https://www.barks.jp/news/?id=1000233130"
+          },
+          {
+            "quote": "勝てなくてもいいから、負けないでいることの強さ、そのプライドの大切さをすごく感じた",
+            "source": "BARKS",
+            "year": 2023,
+            "url": "https://www.barks.jp/news/?id=1000233130"
+          },
+          {
+            "quote": "第一話の脚本を読ませていただき、頭3ページの時点で涙が出てしまいました。心がガッツリと掴まれてしまい、僕が個人的に大切にしている琴線に触れました",
+            "source": "BARKS",
+            "year": 2023,
+            "url": "https://www.barks.jp/news/?id=1000233130"
+          },
+          {
+            "quote": "なるようになる。良いとか悪いとかではなく、なるようになる。そう信じて楽曲を書きました",
+            "source": "BARKS",
+            "year": 2023,
+            "url": "https://www.barks.jp/news/?id=1000233130"
+          }
+        ],
+        "Soranji": [
+          {
+            "quote": "極限状態の中で見出す希望みたいなことがとってもキーになると思ったので、僕極限状態になんなきゃって思った。食事も水も摂らず部屋を真っ暗にし、修行ですよね。5キロくらい痩せてるんですよ、『Soranji』書いて",
+            "source": "音楽ナタリー",
+            "year": 2022,
+            "url": "https://natalie.mu/music/pp/mrsgreenapple03/page/3"
+          },
+          {
+            "quote": "生きる事への探究、深淵に触れるようなただならぬ感覚でなんとか制作することが出来ました",
+            "source": "音楽ナタリー",
+            "year": 2022,
+            "url": "https://natalie.mu/music/pp/mrsgreenapple03/page/3"
+          },
+          {
+            "quote": "『Soranji』は人生観や死生観まで、すべてを言い切ってしまった感覚があって",
+            "source": "BARKS",
+            "year": 2022,
+            "url": "https://www.barks.jp/news/?id=1000233130"
+          },
+          {
+            "quote": "難しい楽曲じゃないですか。難しいし、派手じゃない。プロモーション会議とかでも『たぶんヒットしないよ』ってスタッフに話していた",
+            "source": "Billboard JAPAN",
+            "year": 2024,
+            "url": "https://www.billboard-japan.com/special/detail/4296"
+          }
+        ],
+        "ロマンチシズム": [
+          {
+            "quote": "人類愛をコンセプトに制作した。愛を裏返しながら、故意的に恋する奴らも人間であって、肯定も否定もせず、『それも全て人間さ』っていう視点で歌ってる",
+            "source": "USEN encore",
+            "year": 2019,
+            "url": "https://e.usen.com/archive/sub-archive/24522.html"
+          },
+          {
+            "quote": "ロマンチシズムって言葉がそもそも両極端な意味を含む言葉。ロマンって言葉もある一方で、空想に浸る傾向みたいな、ちょっとシニカルな意味もある",
+            "source": "USEN encore",
+            "year": 2019,
+            "url": "https://e.usen.com/archive/sub-archive/24522.html"
+          }
+        ],
+        "僕のこと": [
+          {
+            "quote": "勝負やスポーツに対して曲を書いたことがないなかで、自分がどう生きているかを歌うことでしか、エールを送ることができない",
+            "source": "Skream!",
+            "year": 2019,
+            "url": "https://skream.jp/interview/2019/10/mrs_green_apple.php"
+          }
+        ],
+        "点描の唄": [
+          {
+            "quote": "台本をいただいて、『ここからここまでで流れます』『でも曲の歌詞で必要なことを言えていたら、この台詞がなくなっても大丈夫です』っていう、ものすごいオーダーをいただいて",
+            "source": "SPICE",
+            "year": 2018,
+            "url": "https://spice.eplus.jp/articles/198912"
+          }
+        ],
+        "天国": [
+          {
+            "quote": "希望とか前に向かう力みたいなものって、楽曲から誘導するものとしてはゼロ。『Soranji』には希望を信じることとか、生きることを諦めないこととか、前に進んでいく力があったんですけど、天国って『無』なんですよね。虚無というか",
+            "source": "ORICON NEWS",
+            "year": 2024,
+            "url": "https://www.oricon.co.jp/special/71047/"
+          }
+        ],
+        "ダンスホール": [
+          {
+            "quote": "思い切りファンクにして制作した。マイケル・ジャクソンではないけど、ああいう軽快な曲って、意外とこれまでミセスではやったことのなかったジャンル",
+            "source": "BARKS",
+            "year": 2022,
+            "url": "https://www.barks.jp/news/?id=1000221800&page=3"
+          }
+        ],
+        "インフェルノ": [
+          {
+            "quote": "アニメ、やっぱり好きだし",
+            "source": "Billboard JAPAN",
+            "year": 2024,
+            "url": "https://www.billboard-japan.com/special/detail/4296"
+          }
+        ]
+      }
+    },
+    "soloActivities": {
+      "label": "ソロ活動について",
+      "quotes": [
+        {
+          "quote": "僕の中でミセスは交感神経で、ソロは副交感神経だと思っている。ドキドキ・ワクワクできるものがミセスで、安心してホッとできるのがソロ",
+          "context": "ミセスとソロの違いについて",
+          "source": "Billboard JAPAN",
+          "year": 2024,
+          "url": "https://www.billboard-japan.com/special/detail/4868"
+        },
+        {
+          "quote": "僕が化粧をしているんだったらソロはすっぴんみたいな感覚",
+          "context": "ソロ活動の性質について",
+          "source": "Billboard JAPAN",
+          "year": 2024,
+          "url": "https://www.billboard-japan.com/special/detail/4868"
+        },
+        {
+          "quote": "自分の心身の健康上、やるべきことだと思っていた。いち作家として、より健全にナチュラルに、何も考えずに楽曲を作れる場や時間を設けることは必要",
+          "context": "ソロ活動を続ける理由",
+          "source": "Billboard JAPAN",
+          "year": 2024,
+          "url": "https://www.billboard-japan.com/special/detail/4868"
+        },
+        {
+          "quote": "ミセスだと、若い方がたくさん聴いてくれていることもあって、『こういうことは言えないな』という意識し始めていたタイミング。ソロではもうちょっと自由にやれたらいい",
+          "context": "ミセスでの制約とソロでの自由",
+          "source": "BARKS",
+          "year": 2021,
+          "url": "https://www.barks.jp/news/?id=1000206821"
+        },
+        {
+          "quote": "Mrs. GREEN APPLEが再開する時に色んな多様性が認められるような橋渡しをしている部分もある",
+          "context": "ソロ活動のバンドへの還元",
+          "source": "モデルプレス",
+          "year": 2021,
+          "url": "https://mdpr.jp/interview/detail/2719660"
+        }
+      ]
+    },
+    "photography": {
+      "label": "写真・視覚表現",
+      "quotes": [
+        {
+          "quote": "フィルムだったり、アナログのよさというか、小難しさに憧れる部分があって。自分が見てる世界が音楽とは違う形で具現化されるところにカメラの魅力を感じて始めました",
+          "context": "写真を始めた理由",
+          "source": "音楽ナタリー",
+          "year": 2024,
+          "url": "https://natalie.mu/music/news/630916"
+        },
+        {
+          "quote": "自分の感情がはっきりとしていない瞬間にシャッターを切る機会が多い。写真を見返すことによって、このときの自分はこういうことを考えていたんじゃないかとか、自分自身を追体験することが多い",
+          "context": "撮影のタイミングについて",
+          "source": "音楽ナタリー",
+          "year": 2024,
+          "url": "https://natalie.mu/music/news/630916"
+        },
+        {
+          "quote": "1人の人間として、自分を認めてあげられるか。この世界は続いていくのか、この表現が終わってしまうのか、いろいろわからないけれど、自問自答する意味でも、このタイトルを付けました",
+          "context": "写真展タイトル『僕が居ようが居まいが』について",
+          "source": "音楽ナタリー",
+          "year": 2024,
+          "url": "https://natalie.mu/music/news/630916"
+        }
+      ]
+    },
+    "healthAndStruggles": {
+      "label": "困難・健康問題",
+      "quotes": [
+        {
+          "quote": "難聴と診断されてからのツアー後半戦が辛かった。薬の副作用を含む身体的な辛さが精神的なものより大きかった",
+          "context": "突発性難聴について",
+          "source": "モデルプレス",
+          "year": 2024,
+          "url": "https://mdpr.jp/interview/detail/4437663"
+        },
+        {
+          "quote": "ツアーを続けるという言葉を聞いて、なおさら『頑張るしかないでしょう』と決意しました（藤澤涼架）",
+          "context": "大森の難聴発症後のメンバーの対応",
+          "source": "モデルプレス",
+          "year": 2024,
+          "url": "https://mdpr.jp/interview/detail/4437663"
+        }
+      ]
+    }
+  },
+  "themes": [
+    "孤独と寂しさ",
+    "人間愛・人類愛",
+    "生と死",
+    "希望と絶望",
+    "青春",
+    "成長と変化",
+    "自己肯定",
+    "挫折と再起",
+    "愛することの大切さ",
+    "終わりがあるからこその輝き"
+  ],
+  "keywords": [
+    "孤独",
+    "寂しさ",
+    "ポップ",
+    "間口と奥行き",
+    "虚像",
+    "フェーズ",
+    "自分事",
+    "なるようになる",
+    "人間",
+    "青",
+    "光",
+    "死生観"
+  ]
+}

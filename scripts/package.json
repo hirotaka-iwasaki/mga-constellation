@@ -10,7 +10,12 @@
     "04:export": "tsx 05-export-to-site.ts",
     "build": "npm run 01:songs && npm run 02:constellations && npm run 03:positions && npm run 04:export",
     "dev": "npm run build",
-    "lyrics": "tsx add-lyrics.ts"
+    "lyrics": "tsx add-lyrics.ts",
+    "analyze": "tsx analyze-songs.ts",
+    "analyze:dry": "tsx analyze-songs.ts --dry-run"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.52.0"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",

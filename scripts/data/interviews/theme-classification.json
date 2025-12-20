@@ -1,0 +1,194 @@
+{
+  "title": "テーマ分類マッピング（Phase2 → Phase3連携用）",
+  "analyzedAt": "2025-12-14",
+  "description": "発言分析から導出したテーマ分類。Phase3の楽曲本質推論で使用する基準",
+
+  "themeDefinitions": {
+    "孤独・寂しさ": {
+      "id": "loneliness",
+      "keywords": ["孤独", "寂しさ", "一人", "虚無", "静けさ"],
+      "artistQuote": "表現活動は孤独なこと。自らの孤独な気持ちを紛らわす作業",
+      "musicalCharacteristics": ["静かなバラード", "内省的な歌詞", "余白のあるアレンジ"],
+      "confirmedSongs": ["天国"],
+      "possibleSongs": ["僕のこと"]
+    },
+
+    "人間愛・肯定": {
+      "id": "human-love",
+      "keywords": ["人間", "愛", "肯定", "受容", "ありのまま", "人類愛"],
+      "artistQuote": "肯定も否定もせず、『それも全て人間さ』っていう視点",
+      "musicalCharacteristics": ["普遍的なメッセージ", "包容力のあるメロディ"],
+      "confirmedSongs": ["ロマンチシズム"],
+      "possibleSongs": []
+    },
+
+    "青春・若さ": {
+      "id": "youth",
+      "keywords": ["青", "夏", "若さ", "青春", "学生", "季節"],
+      "artistQuote": "大人が思う青春みたいなものを書きたい。大人になってもまだ僕らの中に残っている青い部分",
+      "musicalCharacteristics": ["爽やかなサウンド", "疾走感", "夏・季節のモチーフ"],
+      "confirmedSongs": ["青と夏", "ライラック"],
+      "possibleSongs": [],
+      "relationship": {
+        "青と夏→ライラック": "アンサーソング関係。ピカピカの青→渋みの加わった青紫へ"
+      }
+    },
+
+    "希望・再起": {
+      "id": "hope",
+      "keywords": ["希望", "大丈夫", "なるようになる", "負けない", "立ち上がる"],
+      "artistQuote": "無責任なポップではダメ。『大丈夫って言ってみようよ』ということを歌おう",
+      "musicalCharacteristics": ["力強いサウンド", "前向きなメッセージ", "ダンサブル"],
+      "confirmedSongs": ["ダンスホール", "ケセラセラ"],
+      "possibleSongs": [],
+      "nuance": "単純なポジティブではなく、困難を認めた上での希望"
+    },
+
+    "死生観・極限": {
+      "id": "life-death",
+      "keywords": ["生", "死", "終わり", "深淵", "虚無", "人生観"],
+      "artistQuote": "『Soranji』は人生観や死生観まで、すべてを言い切ってしまった感覚",
+      "musicalCharacteristics": ["重厚なアレンジ", "壮大な展開", "哲学的歌詞"],
+      "confirmedSongs": ["Soranji", "天国"],
+      "possibleSongs": [],
+      "contrast": {
+        "Soranji": "極限状態の中で見出す希望、前に進む力がある",
+        "天国": "希望を誘導しない虚無、『無』の表現"
+      }
+    },
+
+    "葛藤・成長": {
+      "id": "struggle",
+      "keywords": ["葛藤", "調和", "劣等感", "敗北感", "成長", "変化"],
+      "artistQuote": "人は必要と不必要、葛藤と調和に向き合っている",
+      "musicalCharacteristics": ["ダイナミックな展開", "起伏のある構成"],
+      "confirmedSongs": ["ケセラセラ", "僕のこと"],
+      "possibleSongs": []
+    },
+
+    "恋愛・関係性": {
+      "id": "love",
+      "keywords": ["恋", "愛", "二人", "関係", "別れ", "出会い"],
+      "artistQuote": "傷つくことがあっても愛することを諦めたくないという願い",
+      "musicalCharacteristics": ["感情的なボーカル", "ストーリー性のある歌詞"],
+      "confirmedSongs": ["点描の唄"],
+      "possibleSongs": []
+    },
+
+    "エンタメ・躍動": {
+      "id": "entertainment",
+      "keywords": ["ダンス", "踊る", "パーティー", "ファンク", "楽しい"],
+      "artistQuote": "バンドマンが踊っちゃダメって理由はないよね？",
+      "musicalCharacteristics": ["ファンク", "ダンサブル", "明るいサウンド"],
+      "confirmedSongs": ["ダンスホール"],
+      "possibleSongs": ["インフェルノ"]
+    },
+
+    "内省・自己対話": {
+      "id": "introspection",
+      "keywords": ["自分", "内省", "等身大", "追体験", "ログ", "すっぴん"],
+      "artistQuote": "自分の感情がはっきりとしていない瞬間にシャッターを切る。写真を見返すことで自分自身を追体験する",
+      "musicalCharacteristics": ["静かなアレンジ", "内向的な歌詞", "余白"],
+      "confirmedSongs": [],
+      "soloWorks": ["French", "写真展『僕が居ようが居まいが』"],
+      "note": "ソロ活動で顕著に表れるテーマ。ミセスでは『化粧』、ソロでは『すっぴん』"
+    },
+
+    "存在意義・自己認識": {
+      "id": "existence",
+      "keywords": ["存在", "自己", "認める", "続く", "終わる", "意味"],
+      "artistQuote": "1人の人間として、自分を認めてあげられるか。この世界は続いていくのか、この表現が終わってしまうのか",
+      "musicalCharacteristics": ["哲学的", "問いかけ"],
+      "confirmedSongs": [],
+      "soloWorks": ["絵画", "写真展『僕が居ようが居まいが』"],
+      "note": "ソロ活動を通じて問い続けているテーマ"
+    }
+  },
+
+  "emotionCategories": {
+    "力強い応援": {
+      "description": "困難を認めつつも前を向かせるエール",
+      "songs": ["ケセラセラ", "僕のこと", "ダンスホール"]
+    },
+    "切ない青春": {
+      "description": "過ぎ去る時間、残る想いへの切なさ",
+      "songs": ["青と夏", "ライラック", "点描の唄"]
+    },
+    "内省・静寂": {
+      "description": "自分と向き合う静かな時間",
+      "songs": ["天国", "Soranji"]
+    },
+    "解放・躍動": {
+      "description": "制限を超えた自由な表現",
+      "songs": ["ダンスホール", "インフェルノ"]
+    }
+  },
+
+  "metaphorMappings": {
+    "色彩": {
+      "青": ["青と夏"],
+      "青紫": ["ライラック"],
+      "炎・赤": ["インフェルノ"]
+    },
+    "季節": {
+      "夏": ["青と夏"],
+      "春": ["ライラック"]
+    },
+    "光と闘": {
+      "光": ["Soranji", "ライラック"],
+      "闇・虚無": ["天国"]
+    }
+  },
+
+  "contrastPairs": [
+    {
+      "pair": ["Soranji", "天国"],
+      "contrast": "希望を見出す vs 虚無を描く",
+      "commonGround": "死生観・極限状態を扱う"
+    },
+    {
+      "pair": ["青と夏", "ライラック"],
+      "contrast": "ピカピカの青春 vs 渋みのある青春",
+      "commonGround": "青を象徴に青春を描く"
+    },
+    {
+      "pair": ["French", "Midnight"],
+      "contrast": "内省的・コンテンポラリー vs 外向的・ダンスミュージック",
+      "commonGround": "ソロ活動として自由な表現を追求",
+      "type": "solo"
+    },
+    {
+      "pair": ["ミセス活動", "ソロ活動"],
+      "contrast": "交感神経・化粧・戦う vs 副交感神経・すっぴん・安らぐ",
+      "commonGround": "大森元貴という表現者の二面性、補完関係",
+      "type": "activity"
+    }
+  ],
+
+  "periodCharacteristics": {
+    "フェーズ1": {
+      "tendency": "人の顔色を窺いながら、精一杯走る曲が多い",
+      "themes": ["青春", "葛藤", "成長"]
+    },
+    "活動休止期（ソロ活動）": {
+      "tendency": "より等身大で内省的、ミセスでは言えないことを表現",
+      "themes": ["内省", "死生観", "自己対話", "多様性"],
+      "works": ["French", "Midnight", "メメント・モリ"],
+      "significance": "フェーズ2への多様性の橋渡し"
+    },
+    "フェーズ2": {
+      "tendency": "「僕らはこうだ」と投げるアプローチ、表現の幅拡大",
+      "themes": ["死生観", "人間愛", "希望・再起"],
+      "soloInfluence": "ソロで培った多様性がバンドにも還元"
+    }
+  },
+
+  "forPhase3": {
+    "instruction": "各楽曲の歌詞を分析する際、このテーマ定義とアーティスト発言を参照して本質を推論する",
+    "priority": [
+      "本人コメントがある曲は最優先で参照",
+      "コメントがない曲は、類似テーマの発言パターンから推論",
+      "制作時期（フェーズ）も考慮する"
+    ]
+  }
+}

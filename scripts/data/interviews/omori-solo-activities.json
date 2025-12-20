@@ -1,0 +1,240 @@
+{
+  "artist": "大森元貴",
+  "type": "solo",
+  "collectedAt": "2025-12-14",
+  "overview": {
+    "soloDebut": "2021-02-24",
+    "description": "Mrs. GREEN APPLEの活動休止期間中にソロプロジェクトを始動。バンドとは異なるアプローチで、より内省的・等身大な表現を追求"
+  },
+
+  "soloPhilosophy": {
+    "label": "ソロ活動の意義・目的",
+    "quotes": [
+      {
+        "quote": "僕の中でミセスは交感神経で、ソロは副交感神経だと思っている。ドキドキ・ワクワクできるものがミセスで、安心してホッとできるのがソロ",
+        "context": "ミセスとソロの違いについて",
+        "source": "Billboard JAPAN",
+        "year": 2024,
+        "url": "https://www.billboard-japan.com/special/detail/4868"
+      },
+      {
+        "quote": "僕が化粧をしているんだったらソロはすっぴんみたいな感覚",
+        "context": "ソロ活動の性質について",
+        "source": "Billboard JAPAN",
+        "year": 2024,
+        "url": "https://www.billboard-japan.com/special/detail/4868"
+      },
+      {
+        "quote": "自分の心身の健康上、やるべきことだと思っていた。いち作家として、より健全にナチュラルに、何も考えずに楽曲を作れる場や時間を設けることは必要",
+        "context": "ソロ活動を続ける理由",
+        "source": "Billboard JAPAN",
+        "year": 2024,
+        "url": "https://www.billboard-japan.com/special/detail/4868"
+      },
+      {
+        "quote": "1人で表現をすることは、ミセス結成前から自分の中では決まっていた",
+        "context": "ソロ活動の原点",
+        "source": "BARKS",
+        "year": 2021,
+        "url": "https://www.barks.jp/news/?id=1000206821"
+      },
+      {
+        "quote": "ミセスだと、若い方がたくさん聴いてくれていることもあって、『こういうことは言えないな』という意識し始めていたタイミング。ソロではもうちょっと自由にやれたらいい",
+        "context": "ミセスでの制約とソロでの自由",
+        "source": "BARKS",
+        "year": 2021,
+        "url": "https://www.barks.jp/news/?id=1000206821"
+      },
+      {
+        "quote": "無意識下でたどり着く先がミセスとソロとでは違う。より等身大で、より内省的になる",
+        "context": "ソロでの表現の特徴",
+        "source": "BARKS",
+        "year": 2021,
+        "url": "https://www.barks.jp/news/?id=1000206821"
+      },
+      {
+        "quote": "Mrs. GREEN APPLEが再開する時に色んな多様性が認められるような橋渡しをしている部分もある",
+        "context": "ソロ活動のバンドへの還元",
+        "source": "モデルプレス",
+        "year": 2021,
+        "url": "https://mdpr.jp/interview/detail/2719660"
+      }
+    ]
+  },
+
+  "soloReleases": {
+    "French": {
+      "type": "1st Digital EP",
+      "releaseDate": "2021-02-24",
+      "description": "ソロデビュー作。内省的な作品で、コンテンポラリーダンスという新表現を披露",
+      "quotes": [
+        {
+          "quote": "こんな曲も作れるんだっていう発見がありました",
+          "source": "BARKS",
+          "year": 2021,
+          "url": "https://www.barks.jp/news/?id=1000206821"
+        },
+        {
+          "quote": "必ずしもギターがいるとは限らない。サウンド面では、かなり感覚的に作っていきました",
+          "context": "楽器選択の柔軟性について",
+          "source": "BARKS",
+          "year": 2021,
+          "url": "https://www.barks.jp/news/?id=1000206821"
+        }
+      ],
+      "themes": ["内省", "孤独", "自己表現"],
+      "mv_note": "コンテンポラリーダンスで自分から出てくるものを体現する正解のないダンス"
+    },
+    "Midnight": {
+      "type": "2nd Digital EP",
+      "releaseDate": "2021-08-06",
+      "description": "Frenchとは異なる方向性を示したダンスミュージック作品",
+      "quotes": [
+        {
+          "quote": "『French』はすごく内省的な作品だったので、『大森のソロはそういう方向でいくのね』と思われるのがちょっと嫌だった",
+          "source": "BARKS",
+          "year": 2021,
+          "url": "https://www.barks.jp/news/?id=1000206821"
+        },
+        {
+          "quote": "流行っているダンスミュージックを同じように作っても、どこか真似っぽさが出てしまう。自分なりのダンスミュージックってなんなんだろう？",
+          "source": "モデルプレス",
+          "year": 2021,
+          "url": "https://mdpr.jp/interview/detail/2719660"
+        },
+        {
+          "quote": "みんなを驚かせたい。どこにでも行くし、どこにも行かない",
+          "context": "制作の動機",
+          "source": "BARKS",
+          "year": 2021,
+          "url": "https://www.barks.jp/news/?id=1000206821"
+        }
+      ],
+      "themes": ["夜", "自分と向き合う", "ダンス", "多様性"],
+      "mv_note": "フォーメーションダンスで周りと合わせる。MVプロデュースも自ら担当"
+    },
+    "絵画": {
+      "type": "3rd Digital Single",
+      "releaseDate": "2024-01-03",
+      "description": "紅白、レコ大、ツアー同時進行という多忙期に制作された楽曲",
+      "quotes": [
+        {
+          "quote": "『おでかけ』した場所から見た自分自身とMrs. GREEN APPLEの今",
+          "context": "タイトルの意味について",
+          "source": "Billboard JAPAN",
+          "year": 2024,
+          "url": "https://www.billboard-japan.com/special/detail/4868"
+        }
+      ],
+      "themes": ["自己認識", "バンドとソロの関係"]
+    }
+  },
+
+  "otherActivities": {
+    "book": {
+      "メメント・モリ": {
+        "type": "絵本",
+        "releaseDate": "2021-09-15",
+        "publisher": "KADOKAWA",
+        "illustrator": "大谷たらふ",
+        "description": "ソロ楽曲「メメント・モリ」のリリックビデオの世界観を絵本化。大森の死生観が映し出された作品",
+        "themes": ["死生観", "寄り添い", "優しさ", "温かさ"],
+        "quotes": [
+          {
+            "quote": "【死】というものに寄り添い、その先には優しく温かい世界が広がっている",
+            "context": "絵本のテーマについて",
+            "source": "KADOKAWA公式",
+            "year": 2021
+          }
+        ],
+        "notes": [
+          "2023年12月に発売2年で異例の立て続け重版",
+          "3刷は初版規模を超える大型重版",
+          "2024年12月に上白石萌音出演の朗読劇として公演"
+        ]
+      }
+    },
+    "photography": {
+      "僕が居ようが居まいが": {
+        "type": "写真展",
+        "date": "2024-07-05/06",
+        "venue": "Ginza Sony Park",
+        "event": "GQ JAPAN クリエイティブ・ウィークエンド",
+        "description": "GQ クリエイティビティ・アワード受賞を機に開催された初の写真展",
+        "quotes": [
+          {
+            "quote": "フィルムだったり、アナログのよさというか、小難しさに憧れる部分があって。自分が見てる世界が音楽とは違う形で具現化されるところにカメラの魅力を感じて始めました",
+            "context": "写真を始めた理由",
+            "source": "音楽ナタリー",
+            "year": 2024,
+            "url": "https://natalie.mu/music/news/630916"
+          },
+          {
+            "quote": "自分の感情がはっきりとしていない瞬間にシャッターを切る機会が多い。写真を見返すことによって、このときの自分はこういうことを考えていたんじゃないかとか、自分自身を追体験することが多い。文章とは違う形のログに近い",
+            "context": "撮影のタイミングについて",
+            "source": "音楽ナタリー",
+            "year": 2024,
+            "url": "https://natalie.mu/music/news/630916"
+          },
+          {
+            "quote": "1人の人間として、自分を認めてあげられるか。この世界は続いていくのか、この表現が終わってしまうのか、いろいろわからないけれど、自問自答する意味でも、このタイトルを付けました",
+            "context": "タイトル『僕が居ようが居まいが』について",
+            "source": "音楽ナタリー",
+            "year": 2024,
+            "url": "https://natalie.mu/music/news/630916"
+          }
+        ],
+        "worksCount": 19,
+        "themes": ["自己認識", "追体験", "ログ", "存在意義"]
+      }
+    }
+  },
+
+  "thematicInsights": {
+    "soloVsBand": {
+      "ミセス": ["交感神経", "ドキドキ・ワクワク", "化粧", "土俵で戦う感覚", "若い層への配慮"],
+      "ソロ": ["副交感神経", "安心・ホッとする", "すっぴん", "健全・ナチュラル", "より自由"]
+    },
+    "recurringThemes": [
+      "内省・自己との対話",
+      "孤独と寄り添い",
+      "死生観（メメント・モリ）",
+      "存在意義への問い",
+      "多様性の追求",
+      "表現の自由"
+    ],
+    "expressionApproach": {
+      "音楽": "ミセスでは言えないことを、より等身大に",
+      "絵本": "死生観を優しく温かく表現",
+      "写真": "感情が不明確な瞬間を記録し、自己追体験"
+    }
+  },
+
+  "sources": [
+    {
+      "title": "Billboard JAPAN - 絵画インタビュー",
+      "url": "https://www.billboard-japan.com/special/detail/4868",
+      "year": 2024
+    },
+    {
+      "title": "BARKS - ソロのすべてを語り尽くす",
+      "url": "https://www.barks.jp/news/?id=1000206821",
+      "year": 2021
+    },
+    {
+      "title": "モデルプレス - Midnightインタビュー",
+      "url": "https://mdpr.jp/interview/detail/2719660",
+      "year": 2021
+    },
+    {
+      "title": "音楽ナタリー - 写真展レポート",
+      "url": "https://natalie.mu/music/news/630916",
+      "year": 2024
+    },
+    {
+      "title": "CINRA - Frenchを紐解く",
+      "url": "https://www.cinra.net/article/column-202103-ohmorimotoki_ymmts",
+      "year": 2021
+    }
+  ]
+}

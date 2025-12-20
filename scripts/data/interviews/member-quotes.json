@@ -1,0 +1,86 @@
+{
+  "collectedAt": "2025-12-14",
+  "members": {
+    "wakai_hiroto": {
+      "name": "若井滉斗",
+      "role": "Gt",
+      "quotes": [
+        {
+          "quote": "何も考えていなかった16歳から、より広い視野を持つようになった",
+          "context": "バンド10年を振り返って",
+          "source": "BARKS",
+          "year": 2023,
+          "url": "https://www.barks.jp/news/?id=1000233130"
+        },
+        {
+          "quote": "『ENSEMBLE』ってアルバム自体、ギターの立ち位置的にちょっと後ろの方というか、背景に徹するみたいな部分が多かった。今回改めて『ロマンチシズム』でギターリフが出てきて、周りとの駆け引きというか、いろんな音の会話っていうのができるようになっている",
+          "context": "ロマンチシズムのギターについて",
+          "source": "USEN encore",
+          "year": 2019,
+          "url": "https://e.usen.com/archive/sub-archive/24522.html"
+        },
+        {
+          "quote": "初期衝動、ワクワク感を大切にしながら、培ってきた表現力をフルで活かすアプローチを取った",
+          "context": "青と夏の制作について",
+          "source": "SPICE",
+          "year": 2018,
+          "url": "https://spice.eplus.jp/articles/198912"
+        },
+        {
+          "quote": "元貴が歌だけでなく演技もダンスもいろんなことに挑戦している中で、ツアー中に自分たちがもっと引っ張っていけるところはないかと考えるようになった",
+          "context": "大森の難聴発症後のツアーについて",
+          "source": "モデルプレス",
+          "year": 2024,
+          "url": "https://mdpr.jp/interview/detail/4437663"
+        },
+        {
+          "quote": "全然覚えてないよね。それくらいずっと走り続けていたということだと思います",
+          "context": "フェーズ1時代を振り返って",
+          "source": "モデルプレス",
+          "year": 2024,
+          "url": "https://mdpr.jp/interview/detail/4437663"
+        }
+      ]
+    },
+    "fujisawa_ryosuke": {
+      "name": "藤澤涼架",
+      "role": "Key",
+      "quotes": [
+        {
+          "quote": "バンド結成時に立てた具体的な目標（横浜アリーナでのステージ、バラエティ番組出演など）を一つひとつ実現できた",
+          "context": "バンド10年を振り返って",
+          "source": "BARKS",
+          "year": 2023,
+          "url": "https://www.barks.jp/news/?id=1000233130"
+        },
+        {
+          "quote": "約1年間かけた制作期間により、一曲一曲に対して集中できた",
+          "context": "Attitudeアルバムの制作について",
+          "source": "Skream!",
+          "year": 2019,
+          "url": "https://skream.jp/interview/2019/10/mrs_green_apple.php"
+        },
+        {
+          "quote": "逆に僕らがとやかく言うことの方が1番元貴に対して失礼かなという風に思って。ツアーを続けるという言葉を聞いて、なおさら『頑張るしかないでしょう』と決意しました",
+          "context": "大森の難聴発症後の対応について",
+          "source": "モデルプレス",
+          "year": 2024,
+          "url": "https://mdpr.jp/interview/detail/4437663"
+        }
+      ]
+    },
+    "yamanaka_ayaka": {
+      "name": "山中綾華",
+      "role": "Dr（元メンバー）",
+      "quotes": [
+        {
+          "quote": "一定になっていることが必ずしも正解じゃないと気づき、お互いの息遣いを感じながら演奏した",
+          "context": "青と夏の制作について",
+          "source": "SPICE",
+          "year": 2018,
+          "url": "https://spice.eplus.jp/articles/198912"
+        }
+      ]
+    }
+  }
+}
