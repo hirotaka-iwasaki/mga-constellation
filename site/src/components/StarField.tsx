@@ -6,9 +6,33 @@ import { TutorialOverlay } from './TutorialOverlay'
 import { WelcomeModal, shouldShowWelcome } from './WelcomeModal'
 import { FeedbackModal } from './FeedbackModal'
 import { RoadmapModal } from './RoadmapModal'
-import type { Song, StarPosition, Constellation } from '../types'
+import { SongDetailModal } from './SongDetailModal'
+import type { Song, StarPosition, Constellation, SongEssence } from '../types'
 
 const CUSTOM_CONSTELLATIONS_KEY = 'mga-custom-constellations'
+
+// エッセンスデータのキャッシュ（モジュールレベルでシングルトン）
+let essencesCache: Record<string, SongEssence> | null = null
+let essencesLoadPromise: Promise<Record<string, SongEssence>> | null = null
+
+async function loadEssences(): Promise<Record<string, SongEssence>> {
+  if (essencesCache) return essencesCache
+  if (essencesLoadPromise) return essencesLoadPromise
+
+  essencesLoadPromise = fetch('/src/content/essences.json')
+    .then(res => res.json())
+    .then(data => {
+      essencesCache = data
+      return data
+    })
+    .catch(err => {
+      console.error('Failed to load essences:', err)
+      essencesCache = {}
+      return {}
+    })
+
+  return essencesLoadPromise
+}
 
 interface StarFieldProps {
   songs: Song[]
@@ -24,7 +48,17 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
   const [showRoadmap, setShowRoadmap] = useState(false)
   const [selectedStar, setSelectedStar] = useState<string | null>('start')
   const [selectedConstellationIds, setSelectedConstellationIds] = useState<string[]>([])
-  const [isCardExpanded, setIsCardExpanded] = useState(false)
+  const [showSongDetail, setShowSongDetail] = useState(false)
+
+  // エッセンスデータ（遅延ロード）
+  const [essences, setEssences] = useState<Record<string, SongEssence> | null>(essencesCache)
+
+  // モーダル表示時にエッセンスデータをロード
+  useEffect(() => {
+    if (showSongDetail && !essences) {
+      loadEssences().then(setEssences)
+    }
+  }, [showSongDetail, essences])
 
   // カスタム星座の状態管理
   const [customConstellations, setCustomConstellations] = useState<Constellation[]>([])
@@ -136,7 +170,6 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
   const songToConstellationsMap = useMemo(() => {
     const map = new Map<string, Constellation[]>()
     allConstellations.forEach(constellation => {
-      // 重複を避けるためユニークな曲タイトルのみ処理
       const uniqueTitles = [...new Set(constellation.songs)]
       uniqueTitles.forEach(title => {
         const existing = map.get(title) || []
@@ -266,7 +299,6 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
   // 星をタップしたときの処理
   const handleStarTap = useCallback((starId: string) => {
     setSelectedStar(prev => prev === starId ? null : starId)
-    setIsCardExpanded(false)
   }, [])
 
   // リリース日順にソートした曲IDリスト（メモ化）
@@ -303,7 +335,6 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
   // 次/前の星に移動（画面移動なし）
   const navigateToStar = useCallback((starId: string) => {
     setSelectedStar(starId)
-    setIsCardExpanded(false)
   }, [])
 
   const goToNextStar = useCallback(() => {
@@ -464,6 +495,9 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
 
   // タッチイベントハンドラー
   const handleTouchStart = useCallback((e: TouchEvent) => {
+    // モーダル表示中は星空の操作を無効化
+    if (showSongDetail) return
+
     if (e.touches.length === 1) {
       setLastTouch({ x: e.touches[0].clientX, y: e.touches[0].clientY })
       setIsPanning(false)
@@ -472,9 +506,12 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
       const dy = e.touches[0].clientY - e.touches[1].clientY
       setLastPinchDistance(Math.sqrt(dx * dx + dy * dy))
     }
-  }, [])
+  }, [showSongDetail])
 
   const handleTouchMove = useCallback((e: TouchEvent) => {
+    // モーダル表示中は星空の操作を無効化
+    if (showSongDetail) return
+
     if (e.touches.length === 1 && lastTouch) {
       const deltaX = e.touches[0].clientX - lastTouch.x
       const deltaY = e.touches[0].clientY - lastTouch.y
@@ -498,14 +535,17 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
       handleZoom(scale, centerX, centerY)
       setLastPinchDistance(distance)
     }
-  }, [lastTouch, lastPinchDistance, handlePan, handleZoom])
+  }, [showSongDetail, lastTouch, lastPinchDistance, handlePan, handleZoom])
 
   const handleTouchEnd = useCallback(() => {
+    // モーダル表示中は星空の操作を無効化
+    if (showSongDetail) return
+
     setLastTouch(null)
     setLastPinchDistance(null)
     // 少し遅延してisPanningをリセット（タップイベントとの競合を避ける）
     setTimeout(() => setIsPanning(false), 100)
-  }, [])
+  }, [showSongDetail])
 
   // マウスイベントハンドラー（デスクトップ用）
   const handleMouseDown = useCallback((e: MouseEvent) => {
@@ -553,7 +593,7 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
   return (
     <div
       ref={containerRef}
-      class="relative w-full h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 overflow-hidden touch-none"
+      class={`relative w-full h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 overflow-hidden ${showSongDetail ? '' : 'touch-none'}`}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
@@ -768,194 +808,115 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
         })}
       </svg>
 
-      {/* カテゴリ選択UI */}
-      <CategorySelector
-        constellations={constellations}
-        customConstellations={customConstellations}
-        selectedIds={selectedConstellationIds}
-        onSelectionChange={setSelectedConstellationIds}
-        onConstellationSelect={handleConstellationSelect}
-        onCreateCustom={() => {
-          setEditingConstellation(null)
-          setIsBuilderOpen(true)
-        }}
-        onEditCustom={handleEditCustomConstellation}
-        onDeleteCustom={handleDeleteCustomConstellation}
-      />
+      {/* フッター（詳細カード + 選択タグ + カテゴリボタン） */}
+      <div class="absolute bottom-0 left-0 right-0 z-40 flex flex-col">
+        {/* 選択時の詳細パネル */}
+        {selectedStar && songMap.get(selectedStar) && (
+          <div
+            data-tutorial="card"
+            class="mx-4 mb-2 bg-slate-900/95 backdrop-blur-md border border-slate-700 rounded-lg p-3 animate-slide-up"
+            style={{
+              transform: `translateX(${cardSwipeOffset * 0.3}px)`,
+              transition: cardSwipeStart !== null ? 'none' : 'transform 0.2s ease-out',
+            }}
+            onTouchStart={handleCardTouchStart}
+            onTouchMove={handleCardTouchMove}
+            onTouchEnd={handleCardTouchEnd}
+          >
+            <div class="flex items-center gap-2">
+              {/* 前へボタン */}
+              <button
+                onClick={(e) => { e.stopPropagation(); goToPrevStar() }}
+                class="p-1.5 text-slate-400 active:text-white active:bg-white/10 rounded-full flex-shrink-0"
+                aria-label="前の曲"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
 
-      {/* 選択時の詳細パネル（カテゴリUIの下に表示） */}
-      {selectedStar && songMap.get(selectedStar) && (
-        <div
-          data-tutorial="card"
-          class="absolute left-4 right-4 bg-slate-900/95 backdrop-blur-md border border-slate-700 rounded-lg p-4 z-30 animate-slide-up"
-          style={{
-            bottom: 'calc(7rem + env(safe-area-inset-bottom, 0px))',
-            transform: `translateX(${cardSwipeOffset * 0.3}px)`,
-            transition: cardSwipeStart !== null ? 'none' : 'transform 0.2s ease-out',
-          }}
-          onTouchStart={handleCardTouchStart}
-          onTouchMove={handleCardTouchMove}
-          onTouchEnd={handleCardTouchEnd}
-        >
-          <div class="flex items-center gap-3">
-            {/* 前へボタン */}
-            <button
-              onClick={(e) => { e.stopPropagation(); goToPrevStar() }}
-              class="p-2 text-slate-400 active:text-white active:bg-white/10 rounded-full flex-shrink-0"
-              aria-label="前の曲"
-            >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
+              {/* 曲情報（タップで詳細モーダル） */}
+              <button
+                onClick={(e) => { e.stopPropagation(); setShowSongDetail(true) }}
+                class="flex-1 min-w-0 text-center active:opacity-70"
+              >
+                <div class="text-base font-medium text-white truncate">{songMap.get(selectedStar)!.title}</div>
+                <div class="text-xs text-slate-400">{songMap.get(selectedStar)!.releaseDate} · {selectedStarIndex >= 0 ? selectedStarIndex + 1 : '-'}/{navigableSongIds.length}</div>
+                <div class="text-xs text-slate-500 mt-0.5">タップで詳細</div>
+              </button>
 
-            {/* 曲情報 */}
-            <div class="flex-1 min-w-0 text-center">
-              <div class="text-lg font-medium text-white truncate">{songMap.get(selectedStar)!.title}</div>
-              <div class="text-sm text-slate-400 mt-0.5">{songMap.get(selectedStar)!.releaseDate}</div>
-              <div class="text-xs text-slate-500 mt-0.5">
-                {selectedStarIndex >= 0 ? selectedStarIndex + 1 : '-'} / {navigableSongIds.length}
-              </div>
-              {/* 外部リンク */}
-              <div class="flex justify-center gap-3 mt-2">
-                <a
-                  href={`https://www.youtube.com/results?search_query=${encodeURIComponent(songMap.get(selectedStar)!.title + ' Mrs. GREEN APPLE')}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  class="p-1.5 rounded-full bg-red-600/20 text-red-400 hover:bg-red-600/30 active:bg-red-600/40"
-                  aria-label="YouTubeで検索"
-                >
-                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                  </svg>
-                </a>
-                <a
-                  href={`https://open.spotify.com/search/${encodeURIComponent(songMap.get(selectedStar)!.title + ' Mrs. GREEN APPLE')}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  class="p-1.5 rounded-full bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/30 active:bg-emerald-600/40"
-                  aria-label="Spotifyで検索"
-                >
-                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
-                  </svg>
-                </a>
-                <a
-                  href={`https://music.apple.com/jp/search?term=${encodeURIComponent(songMap.get(selectedStar)!.title + ' Mrs. GREEN APPLE')}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  class="p-1.5 rounded-full bg-pink-600/20 text-pink-400 hover:bg-pink-600/30 active:bg-pink-600/40"
-                  aria-label="Apple Musicで検索"
-                >
-                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M23.994 6.124a9.23 9.23 0 00-.24-2.19c-.317-1.31-1.062-2.31-2.18-3.043a5.022 5.022 0 00-1.877-.726 10.496 10.496 0 00-1.564-.15c-.04-.003-.083-.01-.124-.013H5.986c-.152.01-.303.017-.455.026-.747.043-1.49.123-2.193.401-1.336.53-2.3 1.452-2.865 2.78-.192.448-.292.925-.363 1.408-.056.392-.088.785-.1 1.18 0 .032-.007.062-.01.093v12.223c.01.14.017.283.027.424.05.815.154 1.624.497 2.373.65 1.42 1.738 2.353 3.234 2.801.42.127.856.187 1.293.228.555.053 1.11.06 1.667.06h11.03a12.5 12.5 0 001.57-.1c.822-.106 1.596-.35 2.295-.81a5.046 5.046 0 001.88-2.207c.186-.42.293-.87.37-1.324.113-.675.138-1.358.137-2.04-.002-3.8 0-7.595-.003-11.393zm-6.423 3.99v5.712c0 .417-.058.827-.244 1.206-.29.59-.76.962-1.388 1.14-.35.1-.706.157-1.07.173-.95.042-1.785-.455-2.105-1.245-.38-.94.093-2.003 1.116-2.494.285-.137.59-.217.9-.27.457-.077.92-.136 1.378-.214.295-.05.452-.188.49-.472.002-.016.005-.032.005-.05V9.315c0-.269-.08-.347-.346-.3l-3.98.756c-.036.007-.07.018-.12.03v6.637c0 .424-.048.84-.225 1.227-.283.616-.765 1.012-1.415 1.2-.34.097-.69.15-1.043.17-1.015.05-1.86-.5-2.14-1.382-.315-.99.188-2.028 1.238-2.52.27-.127.56-.2.856-.25.47-.08.946-.143 1.417-.222.28-.047.43-.18.472-.464.002-.02.006-.04.006-.06V7.12c0-.176.026-.345.105-.503.073-.148.185-.256.34-.318.12-.049.246-.08.374-.104l5.186-.99c.186-.036.374-.07.563-.088.322-.03.52.138.54.46.003.04.003.082.003.123v4.42z"/>
-                  </svg>
-                </a>
-              </div>
-              {/* 収録アルバム/ライブ一覧 */}
-              {(() => {
-                const songTitle = songMap.get(selectedStar)!.title
-                const containingConstellations = songToConstellationsMap.get(songTitle) || []
-                const albums = containingConstellations.filter(c => c.type === 'album' || c.type === 'single')
-                const lives = containingConstellations.filter(c => c.type === 'live')
-                if (albums.length === 0 && lives.length === 0) return null
-
-                const MAX_ALBUMS = 1
-                const MAX_LIVES = 1
-                const visibleAlbums = isCardExpanded ? albums : albums.slice(0, MAX_ALBUMS)
-                const visibleLives = isCardExpanded ? lives : lives.slice(0, MAX_LIVES)
-                const hiddenCount = Math.max(0, albums.length - MAX_ALBUMS) + Math.max(0, lives.length - MAX_LIVES)
-                const hasMore = hiddenCount > 0
-
-                return (
-                  <div class="mt-3 pt-2 border-t border-slate-700/50">
-                    <div class="flex flex-wrap justify-center gap-1.5">
-                      {visibleAlbums.map(c => (
-                        <button
-                          key={c.id}
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            if (!selectedConstellationIds.includes(c.id)) {
-                              setSelectedConstellationIds(prev => [...prev, c.id])
-                            }
-                            handleConstellationSelect(c)
-                          }}
-                          class="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full active:opacity-70"
-                          style={{ backgroundColor: `${c.color}20`, color: c.color }}
-                        >
-                          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 3.22l-.61-.6a5.5 5.5 0 0 0-7.78 7.77L10 18.78l8.39-8.4a5.5 5.5 0 0 0-7.78-7.77l-.61.61z" />
-                          </svg>
-                          <span class="truncate max-w-24">{c.shortName || c.name}</span>
-                        </button>
-                      ))}
-                      {visibleLives.map(c => (
-                        <button
-                          key={c.id}
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            if (!selectedConstellationIds.includes(c.id)) {
-                              setSelectedConstellationIds(prev => [...prev, c.id])
-                            }
-                            handleConstellationSelect(c)
-                          }}
-                          class="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full active:opacity-70"
-                          style={{ backgroundColor: `${c.color}20`, color: c.color }}
-                        >
-                          <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
-                          </svg>
-                          <span class="truncate max-w-24">{c.shortName || c.name}</span>
-                        </button>
-                      ))}
-                      {/* 展開/折りたたみボタン */}
-                      {hasMore && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            setIsCardExpanded(!isCardExpanded)
-                          }}
-                          class="inline-flex items-center gap-1 px-2 py-0.5 text-xs rounded-full bg-slate-700/50 text-slate-300 active:bg-slate-600/50"
-                        >
-                          {isCardExpanded ? (
-                            <>
-                              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                              </svg>
-                              <span>閉じる</span>
-                            </>
-                          ) : (
-                            <>
-                              <span>+{hiddenCount}件</span>
-                              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                              </svg>
-                            </>
-                          )}
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                )
-              })()}
+              {/* 次へボタン */}
+              <button
+                onClick={(e) => { e.stopPropagation(); goToNextStar() }}
+                class="p-1.5 text-slate-400 active:text-white active:bg-white/10 rounded-full flex-shrink-0"
+                aria-label="次の曲"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
             </div>
-
-            {/* 次へボタン */}
-            <button
-              onClick={(e) => { e.stopPropagation(); goToNextStar() }}
-              class="p-2 text-slate-400 active:text-white active:bg-white/10 rounded-full flex-shrink-0"
-              aria-label="次の曲"
-            >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
           </div>
-        </div>
-      )}
+        )}
+
+        {/* 選択中の星座タグ */}
+        {selectedConstellations.length > 0 && (
+          <div class="px-4 pb-2 flex items-center gap-2">
+            <button
+              onClick={() => setSelectedConstellationIds([])}
+              class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap flex-shrink-0 bg-slate-700 text-slate-300 border border-slate-600 active:bg-slate-600"
+              aria-label="すべての選択を解除"
+            >
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              解除
+            </button>
+            <div
+              class="flex gap-1.5 overflow-x-auto py-1 overscroll-contain touch-pan-x"
+              onTouchMove={(e) => e.stopPropagation()}
+            >
+              {selectedConstellations.map((c) => (
+                <span
+                  key={c.id}
+                  class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap flex-shrink-0"
+                  style={{
+                    backgroundColor: c.color + '30',
+                    color: c.color,
+                    border: `1px solid ${c.color}50`,
+                  }}
+                >
+                  {c.name}
+                  <button
+                    onClick={() => handleRemoveConstellation(c.id)}
+                    class="ml-0.5 opacity-70 active:opacity-100"
+                    aria-label={`${c.name}の選択を解除`}
+                  >
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* カテゴリ選択UI */}
+        <CategorySelector
+          constellations={constellations}
+          customConstellations={customConstellations}
+          selectedIds={selectedConstellationIds}
+          onSelectionChange={setSelectedConstellationIds}
+          onConstellationSelect={handleConstellationSelect}
+          onCreateCustom={() => {
+            setEditingConstellation(null)
+            setIsBuilderOpen(true)
+          }}
+          onEditCustom={handleEditCustomConstellation}
+          onDeleteCustom={handleDeleteCustomConstellation}
+        />
+      </div>
 
       {/* 楽曲数の表示 */}
       <div class="absolute bottom-4 left-4 text-xs text-white/40">
@@ -1138,6 +1099,27 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
           onCancel={() => {
             setIsBuilderOpen(false)
             setEditingConstellation(null)
+          }}
+        />
+      )}
+
+      {/* 楽曲詳細モーダル */}
+      {showSongDetail && selectedStar && songMap.get(selectedStar) && (
+        <SongDetailModal
+          song={songMap.get(selectedStar)!}
+          constellations={songToConstellationsMap.get(songMap.get(selectedStar)!.title) || []}
+          essence={essences?.[selectedStar]}
+          currentIndex={selectedStarIndex}
+          totalCount={navigableSongIds.length}
+          onClose={() => setShowSongDetail(false)}
+          onNext={goToNextStar}
+          onPrev={goToPrevStar}
+          onSelectConstellation={(constellation) => {
+            if (!selectedConstellationIds.includes(constellation.id)) {
+              setSelectedConstellationIds(prev => [...prev, constellation.id])
+            }
+            handleConstellationSelect(constellation)
+            setShowSongDetail(false)
           }}
         />
       )}

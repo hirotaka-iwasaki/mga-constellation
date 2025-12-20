@@ -26,3 +26,21 @@ export interface Constellation {
   color: string
   songs: string[]
 }
+
+export interface SongEssence {
+  songId: string
+  title: string
+  releaseDate: string
+  themes: string[]
+  emotion: string
+  message: string
+  interpretation: string
+  lyricsAnalysis: {
+    keywords: string[]
+    motifs: string[]
+    metaphors: string[]
+  }
+  relatedQuotes: Array<{ source: string; quote: string }>
+  connections: Record<string, string | string[]>
+  confidence: string
+}

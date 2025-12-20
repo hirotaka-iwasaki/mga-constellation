@@ -10,8 +10,27 @@ import * as fs from 'fs';
 import * as path from 'path';
 import type { Song, Constellation, StarPosition, ExportData } from './types.js';
 
+interface SongEssenceRaw {
+  songId: string;
+  title: string;
+  releaseDate: string;
+  themes: string[];
+  emotion: string;
+  message: string;
+  interpretation: string;
+  lyricsAnalysis: {
+    keywords: string[];
+    motifs: string[];
+    metaphors: string[];
+  };
+  relatedQuotes: Array<{ source: string; quote: string }>;
+  connections: Record<string, string | string[]>;
+  confidence: string;
+}
+
 function main() {
   const outputDir = path.join(import.meta.dirname, 'output');
+  const dataDir = path.join(import.meta.dirname, 'data', 'analysis');
   const siteContentDir = path.join(import.meta.dirname, '..', 'site', 'src', 'content');
 
   // 必要なファイル確認
@@ -28,6 +47,18 @@ function main() {
   const constellations: Constellation[] = JSON.parse(fs.readFileSync(path.join(outputDir, 'constellations.json'), 'utf-8'));
   const positions: StarPosition[] = JSON.parse(fs.readFileSync(path.join(outputDir, 'positions.json'), 'utf-8'));
 
+  // エッセンスデータ読み込み（存在する場合）
+  let essencesMap: Record<string, SongEssenceRaw> = {};
+  const essencesPath = path.join(dataDir, 'song-essences.json');
+  if (fs.existsSync(essencesPath)) {
+    const essencesData = JSON.parse(fs.readFileSync(essencesPath, 'utf-8'));
+    // songId をキーにしたマップに変換（高速検索のため）
+    for (const e of essencesData.essences) {
+      essencesMap[e.songId] = e;
+    }
+    console.log(`📖 エッセンスデータ読み込み: ${Object.keys(essencesMap).length}曲`);
+  }
+
   // サイトディレクトリ作成
   if (!fs.existsSync(siteContentDir)) {
     fs.mkdirSync(siteContentDir, { recursive: true });
@@ -37,6 +68,11 @@ function main() {
   fs.writeFileSync(path.join(siteContentDir, 'songs.json'), JSON.stringify(songs, null, 2));
   fs.writeFileSync(path.join(siteContentDir, 'constellations.json'), JSON.stringify(constellations, null, 2));
   fs.writeFileSync(path.join(siteContentDir, 'positions.json'), JSON.stringify(positions, null, 2));
+
+  // エッセンスデータ出力（songId をキーにしたオブジェクト形式）
+  if (Object.keys(essencesMap).length > 0) {
+    fs.writeFileSync(path.join(siteContentDir, 'essences.json'), JSON.stringify(essencesMap, null, 2));
+  }
 
   // 統合データも出力（オプション）
   const exportData: ExportData = {
@@ -60,6 +96,9 @@ function main() {
   console.log(`   - constellations.json (${constellations.length}個)`);
   console.log(`   - positions.json (${positions.length}個)`);
   console.log(`   - all-data.json (統合)`);
+  if (Object.keys(essencesMap).length > 0) {
+    console.log(`   - essences.json (${Object.keys(essencesMap).length}曲分の分析データ)`);
+  }
 
   // 星座タイプ別統計
   console.log('\n📊 星座の内訳:');
