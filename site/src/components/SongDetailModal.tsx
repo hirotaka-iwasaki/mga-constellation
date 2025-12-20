@@ -14,6 +14,8 @@ interface SongDetailModalProps {
   onSelectConstellation: (constellation: Constellation) => void
 }
 
+const SWIPE_CLOSE_THRESHOLD = 100 // この距離以上スワイプしたら閉じる
+
 export function SongDetailModal({
   song,
   constellations,
@@ -26,7 +28,51 @@ export function SongDetailModal({
   onSelectConstellation,
 }: SongDetailModalProps) {
   const contentRef = useRef<HTMLDivElement>(null)
+  const modalRef = useRef<HTMLDivElement>(null)
   const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null)
+
+  // スワイプで閉じる用の状態
+  const [dragOffset, setDragOffset] = useState(0)
+  const [isDragging, setIsDragging] = useState(false)
+  const dragStartY = useRef(0)
+  const canDragClose = useRef(false) // スクロール位置が0の時のみtrue
+
+  // タッチ開始
+  const handleTouchStart = useCallback((e: TouchEvent) => {
+    const scrollEl = contentRef.current
+    // スクロール位置が最上部の時のみドラッグで閉じることを許可
+    canDragClose.current = !scrollEl || scrollEl.scrollTop <= 0
+    dragStartY.current = e.touches[0].clientY
+    setIsDragging(false)
+    setDragOffset(0)
+  }, [])
+
+  // タッチ移動
+  const handleTouchMove = useCallback((e: TouchEvent) => {
+    const deltaY = e.touches[0].clientY - dragStartY.current
+
+    // 下方向へのスワイプで、スクロールが最上部の場合のみ
+    if (deltaY > 0 && canDragClose.current) {
+      // スクロールを防いでモーダルを移動
+      e.preventDefault()
+      setIsDragging(true)
+      setDragOffset(deltaY)
+    }
+  }, [])
+
+  // タッチ終了
+  const handleTouchEnd = useCallback(() => {
+    if (isDragging) {
+      if (dragOffset > SWIPE_CLOSE_THRESHOLD) {
+        // 閾値を超えたら閉じる
+        onClose()
+      } else {
+        // 閾値未満なら元に戻す
+        setDragOffset(0)
+      }
+    }
+    setIsDragging(false)
+  }, [isDragging, dragOffset, onClose])
 
   // ポータル用のコンテナをbody直下に作成
   useEffect(() => {
@@ -57,7 +103,15 @@ export function SongDetailModal({
 
       {/* モーダルコンテンツ */}
       <div
-        class="relative mt-auto bg-slate-900 rounded-t-2xl max-h-[85vh] flex flex-col animate-slide-up-modal"
+        ref={modalRef}
+        class={`relative mt-auto bg-slate-900 rounded-t-2xl max-h-[85vh] flex flex-col ${isDragging ? '' : 'animate-slide-up-modal'}`}
+        style={{
+          transform: `translateY(${dragOffset}px)`,
+          transition: isDragging ? 'none' : 'transform 0.2s ease-out',
+        }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         {/* ドラッグハンドル */}
         <div class="flex justify-center py-3">
