@@ -18,6 +18,65 @@ interface IdeaSection {
   items: IdeaItem[]
 }
 
+// 実装済み機能データ
+interface FeatureItem {
+  title: string
+  description: string
+}
+
+interface FeatureSection {
+  title: string
+  icon: string
+  items: FeatureItem[]
+}
+
+const implementedFeatures: FeatureSection[] = [
+  {
+    title: "星座機能",
+    icon: "🎵",
+    items: [
+      { title: "星座表示", description: "アルバム/ライブを選んで星座を表示" },
+      { title: "複数選択", description: "複数の星座を同時に表示・比較" },
+      { title: "アニメーション", description: "星座線が順番に繋がる演出" },
+    ]
+  },
+  {
+    title: "検索・ナビゲーション",
+    icon: "🔍",
+    items: [
+      { title: "曲検索", description: "曲名で検索してジャンプ" },
+      { title: "カードスワイプ", description: "スワイプで次/前の曲へ移動" },
+      { title: "キーボード操作", description: "←→でナビ、/で検索、Escで解除" },
+    ]
+  },
+  {
+    title: "カスタム星座",
+    icon: "✨",
+    items: [
+      { title: "オリジナル星座", description: "好きな曲を選んで星座を作成" },
+      { title: "名前付け", description: "作った星座に名前を付ける" },
+      { title: "共有", description: "画像として保存・SNSでシェア" },
+    ]
+  },
+  {
+    title: "楽曲情報",
+    icon: "📖",
+    items: [
+      { title: "詳細カード", description: "収録アルバム/ライブ一覧を表示" },
+      { title: "外部リンク", description: "YouTube/Spotify/Apple Musicへ" },
+      { title: "楽曲考察", description: "LLMによるテーマ分析を表示" },
+    ]
+  },
+  {
+    title: "操作",
+    icon: "🖐️",
+    items: [
+      { title: "タッチ操作", description: "ドラッグで移動、ピンチでズーム" },
+      { title: "チュートリアル", description: "操作方法をいつでも確認" },
+    ]
+  },
+]
+
 // カテゴリ別アイデアデータ（IDを追加）
 const ideas: Record<string, IdeaSection> = {
   explore: {
@@ -25,7 +84,6 @@ const ideas: Record<string, IdeaSection> = {
     icon: "🔭",
     color: "text-blue-400",
     items: [
-      { id: "explore-song-analysis", title: "楽曲の考察", description: "インタビューや歌詞をもとにLLMで楽曲テーマを考察" },
       { id: "explore-concept-constellation", title: "考察星座", description: "本質が近い楽曲同士を繋げる新しい星座" },
       { id: "explore-lucky-star", title: "今日のラッキースター", description: "ランダムな曲へジャンプして新しい出会いを" },
       { id: "explore-first-live-link", title: "初披露ライブへのリンク", description: "曲が初めて演奏されたライブへジャンプ" },
@@ -36,6 +94,7 @@ const ideas: Record<string, IdeaSection> = {
       { id: "explore-complete-constellation", title: "全曲制覇スペシャル星座", description: "全曲訪問で隠し星座が出現" },
       { id: "explore-quiz", title: "星座クイズ", description: "星座線だけでアルバム/ライブを当てるゲーム" },
       { id: "explore-audio-preview", title: "オーディオプレビュー", description: "星選択時に30秒プレビュー再生" },
+      { id: "explore-live-gallery", title: "ライブ写真ギャラリー", description: "ライブ星座選択時に公式写真を表示" },
       { id: "explore-ar-mode", title: "AR星空モード", description: "カメラ越しに星空を重ねて表示" },
     ]
   },
@@ -57,6 +116,8 @@ const ideas: Record<string, IdeaSection> = {
     color: "text-amber-400",
     items: [
       { id: "display-jacket", title: "カードにジャケット表示", description: "アルバムアートを詳細カードに表示" },
+      { id: "display-mv-thumbnail", title: "MVサムネイル表示", description: "楽曲カードにYouTube公式MVのサムネイル" },
+      { id: "display-artist-photo", title: "アーティスト写真", description: "ヘッダーやアバウトに公式写真を表示" },
       { id: "display-song-label", title: "曲名ラベル表示", description: "ズームに応じて曲名を表示/非表示" },
       { id: "display-phase", title: "フェーズ1/2の視覚的分類", description: "活動フェーズで楽曲を色分け" },
       { id: "display-pulse-animation", title: "星の脈動アニメーション", description: "タップ時にゆっくり脈動する演出" },
@@ -101,6 +162,7 @@ export function RoadmapModal({ onClose, onOpenFeedback }: RoadmapModalProps) {
   const [votes, setVotes] = useState<Record<string, number>>({})
   const [votedIds, setVotedIds] = useState<string[]>([])
   const [votingId, setVotingId] = useState<string | null>(null)
+  const [isFeaturesOpen, setIsFeaturesOpen] = useState(false)
 
   // 初期化: 投票数取得 & localStorage から投票済みID読み込み
   useEffect(() => {
@@ -206,13 +268,60 @@ export function RoadmapModal({ onClose, onOpenFeedback }: RoadmapModalProps) {
         {/* フィードバックボタン */}
         <button
           onClick={handleOpenFeedback}
-          class="w-full flex items-center justify-center gap-2 px-4 py-2.5 mb-5 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 text-sm rounded-lg border border-emerald-500/30 transition-colors"
+          class="w-full flex items-center justify-center gap-2 px-4 py-2.5 mb-4 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 text-sm rounded-lg border border-emerald-500/30 transition-colors"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
           </svg>
           「これが欲しい！」を送る
         </button>
+
+        {/* できること（折りたたみ） */}
+        <div class="mb-5">
+          <button
+            onClick={() => setIsFeaturesOpen(!isFeaturesOpen)}
+            class="w-full flex items-center justify-between px-3 py-2 bg-white/5 hover:bg-white/10 rounded-lg border border-white/10 transition-colors"
+          >
+            <span class="text-sm text-white/80 flex items-center gap-2">
+              <span>🌟</span>
+              できること
+            </span>
+            <svg
+              class={`w-4 h-4 text-white/50 transition-transform ${isFeaturesOpen ? 'rotate-180' : ''}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          {isFeaturesOpen && (
+            <div class="mt-2 space-y-3">
+              {implementedFeatures.map((section) => (
+                <div key={section.title} class="bg-white/5 rounded-lg p-3 border border-white/10">
+                  <div class="text-xs font-medium text-white/70 mb-2 flex items-center gap-1.5">
+                    <span>{section.icon}</span>
+                    {section.title}
+                  </div>
+                  <div class="space-y-1">
+                    {section.items.map((item) => (
+                      <div key={item.title} class="flex items-start gap-2 text-xs">
+                        <svg class="w-3 h-3 text-emerald-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                        <div>
+                          <span class="text-white/80">{item.title}</span>
+                          <span class="text-white/40 ml-1">- {item.description}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
         {/* カテゴリ別アイデア */}
         {Object.entries(ideas).map(([key, section]) => (

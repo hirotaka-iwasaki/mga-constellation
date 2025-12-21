@@ -1,234 +1,75 @@
 # CLAUDE.md - Mrs. GREEN APPLE 動的星座マップ
 
-## プロジェクト概要
+## 概要
 
-Mrs. GREEN APPLEの全楽曲をリリース日順のグリッドに配置し、アルバムやライブを選択すると該当曲が星座線で結ばれるインタラクティブなファンメイド・ビジュアライゼーション。
-
-**コンセプト**: カテゴリ（アルバム/ライブ/シングル）を選ぶと星座が浮かび上がる
+Mrs. GREEN APPLEの全楽曲をリリース日順グリッドに配置し、アルバム/ライブ選択で星座線が結ばれるファンメイド・ビジュアライゼーション。
 
 ## ディレクトリ構成
 
 ```
 mga-constellation/
-├── scripts/                      # データ生成パイプライン
-│   ├── 01-fetch-songs.ts         # 楽曲カタログ生成（121曲）
-│   ├── 02-build-constellations.ts # 星座データ構築
-│   ├── 04-calculate-positions.ts # 星の座標計算（グリッド配置）
-│   ├── 05-export-to-site.ts      # site/へエクスポート
-│   ├── data/                     # 入力データ（TypeScript）
-│   │   ├── albums-data.ts        # アルバム・シングル定義
-│   │   └── lives-data.ts         # ライブ・セットリスト定義
-│   ├── output/                   # 生成されたJSONデータ
-│   └── types.ts                  # 共通型定義
-├── site/                         # フロントエンド（Astro+Preact）
-│   ├── functions/                # Cloudflare Pages Functions
-│   │   └── api/
-│   │       ├── votes.ts          # GET /api/votes
-│   │       └── vote.ts           # POST /api/vote
-│   ├── src/
-│   │   ├── components/           # Preactコンポーネント
-│   │   │   ├── StarField.tsx     # 星図メイン
-│   │   │   └── CategorySelector.tsx # カテゴリ選択UI
-│   │   └── content/              # 生成データの出力先
-│   └── wrangler.toml             # Cloudflare KV設定
-├── docs/                         # ドキュメント
-│   ├── voting-api-design.md      # 投票API設計書
-│   ├── MGA-DYNAMIC-CONSTELLATION-SPEC.md  # 詳細設計仕様書
-│   └── BACKEND-IDEAS.md          # バックエンドアイデア
-├── README.md
-└── TODO.md                       # 残タスク・改善案
+├── scripts/           # データ生成（01〜05の順で実行）
+│   ├── data/          # albums-data.ts, lives-data.ts
+│   └── output/        # 生成JSON
+├── site/              # Astro+Preact フロントエンド
+│   ├── functions/api/ # Cloudflare Pages Functions（投票API）
+│   └── src/components/# StarField.tsx 等
+└── docs/              # 設計書
 ```
 
-## クイックコマンド
+## コマンド
 
 ```bash
-# 依存関係インストール + 開発サーバー起動（推奨）
-make dev
-
-# その他のコマンド
-make install     # 依存関係インストール
-make dev-front   # フロントエンドのみ起動（APIなし）
-make build       # 本番ビルド
-make data        # 楽曲・星座データ再生成
-make clean       # ビルド成果物削除
-```
-
-### 個別実行（scriptsディレクトリ）
-
-```bash
-cd scripts
-npm run 01:songs          # 楽曲データ生成
-npm run 02:constellations # 星座データ構築
-npm run 03:positions      # 位置計算（グリッド配置）
-npm run 04:export         # site/へエクスポート
+make dev        # 依存インストール + 開発サーバー起動
+make build      # 本番ビルド
+make data       # 楽曲・星座データ再生成
 ```
 
 ## 技術スタック
 
-- **データ処理**: TypeScript + Node.js (tsx)
-- **フロントエンド**: Astro + Preact + Tailwind CSS
-- **バックエンド**: Cloudflare Pages Functions + KV
-- **描画**: SVG + CSS Animations
-- **ホスティング**: Cloudflare Pages
-
-## バックエンド（投票API）
-
-投票機能は Cloudflare Pages Functions + KV で実装。
-
-### ローカル開発
-
-```bash
-cd site
-npm run dev:api  # ビルド後、ローカルKVモックでサーバー起動
-```
-
-### API エンドポイント
-
-- `GET /api/votes` - 全アイデアの投票数取得
-- `POST /api/vote` - アイデアに投票
-
-### 本番デプロイ設定
-
-1. KV Namespace 作成
-```bash
-npx wrangler kv:namespace create "VOTES"
-npx wrangler kv:namespace create "VOTES" --preview
-```
-
-2. `site/wrangler.toml` に出力されたIDを設定
-
-3. Cloudflare Dashboard → Pages → Settings → Functions → KV namespace bindings で `VOTES` をバインド
-
-詳細: `docs/voting-api-design.md`
+Astro + Preact + Tailwind / Cloudflare Pages + KV / SVG描画
 
 ## 開発方針
 
-### モバイルファースト
-- **主要ターゲット: スマートフォン**
-- タッチ操作を前提としたUI設計
-- ビューポートは縦長を基本とする
+- **モバイルファースト**: タッチ操作前提、縦長ビューポート
+- **パフォーマンス優先**: Core Web Vitals意識、不要な再レンダリング回避
+- **インタラクション**: タップ→詳細、スワイプ→ナビ、ドラッグ→パン、ピンチ→ズーム
+- **表示**: 星は白統一、星座線は固有色、複数選択可
 
-### パフォーマンス優先
-- **表示速度とUXを最重視**
-- 機能追加時は必ずパフォーマンスへの影響を考慮
-- 不要な再レンダリング・重い処理を避ける
-- Core Web Vitals（LCP, CLS, INP）を意識した実装
+## データ追加
 
-### インタラクション設計
-- 星のタップ → 詳細カード表示
-- カードスワイプ/矢印 → 次/前の曲へ移動（画面も追従）
-- ドラッグ → パン移動
-- ピンチ → ズーム
-- ダブルタップ → 初期位置にリセット
+**新曲**: `scripts/01-fetch-songs.ts` の `RAW_SONGS` に追加 → `make data`
 
-### 表示設計
-- 星は全て白で統一（サイズも統一）
-- 星座線は各星座の固有色で表示
-- 複数星座の同時選択が可能
-- 星座選択時はその星座の曲順でカードナビゲーション
-
-## 主要な型定義 (scripts/types.ts)
-
+**ライブ**: `scripts/data/lives-data.ts` に追加
 ```typescript
-// 楽曲
-interface Song {
-  id: string;           // URL-friendly ID
-  title: string;
-  releaseDate: string;  // YYYY-MM-DD
-  year: number;
-}
-
-// 星座（アルバム/ライブ/シングル）
-interface Constellation {
-  id: string;
-  name: string;
-  type: 'album' | 'live' | 'single' | 'theme';
-  year: number;
-  date?: string;
-  color: string;        // Hex
-  songs: string[];      // タイトル配列（順序が重要）
-}
-
-// 星の位置
-interface StarPosition {
-  id: string;
-  x: number;            // 0-100
-  y: number;            // 0-100
-}
+{ id: 'tour-2025', name: 'ツアー名', type: 'dome', year: 2025, date: '2025-01-01', color: '#xxx', songs: [...] }
 ```
 
-## 位置計算アルゴリズム
-
-`04-calculate-positions.ts` は楽曲をリリース日順でソートし、正方形グリッド（11×11）に配置。左上が最も古い曲、右下が最も新しい曲。
-
-## データ追加・変更の手順
-
-### 新曲を追加
-1. `scripts/01-fetch-songs.ts` の `RAW_SONGS` に曲名とリリース日を追加
-2. `npm run build` で再生成
-
-### ライブを追加
-`scripts/data/lives-data.ts`:
+**アルバム**: `scripts/data/albums-data.ts` に追加
 ```typescript
-{
-  id: 'new-tour-2025',
-  name: '新ツアー名',
-  type: 'dome',  // dome | arena | hall | fc
-  year: 2025,
-  date: '2025-MM-DD',
-  color: '#xxxxxx',
-  songs: ['曲1', '曲2', ...],  // セットリスト順
-}
+{ id: 'album-id', name: 'アルバム名', type: 'album', releaseDate: '2025-01-01', color: '#xxx', songs: [...] }
 ```
 
-### アルバム/シングルを追加
-`scripts/data/albums-data.ts`:
-```typescript
-{
-  id: 'new-album',
-  name: 'アルバム名',
-  type: 'album',  // album | mini | best | single
-  releaseDate: '2025-MM-DD',
-  color: '#xxxxxx',
-  songs: ['曲1', '曲2', ...],  // 収録順
-}
-```
+## 公式ガイドライン準拠
 
-## 公式ファン活動ガイドライン
+> https://www.universal-music.co.jp/mrsgreenapple/guide/
 
-> 出典: https://www.universal-music.co.jp/mrsgreenapple/guide/
+**許可**: 公式サイト/YouTube/ユニバーサル公式からのジャケット・アーティスト・ライブ写真の使用
 
-### 許可されている用途
+**遵守事項**:
+- 非営利（広告なし、収益化なし）
+- 出典明記（© Universal Music Japan）
+- アーティストイメージの保護
+- 著作権表記（フッターに明記済み）
 
-**動画コンテンツ:**
-- 「弾いてみた」「歌ってみた」「踊ってみた」動画
-- 複数楽曲のメドレー形式での使用
-- その他ファンオリジナルコンテンツへの組み込み
+## 技術メモ
 
-**写真・映像の使用:**
-- 公式サイト、ユニバーサルミュージック公式ページ、オフィシャルYouTubeチャンネルから取得した「ジャケット写真、アーティスト写真、ライブ写真」をファン制作動画に表示可能
+- **画像化**: html-to-image でSVG→PNG、Web Share API で共有
+- **歌詞（将来）**: Uta-Net手動取得、一文のみ表示、.gitignore
+- **ジャケット（将来）**: 公式から取得、WebP最適化、lazy load
 
-### 重要な制限事項
+## 参考
 
-- **マネタイズ禁止** — すべてのコンテンツは個人使用に限定、収益化不可
-- **アーティストのイメージ保護** — 「アーティストの意向やイメージを傷つける編集」は避けるべき
-- **他者の権利尊重** — ライブ映像では他の出演者や観客が写らないよう注意が必要
-
-### 禁止行為
-
-- 誹謗中傷、名誉毀損
-- 第三者の知的財産権や肖像権の無許諾使用
-- ユニバーサルミュージックは予告なく削除可能
-
-### 本プロジェクトでの遵守事項
-
-- **非営利**: 広告なし、収益化なし
-- **公式素材の適切な使用**: ジャケット写真は公式サイトから取得し、出典を明記
-- **リスペクト**: アーティストのイメージを損なう表現は行わない
-- **著作権表記**: 楽曲の著作権はMrs. GREEN APPLEおよび関係者に帰属することを明記
-
-## 注意事項
-
-- 楽曲の著作権は Mrs. GREEN APPLE および関係者に帰属
-- ファンによる非公式プロジェクト
-- 公式ガイドラインに準拠したファン活動として運営
+- [Music Galaxy](https://galaxy.spotify.com) - 3D音楽宇宙
+- [Scaled in Miles](https://scaledinmiles.com) - Miles Davisディスコグラフィ
+- [Instafest](https://instafest.app) - フェスポスター生成
