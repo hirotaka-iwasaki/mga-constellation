@@ -78,6 +78,9 @@ const implementedFeatures: FeatureSection[] = [
 ]
 
 // カテゴリ別アイデアデータ（IDを追加）
+// 目標票数（この数で100%になる）
+const VOTE_GOAL = 20
+
 const ideas: Record<string, IdeaSection> = {
   explore: {
     title: "探索・発見",
@@ -336,13 +339,19 @@ export function RoadmapModal({ onClose, onOpenFeedback }: RoadmapModalProps) {
                 const isVoted = votedIds.includes(item.id)
                 const isVoting = votingId === item.id
                 const voteCount = votes[item.id] || 0
+                const progressPercent = Math.min((voteCount / VOTE_GOAL) * 100, 100)
 
                 return (
                   <div
                     key={item.id}
-                    class="bg-white/5 rounded-lg px-3 py-2 border border-white/10 flex items-start gap-2"
+                    class="relative overflow-hidden bg-white/5 rounded-lg px-3 py-2 border border-white/10 flex items-start gap-2"
                   >
-                    <div class="flex-1 min-w-0">
+                    {/* プログレスバー背景 */}
+                    <div
+                      class="absolute inset-0 bg-emerald-400 opacity-20 transition-all duration-500"
+                      style={{ width: `${progressPercent}%` }}
+                    />
+                    <div class="relative flex-1 min-w-0">
                       <div class="text-sm text-white/90">{item.title}</div>
                       <div class="text-xs text-white/50 mt-0.5">{item.description}</div>
                     </div>
@@ -351,23 +360,16 @@ export function RoadmapModal({ onClose, onOpenFeedback }: RoadmapModalProps) {
                     <button
                       onClick={() => !isVoted && handleVote(item.id)}
                       disabled={isVoting || isVoted}
-                      class={`flex-shrink-0 flex items-center gap-1 px-2 py-1 rounded text-xs transition-colors ${
+                      class={`relative flex-shrink-0 p-1.5 rounded-full transition-all ${
                         isVoted
-                          ? 'bg-emerald-600/30 text-emerald-400 border border-emerald-500/40 cursor-default'
-                          : 'bg-white/10 text-white/70 border border-white/20 hover:bg-white/20 hover:text-white'
+                          ? 'text-pink-400 cursor-default'
+                          : 'text-white/40 hover:text-pink-400 active:scale-110'
                       } ${isVoting ? 'opacity-50 cursor-wait' : ''}`}
                       aria-label={isVoted ? '投票済み' : '投票する'}
                     >
-                      {isVoted ? (
-                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                        </svg>
-                      ) : (
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
-                        </svg>
-                      )}
-                      <span>{voteCount}</span>
+                      <svg class="w-4 h-4" viewBox="0 0 24 24" fill={isVoted ? 'currentColor' : 'none'} stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                      </svg>
                     </button>
                   </div>
                 )

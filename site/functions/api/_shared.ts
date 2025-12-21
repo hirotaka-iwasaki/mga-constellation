@@ -15,6 +15,7 @@ export const VALID_IDEA_IDS = [
   'explore-complete-constellation',
   'explore-quiz',
   'explore-audio-preview',
+  'explore-live-gallery',
   'explore-ar-mode',
 
   // share（共有・カスタマイズ）
@@ -26,6 +27,8 @@ export const VALID_IDEA_IDS = [
 
   // display（表示・演出）
   'display-jacket',
+  'display-mv-thumbnail',
+  'display-artist-photo',
   'display-song-label',
   'display-phase',
   'display-pulse-animation',
