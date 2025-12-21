@@ -415,7 +415,7 @@ export function RoadmapModal({ onClose, onOpenFeedback }: RoadmapModalProps) {
           )
         })()}
 
-        {/* できること（折りたたみ） */}
+        {/* これまでに作ったもの（折りたたみ） */}
         <div class="mb-5">
           <button
             onClick={() => setIsFeaturesOpen(!isFeaturesOpen)}
@@ -423,7 +423,7 @@ export function RoadmapModal({ onClose, onOpenFeedback }: RoadmapModalProps) {
           >
             <span class="text-sm text-white/80 flex items-center gap-2">
               <span>🌟</span>
-              もうできること
+              これまでに作ったもの
             </span>
             <svg
               class={`w-4 h-4 text-white/50 transition-transform ${isFeaturesOpen ? 'rotate-180' : ''}`}
