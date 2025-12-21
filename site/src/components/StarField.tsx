@@ -847,7 +847,7 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
       </svg>
 
       {/* フッター（詳細カード + 選択タグ + カテゴリボタン） */}
-      <div class="absolute bottom-0 left-0 right-0 z-40 flex flex-col" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+      <div class="absolute bottom-0 left-0 right-0 z-40 flex flex-col pb-[env(safe-area-inset-bottom)] bg-slate-900/95 backdrop-blur-md">
         {/* 選択時の詳細パネル */}
         {selectedStar && songMap.get(selectedStar) && (
           <div

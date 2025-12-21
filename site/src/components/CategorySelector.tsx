@@ -102,7 +102,7 @@ export function CategorySelector({
       onWheel={(e) => e.stopPropagation()}
     >
       {/* カテゴリボタン */}
-      <div class="bg-slate-900/95 backdrop-blur-md border-t border-slate-700 px-4 py-3">
+      <div class="border-t border-slate-700 px-4 py-3">
         <div class="flex gap-2 justify-center flex-wrap">
           {(Object.keys(CATEGORY_LABELS) as CategoryType[]).map((cat) => (
             <div key={cat} class="relative">

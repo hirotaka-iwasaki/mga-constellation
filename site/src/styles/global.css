@@ -4,8 +4,8 @@
 :root {
   --sat: env(safe-area-inset-top, 0px);
   --sab: env(safe-area-inset-bottom, 0px);
-  /* Dynamic Island対応: 最低59pxを確保（iPhone 16 Pro） */
-  --header-offset: max(59px, calc(0.5rem + var(--sat)));
+  /* env()が正しく取得できる前提でシンプルに */
+  --header-offset: calc(8px + var(--sat));
 }
 
 /* Tutorial animation */
