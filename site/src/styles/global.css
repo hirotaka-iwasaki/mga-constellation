@@ -3,7 +3,8 @@
 /* iPhone Safe Area support */
 :root {
   --sat: env(safe-area-inset-top, 0px);
-  --header-offset: calc(4rem + var(--sat));
+  --sab: env(safe-area-inset-bottom, 0px);
+  --header-offset: calc(0.75rem + var(--sat));
 }
 
 /* Tutorial animation */

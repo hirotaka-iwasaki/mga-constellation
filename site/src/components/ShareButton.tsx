@@ -255,14 +255,14 @@ export function ShareButton({ selectedConstellations, positions, titleToIdMap }:
       <button
         onClick={handleShare}
         disabled={isGenerating || !hasSelection}
-        class={`w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center active:bg-slate-800 disabled:opacity-50 ${!hasSelection ? 'opacity-30' : ''}`}
+        class={`w-9 h-9 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center active:bg-slate-800 disabled:opacity-50 ${!hasSelection ? 'opacity-30' : ''}`}
         aria-label="画像として共有"
         title={hasSelection ? '画像として共有' : '星座を選択してください'}
       >
         {isGenerating ? (
-          <div class="w-5 h-5 border-2 border-white/30 border-t-white/80 rounded-full animate-spin" />
+          <div class="w-4 h-4 border-2 border-white/30 border-t-white/80 rounded-full animate-spin" />
         ) : (
-          <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
         )}

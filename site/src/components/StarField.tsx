@@ -593,7 +593,7 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
   return (
     <div
       ref={containerRef}
-      class={`relative w-full h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 overflow-hidden ${showSongDetail ? '' : 'touch-none'}`}
+      class={`relative w-full h-dvh bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 overflow-hidden ${showSongDetail ? '' : 'touch-none'}`}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
@@ -919,18 +919,22 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
       </div>
 
       {/* 楽曲数の表示 */}
-      <div class="absolute bottom-4 left-4 text-xs text-white/40">
+      <div class="absolute left-4 text-xs text-white/40" style={{ bottom: 'calc(0.75rem + var(--sab))' }}>
         {songs.length} songs
       </div>
 
-      {/* 上部UI: 検索ボタン */}
-      <div class="absolute left-3 z-20" style={{ top: 'var(--header-offset)' }}>
+      {/* ヘッダー: タイトル + 検索ボタン */}
+      <div class="absolute left-3 right-3 z-20 flex items-center justify-between" style={{ top: 'var(--header-offset)' }}>
+        <h1 class="text-base font-light tracking-wider text-white/90">
+          Mrs. GREEN APPLE
+          <span class="block text-[10px] text-emerald-400/70">CONSTELLATION MAP</span>
+        </h1>
         <button
           onClick={openSearch}
-          class="w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center flex-shrink-0 active:bg-slate-800"
+          class="w-9 h-9 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center flex-shrink-0 active:bg-slate-800"
           aria-label="曲を検索"
         >
-          <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </button>
@@ -1003,50 +1007,48 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
         </div>
       )}
 
-      {/* 共有ボタン */}
-      <div class="absolute right-3 z-20" style={{ top: 'var(--header-offset)' }}>
+      {/* 右側ボタン群 */}
+      <div class="absolute right-3 z-20 flex flex-col gap-2" style={{ top: 'calc(var(--header-offset) + 3rem)' }}>
+        {/* 共有ボタン */}
         <ShareButton
           selectedConstellations={selectedConstellations}
           positions={positions}
           titleToIdMap={titleToIdMap}
         />
+
+        {/* 使い方ボタン */}
+        <button
+          onClick={() => setShowTutorial(true)}
+          class="w-9 h-9 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center active:bg-slate-800"
+          aria-label="使い方を見る"
+        >
+          <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </button>
+
+        {/* ロードマップボタン */}
+        <button
+          onClick={() => setShowRoadmap(true)}
+          class="w-9 h-9 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center active:bg-slate-800"
+          aria-label="ロードマップを見る"
+        >
+          <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+          </svg>
+        </button>
+
+        {/* フィードバックボタン */}
+        <button
+          onClick={() => setShowFeedback(true)}
+          class="w-9 h-9 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center active:bg-slate-800"
+          aria-label="フィードバックを送る"
+        >
+          <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+          </svg>
+        </button>
       </div>
-
-      {/* 使い方ボタン */}
-      <button
-        onClick={() => setShowTutorial(true)}
-        class="absolute right-3 w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center z-20 active:bg-slate-800"
-        style={{ top: 'calc(var(--header-offset) + 3rem)' }}
-        aria-label="使い方を見る"
-      >
-        <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      </button>
-
-      {/* ロードマップボタン */}
-      <button
-        onClick={() => setShowRoadmap(true)}
-        class="absolute right-3 w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center z-20 active:bg-slate-800"
-        style={{ top: 'calc(var(--header-offset) + 6rem)' }}
-        aria-label="ロードマップを見る"
-      >
-        <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-        </svg>
-      </button>
-
-      {/* フィードバックボタン */}
-      <button
-        onClick={() => setShowFeedback(true)}
-        class="absolute right-3 w-10 h-10 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center z-20 active:bg-slate-800"
-        style={{ top: 'calc(var(--header-offset) + 9rem)' }}
-        aria-label="フィードバックを送る"
-      >
-        <svg class="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-        </svg>
-      </button>
 
       {/* フィードバックモーダル */}
       {showFeedback && (
