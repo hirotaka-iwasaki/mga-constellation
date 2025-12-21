@@ -46,7 +46,45 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
   const [showTutorial, setShowTutorial] = useState(false)
   const [showFeedback, setShowFeedback] = useState(false)
   const [showRoadmap, setShowRoadmap] = useState(false)
+  const [showMenu, setShowMenu] = useState(false)
+  const [triggerShare, setTriggerShare] = useState(false)
   const [selectedStar, setSelectedStar] = useState<string | null>('start')
+
+  // ボトムシートメニューのスワイプ操作
+  const [menuDragOffset, setMenuDragOffset] = useState(0)
+  const [isMenuDragging, setIsMenuDragging] = useState(false)
+  const menuDragStartY = useRef(0)
+  const MENU_SWIPE_THRESHOLD = 80
+
+  const handleMenuTouchStart = useCallback((e: TouchEvent) => {
+    e.stopPropagation()
+    menuDragStartY.current = e.touches[0].clientY
+    setIsMenuDragging(false)
+    setMenuDragOffset(0)
+  }, [])
+
+  const handleMenuTouchMove = useCallback((e: TouchEvent) => {
+    e.stopPropagation()
+    const deltaY = e.touches[0].clientY - menuDragStartY.current
+    // 下方向へのスワイプのみ
+    if (deltaY > 0) {
+      e.preventDefault()
+      setIsMenuDragging(true)
+      setMenuDragOffset(deltaY)
+    }
+  }, [])
+
+  const handleMenuTouchEnd = useCallback((e: TouchEvent) => {
+    e.stopPropagation()
+    if (isMenuDragging) {
+      if (menuDragOffset > MENU_SWIPE_THRESHOLD) {
+        setShowMenu(false)
+      }
+      setMenuDragOffset(0)
+    }
+    setIsMenuDragging(false)
+  }, [isMenuDragging, menuDragOffset])
+
   const [selectedConstellationIds, setSelectedConstellationIds] = useState<string[]>([])
   const [showSongDetail, setShowSongDetail] = useState(false)
 
@@ -842,7 +880,12 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
               >
                 <div class="text-base font-medium text-white truncate">{songMap.get(selectedStar)!.title}</div>
                 <div class="text-xs text-slate-400">{songMap.get(selectedStar)!.releaseDate} · {selectedStarIndex >= 0 ? selectedStarIndex + 1 : '-'}/{navigableSongIds.length}</div>
-                <div class="text-xs text-slate-500 mt-0.5">タップで詳細</div>
+                <span class="inline-flex items-center gap-0.5 mt-1.5 px-2.5 py-0.5 text-xs font-medium text-emerald-300 bg-emerald-900/50 border border-emerald-700/50 rounded-full">
+                  AI分析を見る
+                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                </span>
               </button>
 
               {/* 次へボタン */}
@@ -923,21 +966,34 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
         {songs.length} songs
       </div>
 
-      {/* ヘッダー: タイトル + 検索ボタン */}
+      {/* ヘッダー: タイトル + 検索・メニューボタン */}
       <div class="absolute left-3 right-3 z-20 flex items-center justify-between" style={{ top: 'var(--header-offset)' }}>
         <h1 class="text-base font-light tracking-wider text-white/90">
           Mrs. GREEN APPLE
           <span class="block text-[10px] text-emerald-400/70">CONSTELLATION MAP</span>
         </h1>
-        <button
-          onClick={openSearch}
-          class="w-9 h-9 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center flex-shrink-0 active:bg-slate-800"
-          aria-label="曲を検索"
-        >
-          <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-        </button>
+        <div class="flex items-center gap-2">
+          <button
+            onClick={openSearch}
+            class="h-9 px-3 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center gap-1.5 flex-shrink-0 active:bg-slate-800"
+            aria-label="曲を検索"
+          >
+            <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <span class="text-xs text-white/70">検索</span>
+          </button>
+          <button
+            onClick={() => setShowMenu(true)}
+            class="h-9 px-3 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center gap-1.5 flex-shrink-0 active:bg-slate-800"
+            aria-label="メニューを開く"
+          >
+            <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <span class="text-xs text-white/70">メニュー</span>
+          </button>
+        </div>
       </div>
 
       {/* 検索モーダル */}
@@ -1007,48 +1063,120 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
         </div>
       )}
 
-      {/* 右側ボタン群 */}
-      <div class="absolute right-3 z-20 flex flex-col gap-2" style={{ top: 'calc(var(--header-offset) + 3rem)' }}>
-        {/* 共有ボタン */}
-        <ShareButton
-          selectedConstellations={selectedConstellations}
-          positions={positions}
-          titleToIdMap={titleToIdMap}
-        />
+      {/* ボトムシートメニュー */}
+      {showMenu && (
+        <div class="absolute inset-0 z-50">
+          {/* 背景オーバーレイ */}
+          <div
+            class="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in"
+            onClick={() => setShowMenu(false)}
+          />
+          {/* メニューシート */}
+          <div
+            class={`absolute bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-700 rounded-t-2xl ${isMenuDragging ? '' : 'animate-slide-up-menu'}`}
+            style={{
+              paddingBottom: 'var(--sab)',
+              transform: `translateY(${menuDragOffset}px)`,
+              transition: isMenuDragging ? 'none' : 'transform 0.2s ease-out',
+            }}
+            onTouchStart={handleMenuTouchStart}
+            onTouchMove={handleMenuTouchMove}
+            onTouchEnd={handleMenuTouchEnd}
+          >
+            <div class="w-12 h-1 bg-slate-600 rounded-full mx-auto mt-3 mb-2" />
+            <div class="px-4 pb-4">
+              {/* 共有ボタン */}
+              <button
+                onClick={() => {
+                  setShowMenu(false)
+                  setTriggerShare(true)
+                }}
+                disabled={selectedConstellations.length === 0}
+                class={`w-full flex items-center gap-4 px-4 py-3 rounded-xl active:bg-slate-800 ${selectedConstellations.length === 0 ? 'opacity-40' : ''}`}
+              >
+                <div class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center">
+                  <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div class="text-left">
+                  <div class="text-white font-medium">画像を共有</div>
+                  <div class="text-xs text-slate-400">
+                    {selectedConstellations.length === 0 ? '星座を選択してください' : '星座マップを画像として保存・共有'}
+                  </div>
+                </div>
+              </button>
 
-        {/* 使い方ボタン */}
-        <button
-          onClick={() => setShowTutorial(true)}
-          class="w-9 h-9 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center active:bg-slate-800"
-          aria-label="使い方を見る"
-        >
-          <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </button>
+              {/* 使い方ボタン */}
+              <button
+                onClick={() => {
+                  setShowMenu(false)
+                  setShowTutorial(true)
+                }}
+                class="w-full flex items-center gap-4 px-4 py-3 rounded-xl active:bg-slate-800"
+              >
+                <div class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center">
+                  <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div class="text-left">
+                  <div class="text-white font-medium">使い方</div>
+                  <div class="text-xs text-slate-400">操作方法をチュートリアルで確認</div>
+                </div>
+              </button>
 
-        {/* ロードマップボタン */}
-        <button
-          onClick={() => setShowRoadmap(true)}
-          class="w-9 h-9 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center active:bg-slate-800"
-          aria-label="ロードマップを見る"
-        >
-          <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-          </svg>
-        </button>
+              {/* ロードマップボタン */}
+              <button
+                onClick={() => {
+                  setShowMenu(false)
+                  setShowRoadmap(true)
+                }}
+                class="w-full flex items-center gap-4 px-4 py-3 rounded-xl active:bg-slate-800"
+              >
+                <div class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center">
+                  <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                  </svg>
+                </div>
+                <div class="text-left">
+                  <div class="text-white font-medium">開発ロードマップ</div>
+                  <div class="text-xs text-slate-400">今後追加予定の機能を確認</div>
+                </div>
+              </button>
 
-        {/* フィードバックボタン */}
-        <button
-          onClick={() => setShowFeedback(true)}
-          class="w-9 h-9 bg-slate-900/80 backdrop-blur-sm border border-slate-700/50 rounded-lg flex items-center justify-center active:bg-slate-800"
-          aria-label="フィードバックを送る"
-        >
-          <svg class="w-4 h-4 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-          </svg>
-        </button>
-      </div>
+              {/* 感想を送るボタン */}
+              <button
+                onClick={() => {
+                  setShowMenu(false)
+                  setShowFeedback(true)
+                }}
+                class="w-full flex items-center gap-4 px-4 py-3 rounded-xl active:bg-slate-800"
+              >
+                <div class="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center">
+                  <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                </div>
+                <div class="text-left">
+                  <div class="text-white font-medium">感想を送る</div>
+                  <div class="text-xs text-slate-400">フィードバックや要望をお聞かせください</div>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 共有機能（非表示、ボトムシートからトリガー） */}
+      <ShareButton
+        selectedConstellations={selectedConstellations}
+        positions={positions}
+        titleToIdMap={titleToIdMap}
+        triggerShare={triggerShare}
+        onShareComplete={() => setTriggerShare(false)}
+        hidden
+      />
 
       {/* フィードバックモーダル */}
       {showFeedback && (
@@ -1071,6 +1199,20 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
         }
         .animate-slide-up {
           animation: slide-up 0.2s ease-out;
+        }
+        @keyframes slide-up-menu {
+          from { transform: translateY(100%); }
+          to { transform: translateY(0); }
+        }
+        .animate-slide-up-menu {
+          animation: slide-up-menu 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+        @keyframes fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        .animate-fade-in {
+          animation: fade-in 0.2s ease-out;
         }
         @keyframes fade-in-dot {
           from { opacity: 0; }

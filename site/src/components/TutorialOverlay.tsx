@@ -59,7 +59,7 @@ const TUTORIAL_STEPS: TutorialStep[] = [
   },
   {
     target: '[data-tutorial="share-button"]',
-    title: '📸 推し座が作れたら\n画像にしてシェアしてみてね',
+    title: '📸 推し座が作れたら\nメニューからシェアしてみてね',
     description: '',
     position: 'top-center',
   },

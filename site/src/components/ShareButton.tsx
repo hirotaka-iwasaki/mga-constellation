@@ -1,13 +1,16 @@
-import { useState, useCallback, useMemo } from 'preact/hooks'
+import { useState, useCallback, useMemo, useEffect } from 'preact/hooks'
 import type { Constellation, StarPosition } from '../types'
 
 interface ShareButtonProps {
   selectedConstellations: Constellation[]
   positions: StarPosition[]
   titleToIdMap: Map<string, string>
+  triggerShare?: boolean
+  onShareComplete?: () => void
+  hidden?: boolean
 }
 
-export function ShareButton({ selectedConstellations, positions, titleToIdMap }: ShareButtonProps) {
+export function ShareButton({ selectedConstellations, positions, titleToIdMap, triggerShare, onShareComplete, hidden }: ShareButtonProps) {
   const [isGenerating, setIsGenerating] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
@@ -246,8 +249,26 @@ export function ShareButton({ selectedConstellations, positions, titleToIdMap }:
     }
   }, [isGenerating, generateImage, selectedConstellations, showSuccessMessage])
 
+  // 外部からのトリガーに応答
+  useEffect(() => {
+    if (triggerShare && !isGenerating) {
+      handleShare().finally(() => {
+        onShareComplete?.()
+      })
+    }
+  }, [triggerShare])
+
   // 星座が選択されていない場合は非表示
   const hasSelection = selectedConstellations.length > 0
+
+  // hidden指定時はUIを非表示（ロジックのみ）
+  if (hidden) {
+    return successMessage ? (
+      <div class="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-emerald-600/90 text-white text-sm px-4 py-2 rounded-lg whitespace-nowrap animate-fade-in-toast">
+        {successMessage}
+      </div>
+    ) : null
+  }
 
   return (
     <div class="flex flex-col gap-2" data-tutorial="share-button">
@@ -282,6 +303,13 @@ export function ShareButton({ selectedConstellations, positions, titleToIdMap }:
         }
         .animate-fade-in {
           animation: fade-in 0.2s ease-out;
+        }
+        @keyframes fade-in-toast {
+          from { opacity: 0; transform: translate(-50%, -8px); }
+          to { opacity: 1; transform: translate(-50%, 0); }
+        }
+        .animate-fade-in-toast {
+          animation: fade-in-toast 0.2s ease-out;
         }
       `}</style>
     </div>
