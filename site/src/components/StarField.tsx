@@ -847,7 +847,7 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
       </svg>
 
       {/* フッター（詳細カード + 選択タグ + カテゴリボタン） */}
-      <div class="absolute bottom-0 left-0 right-0 z-40 flex flex-col">
+      <div class="absolute bottom-0 left-0 right-0 z-40 flex flex-col" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
         {/* 選択時の詳細パネル */}
         {selectedStar && songMap.get(selectedStar) && (
           <div
@@ -959,11 +959,6 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
           onEditCustom={handleEditCustomConstellation}
           onDeleteCustom={handleDeleteCustomConstellation}
         />
-      </div>
-
-      {/* 楽曲数の表示 */}
-      <div class="absolute left-4 text-xs text-white/40" style={{ bottom: 'calc(0.75rem + var(--sab))' }}>
-        {songs.length} songs
       </div>
 
       {/* ヘッダー: タイトル + 検索・メニューボタン */}

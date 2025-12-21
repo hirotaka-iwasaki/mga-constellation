@@ -4,7 +4,8 @@
 :root {
   --sat: env(safe-area-inset-top, 0px);
   --sab: env(safe-area-inset-bottom, 0px);
-  --header-offset: calc(0.75rem + var(--sat));
+  /* Dynamic Island対応: 最低12pxを確保 */
+  --header-offset: calc(0.5rem + max(12px, var(--sat)));
 }
 
 /* Tutorial animation */
