@@ -40,7 +40,7 @@ export interface SongEssence {
     motifs: string[]
     metaphors: string[]
   }
-  relatedQuotes: Array<{ source: string; quote: string }>
-  connections: Record<string, string | string[]>
+  relatedQuotes?: Array<{ source: string; quote: string }>
+  connections?: Record<string, string | string[]>
   confidence: string
 }

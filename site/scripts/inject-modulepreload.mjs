@@ -11,9 +11,10 @@ const distDir = join(process.cwd(), 'dist')
 const htmlPath = join(distDir, 'index.html')
 const astroDir = join(distDir, '_astro')
 
-// Find all JS files that should be preloaded
+// Find all JS files that should be preloaded (exclude lazy-loaded chunks)
 const jsFiles = readdirSync(astroDir)
   .filter(f => f.endsWith('.js'))
+  .filter(f => !f.startsWith('essences.')) // 遅延ロードのため除外
   .map(f => `/_astro/${f}`)
 
 // Generate modulepreload links

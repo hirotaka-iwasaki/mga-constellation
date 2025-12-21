@@ -19,11 +19,11 @@ async function loadEssences(): Promise<Record<string, SongEssence>> {
   if (essencesCache) return essencesCache
   if (essencesLoadPromise) return essencesLoadPromise
 
-  essencesLoadPromise = fetch('/src/content/essences.json')
-    .then(res => res.json())
-    .then(data => {
-      essencesCache = data
-      return data
+  // 動的import()でコード分割 - 初期ロードに影響なし
+  essencesLoadPromise = import('../content/essences.json')
+    .then(module => {
+      essencesCache = module.default
+      return module.default
     })
     .catch(err => {
       console.error('Failed to load essences:', err)
