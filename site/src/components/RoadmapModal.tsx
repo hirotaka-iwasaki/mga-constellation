@@ -90,6 +90,8 @@ const ideas: Record<string, IdeaSection> = {
     items: [
       { id: "explore-storyline", title: "ストーリーライン分析", description: "EDEN→NOAH→Atlantis→BABELの物語を通した楽曲変遷" },
       { id: "explore-artist-philosophy", title: "アーティスト解釈ページ", description: "インタビューなどから読み解くミセスの哲学・テーマ・進化" },
+      { id: "explore-tieup-context", title: "タイアップ作品連携", description: "映画・ドラマ・CMの世界観と楽曲の関係性を解説" },
+      { id: "explore-behind-the-scenes", title: "レコーディング映像", description: "YouTube公開のRecording Behind the Scenesへリンク" },
       { id: "explore-lucky-star", title: "今日のラッキースター", description: "ランダムな曲へジャンプして新しい出会いを" },
       { id: "explore-concept-constellation", title: "考察星座", description: "本質が近い楽曲同士を繋げる新しい星座" },
       { id: "explore-first-live-link", title: "初披露ライブへのリンク", description: "曲が初めて演奏されたライブへジャンプ" },

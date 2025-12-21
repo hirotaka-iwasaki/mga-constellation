@@ -19,6 +19,8 @@ export const VALID_IDEA_IDS = [
   'explore-ar-mode',
   'explore-storyline',
   'explore-artist-philosophy',
+  'explore-tieup-context',
+  'explore-behind-the-scenes',
 
   // share（共有・カスタマイズ）
   'share-url-short',
