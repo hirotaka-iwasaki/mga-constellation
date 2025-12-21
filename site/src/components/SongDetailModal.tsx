@@ -185,7 +185,7 @@ export function SongDetailModal({
               {/* 解釈 */}
               {essence.interpretation && (
                 <div class="mb-4">
-                  <h3 class="text-xs font-medium text-slate-500 mb-2">解釈</h3>
+                  <h3 class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-2">Interpretation</h3>
                   <p class="text-sm text-slate-400 leading-relaxed">
                     {essence.interpretation}
                   </p>
@@ -198,7 +198,7 @@ export function SongDetailModal({
                   {/* キーワード */}
                   {essence.lyricsAnalysis.keywords?.length > 0 && (
                     <div>
-                      <h4 class="text-xs text-slate-500 mb-1.5">キーワード</h4>
+                      <h4 class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-2">Keywords</h4>
                       <div class="flex flex-wrap gap-1">
                         {essence.lyricsAnalysis.keywords.map(kw => (
                           <span key={kw} class="px-1.5 py-0.5 text-xs bg-slate-800 text-slate-300 rounded">
@@ -212,7 +212,7 @@ export function SongDetailModal({
                   {/* モチーフ */}
                   {essence.lyricsAnalysis.motifs?.length > 0 && (
                     <div>
-                      <h4 class="text-xs text-slate-500 mb-1.5">モチーフ</h4>
+                      <h4 class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-2">Motifs</h4>
                       <ul class="text-xs text-slate-400 space-y-0.5">
                         {essence.lyricsAnalysis.motifs.map(motif => (
                           <li key={motif} class="flex items-start gap-1.5">
@@ -227,7 +227,7 @@ export function SongDetailModal({
                   {/* 隠喩・比喩 */}
                   {essence.lyricsAnalysis.metaphors?.length > 0 && (
                     <div>
-                      <h4 class="text-xs text-slate-500 mb-1.5">隠喩・比喩</h4>
+                      <h4 class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-2">Metaphors</h4>
                       <ul class="text-xs text-slate-400 space-y-0.5">
                         {essence.lyricsAnalysis.metaphors.map(meta => (
                           <li key={meta} class="flex items-start gap-1.5">
@@ -244,7 +244,7 @@ export function SongDetailModal({
               {/* 本人コメント */}
               {essence.relatedQuotes && essence.relatedQuotes.length > 0 && (
                 <div class="mb-4">
-                  <h3 class="text-xs font-medium text-slate-500 mb-2">本人コメント</h3>
+                  <h3 class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-2">Artist Comments</h3>
                   <div class="space-y-2">
                     {essence.relatedQuotes.map((q, i) => (
                       <div key={i} class="bg-slate-800/50 rounded-lg p-3">
@@ -259,7 +259,7 @@ export function SongDetailModal({
               {/* 関連曲 */}
               {essence.connections && Object.keys(essence.connections).length > 0 && (
                 <div class="mb-4">
-                  <h3 class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-2">関連</h3>
+                  <h3 class="text-xs font-medium text-slate-500 uppercase tracking-wider mb-2">Connections</h3>
                   <div class="space-y-1">
                     {Object.entries(essence.connections).map(([key, value]) => (
                       <div key={key} class="flex items-start gap-2 text-xs">
