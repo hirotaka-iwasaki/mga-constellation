@@ -88,19 +88,20 @@ const ideas: Record<string, IdeaSection> = {
     icon: "🔭",
     color: "text-blue-400",
     items: [
-      { id: "explore-concept-constellation", title: "考察星座", description: "本質が近い楽曲同士を繋げる新しい星座" },
+      { id: "explore-storyline", title: "ストーリーライン分析", description: "EDEN→NOAH→Atlantis→BABELの物語を通した楽曲変遷" },
+      { id: "explore-artist-philosophy", title: "アーティスト解釈ページ", description: "インタビューなどから読み解くミセスの哲学・テーマ・進化" },
       { id: "explore-lucky-star", title: "今日のラッキースター", description: "ランダムな曲へジャンプして新しい出会いを" },
+      { id: "explore-concept-constellation", title: "考察星座", description: "本質が近い楽曲同士を繋げる新しい星座" },
       { id: "explore-first-live-link", title: "初披露ライブへのリンク", description: "曲が初めて演奏されたライブへジャンプ" },
-      { id: "explore-progress-counter", title: "探索率カウンター", description: "「空の○○%を探索済み」の表示" },
-      { id: "explore-easter-egg", title: "日付ベースのイースターエッグ", description: "記念日に特別な星座が出現" },
+      { id: "explore-live-gallery", title: "ライブ写真ギャラリー", description: "ライブ星座選択時に公式写真を表示" },
       { id: "explore-common-songs", title: "共通曲ハイライト", description: "複数星座で共有される曲を強調表示" },
+      { id: "explore-quiz", title: "星座クイズ", description: "星座線だけでアルバム/ライブを当てるゲーム" },
       { id: "explore-guide-mode", title: "星座ガイドモード", description: "当時のセットリストを順に辿るガイド" },
       { id: "explore-complete-constellation", title: "全曲制覇スペシャル星座", description: "全曲訪問で隠し星座が出現" },
-      { id: "explore-quiz", title: "星座クイズ", description: "星座線だけでアルバム/ライブを当てるゲーム" },
       { id: "explore-audio-preview", title: "オーディオプレビュー", description: "星選択時に30秒プレビュー再生" },
-      { id: "explore-live-gallery", title: "ライブ写真ギャラリー", description: "ライブ星座選択時に公式写真を表示" },
+      { id: "explore-progress-counter", title: "探索率カウンター", description: "「空の○○%を探索済み」の表示" },
+      { id: "explore-easter-egg", title: "日付ベースのイースターエッグ", description: "記念日に特別な星座が出現" },
       { id: "explore-ar-mode", title: "AR星空モード", description: "カメラ越しに星空を重ねて表示" },
-      { id: "explore-storyline", title: "ストーリーライン分析", description: "EDEN→NOAH→Atlantis→BABELの物語を通した楽曲変遷" },
     ]
   },
   share: {
@@ -109,10 +110,11 @@ const ideas: Record<string, IdeaSection> = {
     color: "text-pink-400",
     items: [
       { id: "share-url-short", title: "URL短縮", description: "共有URLをより短く、シェアしやすく" },
-      { id: "share-hashtag", title: "推奨ハッシュタグ表示", description: "共有時に #ミセス推し座 を提案" },
+      { id: "share-like-interpretation", title: "解釈にいいね", description: "楽曲解釈への共感を「いいね」で表現" },
       { id: "share-diagnosis", title: "診断・称号機能", description: "選んだ曲傾向から「Pop星雲型」などの称号" },
-      { id: "share-complete-badge", title: "星座コンプリートバッジ", description: "アルバム全曲探索で達成カードを付与" },
+      { id: "share-hashtag", title: "推奨ハッシュタグ表示", description: "共有時に #ミセス推し座 を提案" },
       { id: "share-dynamic-ogp", title: "動的OGP画像生成", description: "選択した星座のプレビュー画像を自動生成" },
+      { id: "share-complete-badge", title: "星座コンプリートバッジ", description: "アルバム全曲探索で達成カードを付与" },
     ]
   },
   display: {
@@ -136,9 +138,9 @@ const ideas: Record<string, IdeaSection> = {
     icon: "⚡",
     color: "text-emerald-400",
     items: [
-      { id: "utility-pwa", title: "PWA対応", description: "ホーム画面に追加してアプリのように使用" },
       { id: "utility-spotify", title: "Spotify連携", description: "再生履歴に基づき、よく聴く曲を強調" },
       { id: "utility-apple-music", title: "Apple Music連携", description: "ライブラリとの連携機能" },
+      { id: "utility-pwa", title: "PWA対応", description: "ホーム画面に追加してアプリのように使用" },
       { id: "utility-i18n", title: "多言語対応", description: "英語表示に切り替え可能" },
     ]
   },

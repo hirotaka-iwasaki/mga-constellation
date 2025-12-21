@@ -18,6 +18,7 @@ export const VALID_IDEA_IDS = [
   'explore-live-gallery',
   'explore-ar-mode',
   'explore-storyline',
+  'explore-artist-philosophy',
 
   // share（共有・カスタマイズ）
   'share-url-short',
@@ -25,6 +26,7 @@ export const VALID_IDEA_IDS = [
   'share-diagnosis',
   'share-complete-badge',
   'share-dynamic-ogp',
+  'share-like-interpretation',
 
   // display（表示・演出）
   'display-jacket',
