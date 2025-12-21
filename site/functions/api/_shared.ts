@@ -17,6 +17,7 @@ export const VALID_IDEA_IDS = [
   'explore-audio-preview',
   'explore-live-gallery',
   'explore-ar-mode',
+  'explore-storyline',
 
   // share（共有・カスタマイズ）
   'share-url-short',

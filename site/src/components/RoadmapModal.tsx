@@ -100,6 +100,7 @@ const ideas: Record<string, IdeaSection> = {
       { id: "explore-audio-preview", title: "オーディオプレビュー", description: "星選択時に30秒プレビュー再生" },
       { id: "explore-live-gallery", title: "ライブ写真ギャラリー", description: "ライブ星座選択時に公式写真を表示" },
       { id: "explore-ar-mode", title: "AR星空モード", description: "カメラ越しに星空を重ねて表示" },
+      { id: "explore-storyline", title: "ストーリーライン分析", description: "EDEN→NOAH→Atlantis→BABELの物語を通した楽曲変遷" },
     ]
   },
   share: {
