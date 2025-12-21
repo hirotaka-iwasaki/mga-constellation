@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'preact/hooks'
+import { useState, useCallback, useEffect, useRef } from 'preact/hooks'
 
 interface RoadmapModalProps {
   onClose: () => void
@@ -9,6 +9,7 @@ interface IdeaItem {
   id: string
   title: string
   description: string
+  category?: string // カテゴリを追跡用に追加
 }
 
 interface IdeaSection {
@@ -160,12 +161,38 @@ function saveVotedId(ideaId: string): void {
   }
 }
 
+// 全アイデアをフラット化（カテゴリ情報付き）
+function getAllIdeas(): (IdeaItem & { categoryKey: string; categoryColor: string })[] {
+  const allIdeas: (IdeaItem & { categoryKey: string; categoryColor: string })[] = []
+  Object.entries(ideas).forEach(([key, section]) => {
+    section.items.forEach(item => {
+      allIdeas.push({ ...item, categoryKey: key, categoryColor: section.color })
+    })
+  })
+  return allIdeas
+}
+
+// アイデアの達成判定
+function isAchieved(voteCount: number): boolean {
+  return voteCount >= VOTE_GOAL
+}
+
 export function RoadmapModal({ onClose, onOpenFeedback }: RoadmapModalProps) {
   const [isVisible, setIsVisible] = useState(true)
   const [votes, setVotes] = useState<Record<string, number>>({})
   const [votedIds, setVotedIds] = useState<string[]>([])
   const [votingId, setVotingId] = useState<string | null>(null)
   const [isFeaturesOpen, setIsFeaturesOpen] = useState(false)
+  // 達成アニメーション用: 直前に達成したアイデアID
+  const [justAchievedId, setJustAchievedId] = useState<string | null>(null)
+  // 達成セクションの開閉
+  const [isAchievedOpen, setIsAchievedOpen] = useState(true)
+  // モーダルのスクロールコンテナref
+  const modalRef = useRef<HTMLDivElement>(null)
+  // 開発予定セクションのref
+  const achievedSectionRef = useRef<HTMLDivElement>(null)
+  // トースト通知用
+  const [toast, setToast] = useState<{ message: string; isAchieved: boolean } | null>(null)
 
   // 初期化: 投票数取得 & localStorage から投票済みID読み込み
   useEffect(() => {
@@ -210,6 +237,9 @@ export function RoadmapModal({ onClose, onOpenFeedback }: RoadmapModalProps) {
   const handleVote = useCallback(async (ideaId: string) => {
     if (votingId) return // 投票中は無視
 
+    const prevVotes = votes[ideaId] || 0
+    const wasAchieved = isAchieved(prevVotes)
+
     setVotingId(ideaId)
     try {
       const res = await fetch('/api/vote', {
@@ -220,16 +250,40 @@ export function RoadmapModal({ onClose, onOpenFeedback }: RoadmapModalProps) {
       const data = await res.json()
 
       if (data.success) {
-        setVotes(prev => ({ ...prev, [ideaId]: data.votes }))
+        const newVotes = data.votes
+        setVotes(prev => ({ ...prev, [ideaId]: newVotes }))
         saveVotedId(ideaId)
         setVotedIds(prev => [...prev, ideaId])
+
+        // 今回の投票で達成したかチェック
+        const justAchieved = !wasAchieved && isAchieved(newVotes)
+
+        // トースト表示
+        setToast({
+          message: justAchieved ? '投票ありがとう！開発者に届けました' : '投票ありがとう！',
+          isAchieved: justAchieved
+        })
+        setTimeout(() => setToast(null), 3000)
+
+        if (justAchieved) {
+          // 達成アニメーションをトリガー
+          setJustAchievedId(ideaId)
+          // 開発予定セクションを開く
+          setIsAchievedOpen(true)
+          // 開発予定セクションにスクロール（即座に開始）
+          achievedSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          // アニメーション終了後にリセット（長めに表示）
+          setTimeout(() => {
+            setJustAchievedId(null)
+          }, 6000)
+        }
       }
     } catch (err) {
       console.error('Failed to vote:', err)
     } finally {
       setVotingId(null)
     }
-  }, [votingId])
+  }, [votingId, votes])
 
   return (
     <div
@@ -242,6 +296,7 @@ export function RoadmapModal({ onClose, onOpenFeedback }: RoadmapModalProps) {
 
       {/* モーダル本体 */}
       <div
+        ref={modalRef}
         class={`relative bg-slate-900 border border-slate-700 rounded-2xl p-5 max-w-lg w-full shadow-2xl transition-transform duration-300 max-h-[85vh] overflow-y-auto overscroll-contain ${
           isVisible ? 'scale-100' : 'scale-95'
         }`}
@@ -279,6 +334,86 @@ export function RoadmapModal({ onClose, onOpenFeedback }: RoadmapModalProps) {
           「これが欲しい！」を送る
         </button>
 
+        {/* 開発予定セクション */}
+        {(() => {
+          const achievedIdeas = getAllIdeas().filter(item => isAchieved(votes[item.id] || 0))
+          if (achievedIdeas.length === 0) return null
+
+          return (
+            <div ref={achievedSectionRef} class="mb-5">
+              <button
+                onClick={() => setIsAchievedOpen(!isAchievedOpen)}
+                class="w-full flex items-center justify-between px-3 py-2 bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 rounded-lg border border-amber-500/30 transition-colors"
+              >
+                <span class="text-sm text-amber-300 flex items-center gap-2 font-medium">
+                  <span>🚀</span>
+                  開発予定
+                  <span class="text-xs bg-amber-500/30 px-1.5 py-0.5 rounded-full">
+                    {achievedIdeas.length}
+                  </span>
+                </span>
+                <svg
+                  class={`w-4 h-4 text-amber-400 transition-transform ${isAchievedOpen ? 'rotate-180' : ''}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {isAchievedOpen && (
+                <div class="mt-2 space-y-1.5">
+                  {achievedIdeas.map((item) => {
+                    const isJustAchieved = justAchievedId === item.id
+
+                    return (
+                      <div
+                        key={item.id}
+                        class={`
+                          relative overflow-hidden rounded-lg px-3 py-2 border flex items-start gap-2
+                          ${isJustAchieved
+                            ? 'bg-amber-500/30 border-amber-400 animate-achieved-snap'
+                            : 'bg-gradient-to-r from-amber-500/10 to-orange-500/10 border-amber-500/20'
+                          }
+                        `}
+                      >
+                        {/* 達成キラキラエフェクト */}
+                        {isJustAchieved && (
+                          <div class="absolute inset-0 pointer-events-none">
+                            <div class="absolute top-1 left-2 w-1 h-1 bg-white rounded-full animate-sparkle-1" />
+                            <div class="absolute top-2 right-4 w-1.5 h-1.5 bg-amber-200 rounded-full animate-sparkle-2" />
+                            <div class="absolute bottom-1 left-1/3 w-1 h-1 bg-white rounded-full animate-sparkle-3" />
+                            <div class="absolute bottom-2 right-8 w-1 h-1 bg-amber-300 rounded-full animate-sparkle-1" />
+                          </div>
+                        )}
+
+                        <div class="relative flex-1 min-w-0">
+                          <div class="flex items-center gap-2">
+                            <span class="text-sm text-amber-100 font-medium">{item.title}</span>
+                            <svg class="w-3.5 h-3.5 text-amber-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                          </div>
+                          <div class="text-xs text-amber-200/60 mt-0.5">{item.description}</div>
+                        </div>
+
+                        {/* 票数表示 */}
+                        <div class="relative flex-shrink-0 text-xs text-amber-300/70 flex items-center gap-1">
+                          <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                          </svg>
+                          <span>{votes[item.id] || 0}</span>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
+          )
+        })()}
+
         {/* できること（折りたたみ） */}
         <div class="mb-5">
           <button
@@ -287,7 +422,7 @@ export function RoadmapModal({ onClose, onOpenFeedback }: RoadmapModalProps) {
           >
             <span class="text-sm text-white/80 flex items-center gap-2">
               <span>🌟</span>
-              できること
+              もうできること
             </span>
             <svg
               class={`w-4 h-4 text-white/50 transition-transform ${isFeaturesOpen ? 'rotate-180' : ''}`}
@@ -327,56 +462,62 @@ export function RoadmapModal({ onClose, onOpenFeedback }: RoadmapModalProps) {
         </div>
 
         {/* カテゴリ別アイデア */}
-        {Object.entries(ideas).map(([key, section]) => (
-          <section key={key} class="mb-5 last:mb-0">
-            <h3 class={`text-sm font-medium mb-2 flex items-center gap-1.5 ${section.color}`}>
-              <span>{section.icon}</span>
-              {section.title}
-            </h3>
+        {Object.entries(ideas).map(([key, section]) => {
+          // 達成済みを除いた未達成アイデアのみ表示
+          const pendingItems = section.items.filter(item => !isAchieved(votes[item.id] || 0))
+          if (pendingItems.length === 0) return null
 
-            <div class="space-y-1.5">
-              {section.items.map((item) => {
-                const isVoted = votedIds.includes(item.id)
-                const isVoting = votingId === item.id
-                const voteCount = votes[item.id] || 0
-                const progressPercent = Math.min((voteCount / VOTE_GOAL) * 100, 100)
+          return (
+            <section key={key} class="mb-5 last:mb-0">
+              <h3 class={`text-sm font-medium mb-2 flex items-center gap-1.5 ${section.color}`}>
+                <span>{section.icon}</span>
+                {section.title}
+              </h3>
 
-                return (
-                  <div
-                    key={item.id}
-                    class="relative overflow-hidden bg-white/5 rounded-lg px-3 py-2 border border-white/10 flex items-start gap-2"
-                  >
-                    {/* プログレスバー背景 */}
+              <div class="space-y-1.5">
+                {pendingItems.map((item) => {
+                  const isVoted = votedIds.includes(item.id)
+                  const isVoting = votingId === item.id
+                  const voteCount = votes[item.id] || 0
+                  const progressPercent = Math.min((voteCount / VOTE_GOAL) * 100, 100)
+
+                  return (
                     <div
-                      class="absolute inset-0 bg-emerald-400 opacity-20 transition-all duration-500"
-                      style={{ width: `${progressPercent}%` }}
-                    />
-                    <div class="relative flex-1 min-w-0">
-                      <div class="text-sm text-white/90">{item.title}</div>
-                      <div class="text-xs text-white/50 mt-0.5">{item.description}</div>
-                    </div>
-
-                    {/* 投票ボタン */}
-                    <button
-                      onClick={() => !isVoted && handleVote(item.id)}
-                      disabled={isVoting || isVoted}
-                      class={`relative flex-shrink-0 p-1.5 rounded-full transition-all ${
-                        isVoted
-                          ? 'text-pink-400 cursor-default'
-                          : 'text-white/40 hover:text-pink-400 active:scale-110'
-                      } ${isVoting ? 'opacity-50 cursor-wait' : ''}`}
-                      aria-label={isVoted ? '投票済み' : '投票する'}
+                      key={item.id}
+                      class="relative overflow-hidden bg-white/5 rounded-lg px-3 py-2 border border-white/10 flex items-start gap-2"
                     >
-                      <svg class="w-4 h-4" viewBox="0 0 24 24" fill={isVoted ? 'currentColor' : 'none'} stroke="currentColor" stroke-width="2">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                      </svg>
-                    </button>
-                  </div>
-                )
-              })}
-            </div>
-          </section>
-        ))}
+                      {/* プログレスバー背景 */}
+                      <div
+                        class="absolute inset-0 bg-emerald-400 opacity-20 transition-all duration-500"
+                        style={{ width: `${progressPercent}%` }}
+                      />
+                      <div class="relative flex-1 min-w-0">
+                        <div class="text-sm text-white/90">{item.title}</div>
+                        <div class="text-xs text-white/50 mt-0.5">{item.description}</div>
+                      </div>
+
+                      {/* 投票ボタン */}
+                      <button
+                        onClick={() => !isVoted && handleVote(item.id)}
+                        disabled={isVoting || isVoted}
+                        class={`relative flex-shrink-0 p-1.5 rounded-full transition-all ${
+                          isVoted
+                            ? 'text-pink-400 cursor-default'
+                            : 'text-white/40 hover:text-pink-400 active:scale-110'
+                        } ${isVoting ? 'opacity-50 cursor-wait' : ''}`}
+                        aria-label={isVoted ? '投票済み' : '投票する'}
+                      >
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill={isVoted ? 'currentColor' : 'none'} stroke="currentColor" stroke-width="2">
+                          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                        </svg>
+                      </button>
+                    </div>
+                  )
+                })}
+              </div>
+            </section>
+          )
+        })}
 
         {/* フッター */}
         <div class="mt-6 pt-4 border-t border-white/10 text-center text-white/40 text-xs">
@@ -385,6 +526,33 @@ export function RoadmapModal({ onClose, onOpenFeedback }: RoadmapModalProps) {
           </p>
         </div>
       </div>
+
+      {/* トースト通知 */}
+      {toast && (
+        <div
+          class={`
+            fixed bottom-8 left-1/2 -translate-x-1/2 z-[80]
+            px-4 py-3 rounded-xl shadow-lg
+            flex items-center gap-2
+            animate-toast-in
+            ${toast.isAchieved
+              ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white'
+              : 'bg-slate-800 text-white border border-slate-600'
+            }
+          `}
+        >
+          {toast.isAchieved ? (
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
+          ) : (
+            <svg class="w-5 h-5 text-pink-400" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+            </svg>
+          )}
+          <span class="text-sm font-medium">{toast.message}</span>
+        </div>
+      )}
     </div>
   )
 }
