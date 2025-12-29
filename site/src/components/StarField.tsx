@@ -1047,6 +1047,28 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
               </div>
             )}
 
+            {/* 推し座紹介カード（検索結果がないときに表示） */}
+            {searchResults.length === 0 && (
+              <div class="mt-4 p-4 bg-white/5 rounded-lg border border-white/10">
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="text-lg">✨</span>
+                  <span class="font-bold text-white">"推し座" を作ってみよう</span>
+                </div>
+                <p class="text-sm text-gray-300 mb-3">
+                  好きな曲を集めて、自分だけのオリジナル星座を作れます。名前や色も自由にカスタマイズ！
+                </p>
+                <button
+                  onClick={() => {
+                    closeSearch()
+                    setIsBuilderOpen(true)
+                  }}
+                  class="w-full py-2 bg-green-600/80 hover:bg-green-600 active:bg-green-700 rounded text-white text-sm transition-colors"
+                >
+                  推し座を作成 →
+                </button>
+              </div>
+            )}
+
             {/* 閉じるボタン */}
             <button
               onClick={closeSearch}

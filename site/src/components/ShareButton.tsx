@@ -102,18 +102,27 @@ export function ShareButton({ selectedConstellations, positions, titleToIdMap, t
 
         if (points.length < 2) return
 
-        // 点線で星座線を描画
-        ctx.strokeStyle = constellation.color
-        ctx.lineWidth = 2
-        ctx.setLineDash([8, 8])
+        // 小さな円を並べて星座線を描画（サイトと同じスタイル）
+        ctx.fillStyle = constellation.color
+        const dotRadius = 3
+        const dotSpacing = 12  // 点の間隔
 
-        ctx.beginPath()
-        ctx.moveTo(points[0].x, points[0].y)
-        for (let i = 1; i < points.length; i++) {
-          ctx.lineTo(points[i].x, points[i].y)
+        for (let i = 0; i < points.length - 1; i++) {
+          const p1 = points[i]
+          const p2 = points[i + 1]
+          const dist = Math.sqrt((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2)
+          const numDots = Math.floor(dist / dotSpacing)
+
+          for (let j = 1; j < numDots; j++) {
+            const t = j / numDots
+            const x = p1.x + (p2.x - p1.x) * t
+            const y = p1.y + (p2.y - p1.y) * t
+
+            ctx.beginPath()
+            ctx.arc(x, y, dotRadius, 0, Math.PI * 2)
+            ctx.fill()
+          }
         }
-        ctx.stroke()
-        ctx.setLineDash([])
       })
 
       // 選択された星のIDセット
