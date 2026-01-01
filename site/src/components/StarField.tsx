@@ -1026,7 +1026,7 @@ export function StarField({ songs, positions, constellations }: StarFieldProps) 
 
             {/* 検索結果 */}
             {searchResults.length > 0 && (
-              <div class="mt-2 bg-slate-800 border border-slate-600 rounded-lg overflow-hidden">
+              <div class="mt-2 bg-slate-800 border border-slate-600 rounded-lg overflow-y-auto max-h-[50vh]">
                 {searchResults.map((song) => (
                   <button
                     key={song.id}
