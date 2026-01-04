@@ -11,11 +11,19 @@ mga-constellation/
 ├── scripts/           # データ生成（01〜05の順で実行）
 │   ├── data/          # albums-data.ts, lives-data.ts
 │   └── output/        # 生成JSON
-├── site/              # Astro+Preact フロントエンド
+├── site/              # web版（Astro+Preact フロントエンド）
 │   ├── functions/api/ # Cloudflare Pages Functions（投票API）
 │   └── src/components/# StarField.tsx 等
+├── mobile/            # アプリ版（Flutter）
+│   ├── lib/           # Dartソースコード
+│   └── assets/        # アプリ用データ・アイコン
 └── docs/              # 設計書
 ```
+
+## 呼称
+
+- **web版**: `/site` - Astro+Preact製のWebアプリ（https://mga-constellation.pages.dev）
+- **アプリ版**: `/mobile` - Flutter製のネイティブアプリ（iOS/Android）
 
 ## コマンド
 

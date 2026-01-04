@@ -175,7 +175,7 @@ class _CustomConstellationBuilderState
     final topPadding = MediaQuery.of(context).padding.top;
     final bottomPadding = MediaQuery.of(context).padding.bottom;
 
-    return Container(
+    return Material(
       color: const Color(0xFF020617),
       child: Column(
         children: [
