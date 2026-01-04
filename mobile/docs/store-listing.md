@@ -81,7 +81,7 @@ storeFile=../keystore/upload-keystore.jks
 ### 2-1. アプリアイコン
 
 **作成**
-- iconifyai などで生成（1024x1024）
+- canva で生成（1024x1024）
 - `mobile/assets/icon/app_icon.png` に配置
 
 **各サイズ自動生成**
@@ -127,7 +127,7 @@ sips -z 1920 1080 screenshot.png --out googleplay/screenshot.png
 
 ### 2-3. フィーチャーグラフィック（Google Play）
 - サイズ: 1024 x 500 px
-- Canva等で作成
+- Canvaで作成
 - アプリアイコン + アプリ名 + キャッチコピー
 
 ### 2-4. プライバシーポリシー
