@@ -179,41 +179,66 @@ flutter pub run flutter_launcher_icons
 
 ### 2-2. スクリーンショット
 
+#### 必要なスクリーンショット
+
+| ストア | デバイス | サイズ | 必須 |
+|--------|----------|--------|------|
+| App Store | iPhone 6.7" | 1290 x 2796 または 1284 x 2778 | ✅ |
+| App Store | **iPad 13"** | **2048 x 2732** | **✅ 必須** |
+| Google Play | 電話 | 1080 x 1920 | ✅ |
+
+> ⚠️ **重要**: App Store は iPhone と iPad 両方のスクリーンショットが必須です。
+
 #### シミュレータ設定（プロフェッショナルな表示）
 
 ```bash
+# 利用可能なシミュレータ一覧
+xcrun simctl list devices available | grep -E "iPhone|iPad"
+
+# iPhone シミュレータ起動
+xcrun simctl boot "iPhone 16 Pro Max"
+
+# iPad シミュレータ起動
+xcrun simctl boot "iPad Pro 13-inch (M5)"
+
+# Simulator アプリを開く
+open -a Simulator
+
 # ステータスバーを 9:41（Apple公式と同じ）に設定
 xcrun simctl status_bar "iPhone 16 Pro Max" override \
+  --time "9:41" --batteryState charged --batteryLevel 100
+
+xcrun simctl status_bar "iPad Pro 13-inch (M5)" override \
   --time "9:41" --batteryState charged --batteryLevel 100
 ```
 
 #### 撮影
 
 ```bash
-# シミュレータでスクリーンショット撮影
-xcrun simctl io "iPhone 16 Pro Max" screenshot ~/Desktop/screenshot.png
+# iPhone スクリーンショット撮影
+xcrun simctl io "iPhone 16 Pro Max" screenshot ~/Desktop/iphone.png
+
+# iPad スクリーンショット撮影
+xcrun simctl io "iPad Pro 13-inch (M5)" screenshot ~/Desktop/ipad.png
 ```
 
 #### サイズ調整
 
-| ストア | サイズ | 用途 |
-|--------|--------|------|
-| App Store | 1290 x 2796 | iPhone 15 Pro Max (6.7") |
-| App Store | 1284 x 2778 | iPhone 14 Pro Max (6.7") |
-| App Store | 1242 x 2688 | iPhone 11 Pro Max (6.5") |
-| Google Play | 1080 x 1920 | 電話 |
-
 ```bash
-# App Store 用にリサイズ
-sips -z 2778 1284 screenshot.png --out appstore/screenshot.png
+# iPhone - App Store 用（6.7インチ）
+sips -z 2778 1284 iphone.png --out appstore/iphone.png
 
-# Google Play 用にリサイズ
-sips -z 1920 1080 screenshot.png --out googleplay/screenshot.png
+# iPad - App Store 用（13インチ）
+sips -z 2732 2048 ipad.png --out appstore/ipad.png
+
+# Google Play 用
+sips -z 1920 1080 iphone.png --out googleplay/screenshot.png
 ```
 
 #### 必要枚数
 
-- **App Store**: 最低2枚、推奨5-10枚
+- **App Store iPhone**: 最低2枚、推奨5-10枚
+- **App Store iPad**: 最低2枚、推奨5枚
 - **Google Play**: 最低2枚、最大8枚
 
 ### 2-3. フィーチャーグラフィック（Google Play 必須）
@@ -368,7 +393,8 @@ Description...
 
 ### ストア素材
 
-- [ ] スクリーンショット（最低2枚）
+- [ ] スクリーンショット iPhone（最低2枚）
+- [ ] スクリーンショット iPad（最低2枚、App Store必須）
 - [ ] フィーチャーグラフィック（Google Play）
 - [ ] プライバシーポリシーURL
 
