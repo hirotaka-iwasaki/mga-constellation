@@ -1,0 +1,728 @@
+[
+  {
+    "id": "good-day",
+    "title": "GOOD DAY",
+    "releaseDate": "2025-09-28",
+    "year": 2025
+  },
+  {
+    "id": "variety",
+    "title": "Variety",
+    "releaseDate": "2025-12-31",
+    "year": 2025
+  },
+  {
+    "id": "s-f2f2db",
+    "title": "夏の影",
+    "releaseDate": "2025-08-11",
+    "year": 2025
+  },
+  {
+    "id": "carrying-happiness",
+    "title": "Carrying Happiness",
+    "releaseDate": "2025-07-19",
+    "year": 2025
+  },
+  {
+    "id": "s-93f3fe",
+    "title": "慶びの種",
+    "releaseDate": "2025-07-08",
+    "year": 2025
+  },
+  {
+    "id": "breakfast",
+    "title": "breakfast",
+    "releaseDate": "2025-06-04",
+    "year": 2025
+  },
+  {
+    "id": "s-224a16",
+    "title": "天国",
+    "releaseDate": "2025-05-02",
+    "year": 2025
+  },
+  {
+    "id": "s-5bd0ac",
+    "title": "クスシキ",
+    "releaseDate": "2025-04-05",
+    "year": 2025
+  },
+  {
+    "id": "s-a04af9",
+    "title": "ダーリン",
+    "releaseDate": "2025-01-20",
+    "year": 2025
+  },
+  {
+    "id": "s-e87a83",
+    "title": "ビターバカンス",
+    "releaseDate": "2024-11-29",
+    "year": 2024
+  },
+  {
+    "id": "the-white-lounge",
+    "title": "The White Lounge",
+    "releaseDate": "2024-09-23",
+    "year": 2024
+  },
+  {
+    "id": "familie",
+    "title": "familie",
+    "releaseDate": "2024-08-09",
+    "year": 2024
+  },
+  {
+    "id": "s-abfa16",
+    "title": "アポロドロス",
+    "releaseDate": "2024-07-03",
+    "year": 2024
+  },
+  {
+    "id": "s-bcb04b",
+    "title": "コロンブス",
+    "releaseDate": "2024-06-12",
+    "year": 2024
+  },
+  {
+    "id": "dear",
+    "title": "Dear",
+    "releaseDate": "2024-05-20",
+    "year": 2024
+  },
+  {
+    "id": "s-bcce9e",
+    "title": "ライラック",
+    "releaseDate": "2024-04-12",
+    "year": 2024
+  },
+  {
+    "id": "s-60dc42",
+    "title": "ナハトムジーク",
+    "releaseDate": "2024-01-17",
+    "year": 2024
+  },
+  {
+    "id": "feeling",
+    "title": "Feeling",
+    "releaseDate": "2023-07-05",
+    "year": 2023
+  },
+  {
+    "id": "bff",
+    "title": "BFF",
+    "releaseDate": "2023-07-05",
+    "year": 2023
+  },
+  {
+    "id": "doodle",
+    "title": "Doodle",
+    "releaseDate": "2023-07-05",
+    "year": 2023
+  },
+  {
+    "id": "s-b990b4",
+    "title": "橙",
+    "releaseDate": "2023-07-05",
+    "year": 2023
+  },
+  {
+    "id": "norn",
+    "title": "norn",
+    "releaseDate": "2023-07-05",
+    "year": 2023
+  },
+  {
+    "id": "loneliness",
+    "title": "Loneliness",
+    "releaseDate": "2023-07-05",
+    "year": 2023
+  },
+  {
+    "id": "s-7fc865",
+    "title": "アンラブレス",
+    "releaseDate": "2023-07-05",
+    "year": 2023
+  },
+  {
+    "id": "blizzard",
+    "title": "Blizzard",
+    "releaseDate": "2023-07-05",
+    "year": 2023
+  },
+  {
+    "id": "magic",
+    "title": "Magic",
+    "releaseDate": "2023-07-05",
+    "year": 2023
+  },
+  {
+    "id": "antenna",
+    "title": "ANTENNA",
+    "releaseDate": "2023-07-05",
+    "year": 2023
+  },
+  {
+    "id": "s-12ddd9",
+    "title": "ケセラセラ",
+    "releaseDate": "2023-04-25",
+    "year": 2023
+  },
+  {
+    "id": "s-c1b5ea",
+    "title": "フロリジナル",
+    "releaseDate": "2022-11-09",
+    "year": 2022
+  },
+  {
+    "id": "s-40cb0e",
+    "title": "私は最強",
+    "releaseDate": "2022-11-09",
+    "year": 2022
+  },
+  {
+    "id": "soranji",
+    "title": "Soranji",
+    "releaseDate": "2022-11-09",
+    "year": 2022
+  },
+  {
+    "id": "part-of-me",
+    "title": "Part of me",
+    "releaseDate": "2022-07-08",
+    "year": 2022
+  },
+  {
+    "id": "s-5a0477",
+    "title": "延々",
+    "releaseDate": "2022-07-08",
+    "year": 2022
+  },
+  {
+    "id": "s-9e0761",
+    "title": "君を知らない",
+    "releaseDate": "2022-07-08",
+    "year": 2022
+  },
+  {
+    "id": "s-e089a9",
+    "title": "ブルーアンビエンス",
+    "releaseDate": "2022-07-08",
+    "year": 2022
+  },
+  {
+    "id": "s-1d80d2",
+    "title": "ダンスホール",
+    "releaseDate": "2022-07-08",
+    "year": 2022
+  },
+  {
+    "id": "s-7bf051",
+    "title": "ニュー・マイ・ノーマル",
+    "releaseDate": "2022-03-18",
+    "year": 2022
+  },
+  {
+    "id": "theater",
+    "title": "Theater",
+    "releaseDate": "2020-07-08",
+    "year": 2020
+  },
+  {
+    "id": "s-1ce3cf",
+    "title": "アボイドノート",
+    "releaseDate": "2020-07-08",
+    "year": 2020
+  },
+  {
+    "id": "present",
+    "title": "PRESENT",
+    "releaseDate": "2020-04-10",
+    "year": 2020
+  },
+  {
+    "id": "circle",
+    "title": "Circle",
+    "releaseDate": "2019-10-02",
+    "year": 2019
+  },
+  {
+    "id": "soup",
+    "title": "Soup",
+    "releaseDate": "2019-10-02",
+    "year": 2019
+  },
+  {
+    "id": "s-1f4cee",
+    "title": "嘘じゃないよ",
+    "releaseDate": "2019-10-02",
+    "year": 2019
+  },
+  {
+    "id": "ke-mo-sah-bee",
+    "title": "Ke-Mo Sah-Bee",
+    "releaseDate": "2019-10-02",
+    "year": 2019
+  },
+  {
+    "id": "lovin",
+    "title": "lovin'",
+    "releaseDate": "2019-10-02",
+    "year": 2019
+  },
+  {
+    "id": "s-a4b07f",
+    "title": "クダリ",
+    "releaseDate": "2019-10-02",
+    "year": 2019
+  },
+  {
+    "id": "propose",
+    "title": "ProPose",
+    "releaseDate": "2019-10-02",
+    "year": 2019
+  },
+  {
+    "id": "viking",
+    "title": "Viking",
+    "releaseDate": "2019-10-02",
+    "year": 2019
+  },
+  {
+    "id": "cheers",
+    "title": "CHEERS",
+    "releaseDate": "2019-10-02",
+    "year": 2019
+  },
+  {
+    "id": "attitude",
+    "title": "Attitude",
+    "releaseDate": "2019-10-02",
+    "year": 2019
+  },
+  {
+    "id": "inspiration",
+    "title": "InsPirATioN",
+    "releaseDate": "2019-10-02",
+    "year": 2019
+  },
+  {
+    "id": "s-20c4ac",
+    "title": "インフェルノ",
+    "releaseDate": "2019-07-18",
+    "year": 2019
+  },
+  {
+    "id": "s-342d1a",
+    "title": "月とアネモネ",
+    "releaseDate": "2019-04-03",
+    "year": 2019
+  },
+  {
+    "id": "how-to",
+    "title": "How-to",
+    "releaseDate": "2019-04-03",
+    "year": 2019
+  },
+  {
+    "id": "s-b543be",
+    "title": "ロマンチシズム",
+    "releaseDate": "2019-04-03",
+    "year": 2019
+  },
+  {
+    "id": "folktale",
+    "title": "Folktale",
+    "releaseDate": "2019-01-09",
+    "year": 2019
+  },
+  {
+    "id": "s-e1f2fb",
+    "title": "灯火",
+    "releaseDate": "2019-01-09",
+    "year": 2019
+  },
+  {
+    "id": "s-46e869",
+    "title": "僕のこと",
+    "releaseDate": "2019-01-09",
+    "year": 2019
+  },
+  {
+    "id": "s-89b190",
+    "title": "ア・プリオリ",
+    "releaseDate": "2018-08-01",
+    "year": 2018
+  },
+  {
+    "id": "s-aaaede",
+    "title": "点描の唄",
+    "releaseDate": "2018-08-01",
+    "year": 2018
+  },
+  {
+    "id": "s-a4a340",
+    "title": "青と夏",
+    "releaseDate": "2018-08-01",
+    "year": 2018
+  },
+  {
+    "id": "coffee",
+    "title": "Coffee",
+    "releaseDate": "2018-04-18",
+    "year": 2018
+  },
+  {
+    "id": "reverse",
+    "title": "REVERSE",
+    "releaseDate": "2018-04-18",
+    "year": 2018
+  },
+  {
+    "id": "splash",
+    "title": "SPLASH!!!",
+    "releaseDate": "2018-04-18",
+    "year": 2018
+  },
+  {
+    "id": "they-are",
+    "title": "They are",
+    "releaseDate": "2018-04-18",
+    "year": 2018
+  },
+  {
+    "id": "s-99c184",
+    "title": "はじまり",
+    "releaseDate": "2018-04-18",
+    "year": 2018
+  },
+  {
+    "id": "s-ed32a9",
+    "title": "アウフヘーベン",
+    "releaseDate": "2018-04-18",
+    "year": 2018
+  },
+  {
+    "id": "party",
+    "title": "PARTY",
+    "releaseDate": "2018-04-18",
+    "year": 2018
+  },
+  {
+    "id": "s-71b762",
+    "title": "春愁",
+    "releaseDate": "2018-02-14",
+    "year": 2018
+  },
+  {
+    "id": "log",
+    "title": "Log",
+    "releaseDate": "2018-02-14",
+    "year": 2018
+  },
+  {
+    "id": "love-me,-love-you",
+    "title": "Love me, Love you",
+    "releaseDate": "2018-02-14",
+    "year": 2018
+  },
+  {
+    "id": "whoo-whoo-whoo",
+    "title": "WHOO WHOO WHOO",
+    "releaseDate": "2017-12-04",
+    "year": 2017
+  },
+  {
+    "id": "s-1ea851",
+    "title": "光のうた",
+    "releaseDate": "2017-08-30",
+    "year": 2017
+  },
+  {
+    "id": "on-my-mind",
+    "title": "On My MiND",
+    "releaseDate": "2017-08-30",
+    "year": 2017
+  },
+  {
+    "id": "wanted-wanted",
+    "title": "WanteD! WanteD!",
+    "releaseDate": "2017-08-30",
+    "year": 2017
+  },
+  {
+    "id": "switch",
+    "title": "SwitCh",
+    "releaseDate": "2017-05-03",
+    "year": 2017
+  },
+  {
+    "id": "s-a6deae",
+    "title": "スマイロブドリーマ",
+    "releaseDate": "2017-05-03",
+    "year": 2017
+  },
+  {
+    "id": "s-4bba39",
+    "title": "どこかで日は昇る",
+    "releaseDate": "2017-05-03",
+    "year": 2017
+  },
+  {
+    "id": "journey",
+    "title": "JOURNEY",
+    "releaseDate": "2017-01-11",
+    "year": 2017
+  },
+  {
+    "id": "just-a-friend",
+    "title": "Just a Friend",
+    "releaseDate": "2017-01-11",
+    "year": 2017
+  },
+  {
+    "id": "s-eea870",
+    "title": "うブ",
+    "releaseDate": "2017-01-11",
+    "year": 2017
+  },
+  {
+    "id": "s-57ca8b",
+    "title": "鯨の唄",
+    "releaseDate": "2017-01-11",
+    "year": 2017
+  },
+  {
+    "id": "soft-drink",
+    "title": "soFt-dRink",
+    "releaseDate": "2017-01-11",
+    "year": 2017
+  },
+  {
+    "id": "s-269b2d",
+    "title": "絶世生物",
+    "releaseDate": "2017-01-11",
+    "year": 2017
+  },
+  {
+    "id": "s-783bab",
+    "title": "おもちゃの兵隊",
+    "releaseDate": "2017-01-11",
+    "year": 2017
+  },
+  {
+    "id": "lion",
+    "title": "Lion",
+    "releaseDate": "2017-01-11",
+    "year": 2017
+  },
+  {
+    "id": "oz",
+    "title": "Oz",
+    "releaseDate": "2016-11-02",
+    "year": 2016
+  },
+  {
+    "id": "s-0271be",
+    "title": "ツキマシテハ",
+    "releaseDate": "2016-11-02",
+    "year": 2016
+  },
+  {
+    "id": "in-the-morning",
+    "title": "In the Morning",
+    "releaseDate": "2016-11-02",
+    "year": 2016
+  },
+  {
+    "id": "s-860f3f",
+    "title": "ノニサクウタ",
+    "releaseDate": "2016-06-15",
+    "year": 2016
+  },
+  {
+    "id": "umbrella",
+    "title": "umbrella",
+    "releaseDate": "2016-06-15",
+    "year": 2016
+  },
+  {
+    "id": "s-5c07c0",
+    "title": "サママ・フェスティバル！",
+    "releaseDate": "2016-06-15",
+    "year": 2016
+  },
+  {
+    "id": "s-100581",
+    "title": "庶幾の唄",
+    "releaseDate": "2016-01-13",
+    "year": 2016
+  },
+  {
+    "id": "hug",
+    "title": "Hug",
+    "releaseDate": "2016-01-13",
+    "year": 2016
+  },
+  {
+    "id": "interlude",
+    "title": "InTerLuDe",
+    "releaseDate": "2016-01-13",
+    "year": 2016
+  },
+  {
+    "id": "simple",
+    "title": "SimPle",
+    "releaseDate": "2016-01-13",
+    "year": 2016
+  },
+  {
+    "id": "s-938fc7",
+    "title": "ミスカサズ",
+    "releaseDate": "2016-01-13",
+    "year": 2016
+  },
+  {
+    "id": "no.7",
+    "title": "No.7",
+    "releaseDate": "2016-01-13",
+    "year": 2016
+  },
+  {
+    "id": "s-b511e6",
+    "title": "私",
+    "releaseDate": "2016-01-13",
+    "year": 2016
+  },
+  {
+    "id": "s-7ffc2a",
+    "title": "キコリ時計",
+    "releaseDate": "2016-01-13",
+    "year": 2016
+  },
+  {
+    "id": "s-e1b424",
+    "title": "パブリック",
+    "releaseDate": "2016-01-13",
+    "year": 2016
+  },
+  {
+    "id": "s-128dd1",
+    "title": "愛情と矛先",
+    "releaseDate": "2016-01-13",
+    "year": 2016
+  },
+  {
+    "id": "s-422361",
+    "title": "えほん",
+    "releaseDate": "2015-12-16",
+    "year": 2015
+  },
+  {
+    "id": "s-138e78",
+    "title": "恋と吟",
+    "releaseDate": "2015-12-16",
+    "year": 2015
+  },
+  {
+    "id": "speaking",
+    "title": "Speaking",
+    "releaseDate": "2015-12-16",
+    "year": 2015
+  },
+  {
+    "id": "s-f731bd",
+    "title": "道徳と皿",
+    "releaseDate": "2015-07-08",
+    "year": 2015
+  },
+  {
+    "id": "s-2700f8",
+    "title": "ゼンマイ",
+    "releaseDate": "2015-07-08",
+    "year": 2015
+  },
+  {
+    "id": "vip",
+    "title": "VIP",
+    "releaseDate": "2015-07-08",
+    "year": 2015
+  },
+  {
+    "id": "l.p",
+    "title": "L.P",
+    "releaseDate": "2015-07-08",
+    "year": 2015
+  },
+  {
+    "id": "start",
+    "title": "StaRt",
+    "releaseDate": "2015-07-08",
+    "year": 2015
+  },
+  {
+    "id": "wall-flower",
+    "title": "WaLL FloWeR",
+    "releaseDate": "2015-02-18",
+    "year": 2015
+  },
+  {
+    "id": "s-c1b406",
+    "title": "日々と君",
+    "releaseDate": "2015-02-18",
+    "year": 2015
+  },
+  {
+    "id": "s-ec101a",
+    "title": "アンゼンパイ",
+    "releaseDate": "2015-02-18",
+    "year": 2015
+  },
+  {
+    "id": "conflict",
+    "title": "CONFLICT",
+    "releaseDate": "2015-02-18",
+    "year": 2015
+  },
+  {
+    "id": "s-dc7d74",
+    "title": "ナニヲナニヲ",
+    "releaseDate": "2015-02-18",
+    "year": 2015
+  },
+  {
+    "id": "s-de6da7",
+    "title": "我逢人",
+    "releaseDate": "2015-02-18",
+    "year": 2015
+  },
+  {
+    "id": "s-e6fcf5",
+    "title": "リスキーゲーム",
+    "releaseDate": "2014-07-05",
+    "year": 2014
+  },
+  {
+    "id": "factory",
+    "title": "FACTORY",
+    "releaseDate": "2014-07-05",
+    "year": 2014
+  },
+  {
+    "id": "s-daaf43",
+    "title": "スターダム",
+    "releaseDate": "2014-07-05",
+    "year": 2014
+  },
+  {
+    "id": "s-975039",
+    "title": "藍",
+    "releaseDate": "2014-07-05",
+    "year": 2014
+  },
+  {
+    "id": "hello",
+    "title": "HeLLo",
+    "releaseDate": "2014-07-05",
+    "year": 2014
+  }
+]
