@@ -19,9 +19,9 @@ function sanitizeInput(input: string): string {
 }
 
 const CATEGORIES = [
-  { id: 'feature', label: '機能リクエスト', icon: '💡' },
+  { id: 'idea', label: '機能リクエスト', icon: '💡' },
   { id: 'bug', label: 'バグ報告', icon: '🐛' },
-  { id: 'data', label: 'データ修正', icon: '📝' },
+  { id: 'praise', label: '感想・応援', icon: '✨' },
   { id: 'other', label: 'その他', icon: '💬' },
 ]
 
@@ -54,25 +54,19 @@ export function FeedbackModal({ onClose }: FeedbackModalProps) {
 
     setSubmitState('submitting')
 
-    const feedbackUrl = import.meta.env.PUBLIC_FEEDBACK_URL
-
     // 入力値をサニタイズ
     const sanitizedContent = sanitizeInput(content.trim().slice(0, MAX_CONTENT_LENGTH))
-    const sanitizedCategory = CATEGORIES.find(c => c.id === category)?.label || sanitizeInput(category)
-
-    if (!feedbackUrl) {
-      // 開発時: URLが未設定の場合はコンソールに出力
-      console.log('Feedback submitted (dev mode):', { category: sanitizedCategory, content: sanitizedContent })
-      setSubmitState('success')
-      return
-    }
 
     try {
-      const response = await fetch(feedbackUrl, {
+      const response = await fetch('/api/feedback', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
-          category: sanitizedCategory,
-          content: sanitizedContent,
+          message: sanitizedContent,
+          type: category,
+          platform: 'web',
         }),
       })
 
