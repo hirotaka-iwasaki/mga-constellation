@@ -12,6 +12,7 @@ workflows:
     scripts:
       - name: Set up key.properties
         script: |
+          mkdir -p $CM_BUILD_DIR/mobile/android/keystore
           echo $CM_KEYSTORE | base64 --decode > $CM_BUILD_DIR/mobile/android/keystore/upload-keystore.jks
           cat > $CM_BUILD_DIR/mobile/android/key.properties <<EOF
           storePassword=$CM_KEYSTORE_PASSWORD
@@ -19,6 +20,8 @@ workflows:
           keyAlias=$CM_KEY_ALIAS
           storeFile=../keystore/upload-keystore.jks
           EOF
+          echo "Keystore created at: $CM_BUILD_DIR/mobile/android/keystore/"
+          ls -la $CM_BUILD_DIR/mobile/android/keystore/
       - name: Get Flutter packages
         script: flutter pub get
       - name: Build AAB
