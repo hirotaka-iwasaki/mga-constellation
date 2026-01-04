@@ -2,7 +2,7 @@ name: mga_constellation
 description: "Mrs. GREEN APPLE 星座マップ - ファンメイド楽曲ビジュアライゼーション"
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: ^3.10.4
@@ -36,7 +36,7 @@ dependencies:
   dio: ^5.4.0
 
   # 共有・画像
-  share_plus: ^7.2.1
+  share_plus: ^10.0.0
   screenshot: ^2.1.0
   path_provider: ^2.1.1
 
